@@ -10,6 +10,7 @@ class Node
 		{
 			ID(sf::Vector2f v) : id(v) {};
 			ID(Node n) : id(n.getPosition()) {};
+			ID(float x, float y) : id(x, y) {};
 			bool operator<(Node::ID const& other) const;
 			bool operator==(Node::ID const& other) const;
 			sf::Vector2f id;
@@ -21,8 +22,6 @@ class Node
 		{ return Node::ID(*this) < Node::ID(other); }
 
 		inline Node(Node::ID id) : m_pos(id.id), m_t(Texture::RegularNode) {}
-		inline Node(sf::Vector2f v) : m_pos(v), m_t(Texture::RegularNode) {}
-		inline Node(float x, float y) : m_pos(x, y), m_t(Texture::RegularNode) {}
 
 		inline sf::Vector2f const& getPosition() const { return m_pos; }
 		inline sf::Vector2f& getPosition() { return m_pos; }

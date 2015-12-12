@@ -11,9 +11,10 @@
 int main()
 {
 	Graph g;
-	g.addNode(Node(45, 35));
-	g.addNode(Node(-20, 35));
-	g.newEdge(Node(45, 35), Node(-20, 35));
+	g.addNode(Node::ID(250, 200));
+	g.addNode(Node::ID(350, 210));
+	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
+	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
 
 
     // Create the main window

@@ -1,6 +1,6 @@
 #include "branch.hpp"
 
-Branch Branch::noneBranch = getNoneBranch(Node(2, 3), Node(4, 4));
+Branch Branch::noneBranch = getNoneBranch(Node::ID(2, 3), Node::ID(4, 4));
 
 
 Branch::Branch(Node _n1, Node _n2) :
