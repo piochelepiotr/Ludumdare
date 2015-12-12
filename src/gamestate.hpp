@@ -10,4 +10,7 @@ class GameState : public State
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
+	
+    private:
+	
 };
