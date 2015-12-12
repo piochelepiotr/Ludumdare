@@ -11,18 +11,22 @@ float CubicCurve::evaluate(float val) {
   return c0 + c1*val + c2*val*val + c3*val*val*val;
 }
 
-Spline::Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :  x (CubicCurve(start.x, startTangent.x,
-		 -2.0f*startTangent.x - 3.0f*start.x + 3*end.x - endTangent.x,
-															  endTangent.x - 2.0f * endTangent.x + startTangent.x + 2.0f*start.x)),
-													    y (CubicCurve(start.y, startTangent.y,
-		 -2.0f*startTangent.y - 3.0f*start.y + 3*end.y - endTangent.y,
-															  endTangent.y - 2.0f * endTangent.y + startTangent.y + 2.0f*start.y)) {
+Spline::Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :  x (CubicCurve(start.x, startTangent.x, -2.0f*startTangent.x - 3.0f*start.x + 3*end.x - endTangent.x, endTangent.x - 2.0f * end.x + startTangent.x + 2.0f*start.x)),
+													    y (CubicCurve(start.y, startTangent.y, -2.0f*startTangent.y - 3.0f*start.y + 3*end.y - endTangent.y, endTangent.y - 2.0f * end.y + startTangent.y + 2.0f*start.y)) {
   
 }
 
 sf::Vector2f normalize(sf::Vector2f v) {
   float norm = sqrt(v.x*v.x + v.y*v.y);
   return sf::Vector2f(v.x/norm, v.y/norm);
+}
+
+float norm(sf::Vector2f v) {
+  return sqrt(v.x*v.x + v.y*v.y);
+}
+
+float SplineShape::getLength() {
+  return length;
 }
 
 SplineShape::SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :
@@ -35,6 +39,8 @@ SplineShape::SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vect
   float step = 1.0f / static_cast<float>(dots - 1);
   for (int i = 0; i < dots; i++) {
     approx[i] = sf::Vector2f(spline.x.evaluate(i * step), spline.y.evaluate(i * step));
+    if (i > 0)
+      length += norm(approx[i] - approx[i - 1]);
   }
   
   sf::Vector2f ns = normalize(sf::Vector2f(approx[1].y - approx[0].y, approx[0].x - approx[1].x));

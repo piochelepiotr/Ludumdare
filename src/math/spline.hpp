@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 struct CubicCurve {
 public:
@@ -20,6 +21,7 @@ class SplineShape {
 public:
   SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent);
   void draw(sf::RenderWindow *window);
+  float getLength();
     
 private:
   Spline spline;
@@ -32,3 +34,4 @@ private:
 
 //util. maybe i should put it in a class or something but idc
 sf::Vector2f normalize(sf::Vector2f v);
+float norm(sf::Vector2f v);
