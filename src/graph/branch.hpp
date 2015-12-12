@@ -7,16 +7,20 @@
 
 class Branch
 {
+	public:
 	enum BranchType {
 		None,
 		RegularBranch
 	};
+	typedef unsigned int ID;
 
-	public:
-	Branch(Node _n1, Node _n2) : n1(_n1), n2(_n2), t(), nbLadyBug(0), ss(3.0f, 20, std::min(_n1, _n2).getPosition(), std::max(_n1, _n2).getPosition(), sf::Vector2f(0, -100), sf::Vector2f(0, -100)) {}
+	Branch(Node _n1, Node _n2);
+
 	float getLength();
-	Node getFirstNode() { return n1; }
-	Node getSecondNode() { return n2; }
+	Node::ID const getFirstNode() const { return n1; }
+	Node::ID getFirstNode() { return n1; }
+	Node::ID const getSecondNode() const { return n2; }
+	Node::ID getSecondNode() { return n2; }
 	int getNbLadyBug() { return nbLadyBug; }
 
 	static Branch noneBranch;

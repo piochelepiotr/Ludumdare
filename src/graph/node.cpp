@@ -1,15 +1,13 @@
 #include "node.hpp"
 
-bool Node::operator<(Node const& other) const
+bool Node::ID::operator<(Node::ID const& other) const
 {
-	sf::Vector2f const& p1 = getPosition(), p2 = other.getPosition();
-	return p1.y > p2.y || p1.y == p2.y && p1.x < p2.x;
+	return id.y > other.id.y || (id.y == other.id.y && id.x < other.id.x);
 }
 
-
-bool Node::operator==(Node const& other) const
+bool Node::ID::operator==(Node::ID const& other) const
 {
-	return getPosition() == other.getPosition();
+	return id == other.id;
 }
 
 Node::Type Node::getType()

@@ -8,27 +8,32 @@ float constexpr leafLimit = 0.3f;
 
 class Graph
 {
-	typedef unsigned int branchID;
-	typedef std::multimap<Node, branchID> NeighbourHood;
+	typedef std::multimap<Node::ID, Branch::ID> NeighbourHood;
 	typedef NeighbourHood multimap;
 
 	public:
 	Graph(); // TODO: Pour l’instant, cette fonction est un peu bidon
-	float distance(Node n1, Node n2);
+	float distance(Node::ID n1, Node::ID n2);
+	Node::ID addNode(Node n);
+	void addNode(Node::ID n);
+	Branch const* newEdge(Node::ID n1, Node::ID n2);
+	// static bool isItLeaf(Node::ID n1, Node::ID n2);
+	bool hasDownEdge(Node::ID n) const;
+	bool isCulDeSac(Branch::ID b) const;
 
-	void addNode(Node n);
-	Branch const* newEdge(Node n1, Node n2);
-	static bool isItLeaf(Node n1, Node n2);
-	bool hasDownEdge(Node n) const;
+	Branch const* getBranch(Branch::ID id) const;
+	Branch* getBranch(Branch::ID id);
+	Node const* getNode(Node::ID id) const;
+	Node* getNode(Node::ID id);
 
-	bool isCulDeSac(Branch b) const;
 
 	private:
-	Branch const* forceNewEdge(Node n1, Node n2);
-	std::map<Node, NeighbourHood> m_nodes;
+	Branch const* forceNewEdge(Node::ID n1, Node::ID n2);
+	std::map<Node::ID, NeighbourHood> m_neighbours;
+	std::map<Node::ID, Node> m_nodes;
 
-	branchID m_branchId;
-	std::map<branchID, Branch> m_branchs;
+	Branch::ID m_branchId;
+	std::map<Branch::ID, Branch> m_branchs;
 
 };
 
