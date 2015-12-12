@@ -15,6 +15,8 @@ bool GameState::handleEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
+		
+		
 		case sf::Event::KeyPressed:
 			handlePlayerInput(event.key.code, true);
 			break;
@@ -46,6 +48,8 @@ bool GameState::update(sf::Time dt)
 
 void GameState::draw()
 {
-
+	getContext().window->clear();
+	
+	getContext().window->display();
 }
 
