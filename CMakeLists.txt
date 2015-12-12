@@ -22,6 +22,7 @@ SET(
 	src/IHM/layout.cpp
 	src/IHM/textbutton.cpp
 	src/IHM/verticalmenu.cpp
+	src/IHM/focusgroup.cpp
 )
 
 ADD_EXECUTABLE(

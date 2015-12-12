@@ -31,6 +31,15 @@ class Widget : public sf::Drawable
 		const sf::Vector2f&
 		getPosition() const;
 
+		void
+		setFocusGroup(FocusGroup* group);
+
+		FocusGroup*
+		getFocusGroup();
+
+		void
+		focus();
+
 	protected:
 		friend class Layout;
 		friend class FocusGroup;
@@ -55,6 +64,6 @@ class Widget : public sf::Drawable
 
 
 		sf::Vector2f mPosition;
-
+		FocusGroup* mFocusGroup;
 };
 

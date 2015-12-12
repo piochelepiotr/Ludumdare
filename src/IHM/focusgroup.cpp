@@ -2,6 +2,8 @@
 #include <IHM/widget.hpp>
 #include <algorithm>
 
+FocusGroup* FocusGroup::mCurrentFocusGroup = nullptr;
+
 void
 FocusGroup::append (Widget& widget)
 {
@@ -34,6 +36,11 @@ FocusGroup::setFocus (Widget& widget)
 	if (mCurrent)
 		mCurrent->disableFocus();
 	mCurrent = &widget;
+
+	if (mCurrentFocusGroup)
+		mCurrentFocusGroup->unfocus();
+
+	mCurrentFocusGroup = this;
 	widget.enableFocus();
 }
 
@@ -76,4 +83,12 @@ Widget*
 FocusGroup::current() 
 {
 	return mCurrent;
+}
+
+void
+FocusGroup::unfocus()
+{
+	if (mCurrent)
+		mCurrent->disableFocus();
+	mCurrentFocusGroup = nullptr;
 }

@@ -25,9 +25,13 @@ class FocusGroup
 
 		Widget*
 		current ();
+
+		void
+		unfocus();
 		
 	private:
 		std::vector<Widget*> mWidgets;
 		Widget*              mCurrent=nullptr;
+		static FocusGroup*   mCurrentFocusGroup;
 
 };
