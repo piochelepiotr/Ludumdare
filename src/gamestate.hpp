@@ -1,5 +1,6 @@
 #pragma once
 #include "state.hpp"
+#include "gameworld.hpp"
 
 class GameState : public State
 {
@@ -10,4 +11,6 @@ class GameState : public State
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
+private:
+    GameWorld mGameWorld;
 };
