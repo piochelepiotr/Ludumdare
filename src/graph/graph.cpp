@@ -46,10 +46,11 @@ float Graph::distance(Node n1, Node n2)
 
 void Graph::addNode(Node node)
 {
-	std::multimap<Node, EdgeType> newMap;
-	m_nodes.insert(std::make_pair(node, newMap));
+	NeighbourHood nh;
+	m_nodes.insert(std::make_pair(node, nh));
 }
 
+/*
 EdgeType Graph::newEdge(Node n1, Node n2)
 {
 	EdgeType t = NONE;
@@ -92,8 +93,42 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 	else
 		return NONE;
 }
+*/
 
+Branch const& Graph::newEdge(Node n1, Node n2)
+{
+	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
+	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
+	if (it1 != m_nodes.end() && it2 != m_nodes.end() && hasDownEdge(n1) || hasDownEdge(n2))
+	{
+		Branch b(n1, n2, ;
+		it1->second.insert(std::make_pair(n2, t));
+		it2->second.insert(std::make_pair(n1, t));
+		return  
+	}
+	else
+		return NONE;
+}
 
+EdgeType Graph::forceNewEdge(Node n1, Node n2)
+{
+	EdgeType t = NONE;
+	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
+	if (isItLeaf(n1, n2))
+		t = LEAF;
+	else
+		t = BRANCH;
+
+	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
+	if (it1 != m_nodes.end() && it2 != m_nodes.end())
+	{
+		it1->second.insert(std::make_pair(n2, t));
+		it2->second.insert(std::make_pair(n1, t));
+		return t;
+	}
+	else
+		return NONE;
+}
 
 bool Graph::isItLeaf(Node n1, Node n2)
 {
