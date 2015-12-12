@@ -5,9 +5,19 @@
 
 class TextButton : public Widget {
 	public:
-		TextButton (sf::Font& font);
+		using TriggerFun = std::function<(void)()>;
 
-		TextButton (const sf::String& text, sf::Font& font);
+
+		TextButton (
+			sf::Font& font,                           /// font used by the widget
+			std::function<(void)()> callback = []{}   /// callback function called when the widget is triggered
+		);
+
+		TextButton (
+			const sf::String& text, 
+			sf::Font& font, 
+			std::function<(void)() callback = []{}
+		);
 
 		/// @brief updates the button state
 		void 
@@ -21,10 +31,6 @@ class TextButton : public Widget {
 		sf::FloatRect
 		getArea () const override;
 
-		/// @brief return the shift required by the widget
-		sf::Vector2f
-		getShift const override;
-
 		void 
 		setText(const sf::String& text);
 
@@ -37,7 +43,11 @@ class TextButton : public Widget {
 		render (sf::RenderTarget& target, sf::RenderState state) const override;
 
 	private:
-		sf::Text	mText;
+		void
+		computeArea ();
 
+		sf::Text                    mText;
+		sf::function<(void)()>      mCallback;
+		sf::FloatRect               mArea;
 };
 
