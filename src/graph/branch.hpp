@@ -23,6 +23,8 @@ class Branch
 	Node::ID getSecondNode() { return n2; }
 	int getNbLadyBug() { return nbLadyBug; }
 
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	static Branch noneBranch;
 	private:
 	static Branch getNoneBranch(Node _n1, Node _n2) { Branch b(_n1, _n2); b.t = None; return b; }
@@ -33,5 +35,3 @@ class Branch
 	int nbLadyBug;
 	SplineShape ss;
 };
-
-

@@ -17,3 +17,10 @@ Branch::Branch(Node _n1, Node _n2) :
 			sf::Vector2f(0, -100)
 	  )
 {}
+
+
+
+void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	ss.draw(target, states);
+}
