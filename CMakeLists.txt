@@ -28,6 +28,7 @@ SET(
 	src/graph/node.cpp
 	src/graph/branch.cpp
 	src/math/spline.cpp
+	src/splinerenderer.cpp
 )
 
 ADD_EXECUTABLE(

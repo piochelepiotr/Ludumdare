@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <graph/graph.hpp>
+#include <splinerenderer.hpp>
 
 class Insect {};
 class InsectType {};

@@ -66,6 +66,6 @@ SplineShape::SplineShape(float thickness, int dots, Spline spline) :
 }
 
 
-void SplineShape::draw(sf::RenderWindow *window) {
-  window->draw(shape);
+void SplineShape::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(shape, states);
 }
