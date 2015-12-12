@@ -22,6 +22,8 @@ SET(
 	src/IHM/layout.cpp
 	src/IHM/textbutton.cpp
 	src/IHM/verticalmenu.cpp
+	src/graph/graph.cpp
+	src/graph/node.cpp
 )
 
 ADD_EXECUTABLE(
