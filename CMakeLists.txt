@@ -24,6 +24,7 @@ SET(
 	src/IHM/verticalmenu.cpp
 	src/graph/graph.cpp
 	src/graph/node.cpp
+	src/graph/branch.cpp
 )
 
 ADD_EXECUTABLE(

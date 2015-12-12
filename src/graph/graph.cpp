@@ -61,8 +61,7 @@ EdgeType Graph::newEdge(Node n1, Node n2)
 			t = LEAF;
 	}
 	else if (n1 < n2 && hasDownEdge(n1) || n2 < n1 && hasDownEdge(n2))
-		t = BRANCH;
-
+		t = BRANCH; 
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
 	if (it1 != m_nodes.end() && it2 != m_nodes.end() && t != NONE)
 	{
@@ -99,36 +98,32 @@ Branch const& Graph::newEdge(Node n1, Node n2)
 {
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
 	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
-	if (it1 != m_nodes.end() && it2 != m_nodes.end() && hasDownEdge(n1) || hasDownEdge(n2))
+	if (it1 != m_nodes.end() && it2 != m_nodes.end() && (n1 < n2 && hasDownEdge(n1) || n2 < n1 && hasDownEdge(n2)))
 	{
-		Branch b(n1, n2, ;
-		it1->second.insert(std::make_pair(n2, t));
-		it2->second.insert(std::make_pair(n1, t));
-		return  
+		Branch b(n1, n2);
+		it1->second.insert(std::make_pair(n2, b));
+		auto &b2 = it2->second.insert(std::make_pair(n1, b))->second;
+		return b2;
 	}
 	else
-		return NONE;
+		return Branch::noneBranch;
 }
 
-EdgeType Graph::forceNewEdge(Node n1, Node n2)
+Branch const& Graph::forceNewEdge(Node n1, Node n2)
 {
-	EdgeType t = NONE;
-	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
-	if (isItLeaf(n1, n2))
-		t = LEAF;
-	else
-		t = BRANCH;
-
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
+	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
 	if (it1 != m_nodes.end() && it2 != m_nodes.end())
 	{
-		it1->second.insert(std::make_pair(n2, t));
-		it2->second.insert(std::make_pair(n1, t));
-		return t;
+		Branch b(n1, n2);
+		it1->second.insert(std::make_pair(n2, b));
+		auto &b2 = it2->second.insert(std::make_pair(n1, b))->second;
+		return b2;
 	}
 	else
-		return NONE;
+		return Branch::noneBranch;
 }
+
 
 bool Graph::isItLeaf(Node n1, Node n2)
 {
@@ -141,13 +136,7 @@ bool Graph::hasDownEdge(Node n) const
 	auto it = m_nodes.find(n);
 	if (it == m_nodes.end())
 		return false;
-	for (auto pair : it->second)
-	{
-		if (n < pair.first)
-			return false;
-		else if (pair.second == BRANCH)
-			return true;
-	}
-	return false;
+	auto pair = it->second.begin();
+	return pair != it->second.end() && pair->first < n;
 }
 
