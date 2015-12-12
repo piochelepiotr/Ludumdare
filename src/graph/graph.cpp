@@ -19,7 +19,6 @@ bool Graph::isCulDeSac(Branch b) const
 }
 
 // TODO: pour l’instant, cette fonction ne renvoie que le nombre de nœuds intermédiaires
-// TODO: De plus, on ne fait pas de vérification de EdgeType
 float Graph::distance(Node n1, Node n2)
 {
 	if (m_nodes.find(n1) == m_nodes.end() || m_nodes.find(n2) == m_nodes.end())
@@ -101,34 +100,33 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 }
 */
 
-Branch const& Graph::newEdge(Node n1, Node n2)
+Branch const* Graph::newEdge(Node n1, Node n2)
 {
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
 	if (it1 != m_nodes.end() && it2 != m_nodes.end() && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2))))
 	{
-		Branch b(n1, n2);
-		it1->second.insert(std::make_pair(n2, b));
-		auto &b2 = it2->second.insert(std::make_pair(n1, b))->second;
-		return b2;
+		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
+		it1->second.insert(std::make_pair(n2, id_n_it->first));
+		it2->second.insert(std::make_pair(n1, id_n_it->first));
+		return &id_n_it->second;
 	}
-	else
-		return Branch::noneBranch;
+	else 
+		return nullptr;
 }
 
-Branch const& Graph::forceNewEdge(Node n1, Node n2)
+Branch const* Graph::forceNewEdge(Node n1, Node n2)
 {
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
 	if (it1 != m_nodes.end() && it2 != m_nodes.end())
 	{
-		Branch b(n1, n2);
-		it1->second.insert(std::make_pair(n2, b));
-		auto &b2 = it2->second.insert(std::make_pair(n1, b))->second;
-		return b2;
+		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
+		it1->second.insert(std::make_pair(n2, id_n_it->first));
+		it2->second.insert(std::make_pair(n1, id_n_it->first));
+		return &id_n_it->second;
 	}
-	else
-		return Branch::noneBranch;
+	else 
+		return nullptr;
 }
-
 
 bool Graph::isItLeaf(Node n1, Node n2)
 {

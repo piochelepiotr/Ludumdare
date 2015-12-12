@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math/spline.hpp>
+#include <memory>
 
 struct SplineGraphics
 {
