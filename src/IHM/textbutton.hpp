@@ -3,20 +3,22 @@
 #include <SFML/Graphics.hpp>
 #include <IHM/widget.hpp>
 
+#include <functional>
+
 class TextButton : public Widget {
 	public:
-		using TriggerFun = std::function<(void)()>;
+		using TriggerFun = std::function<void()>;
 
 
 		TextButton (
 			sf::Font& font,                           /// font used by the widget
-			std::function<(void)()> callback = []{}   /// callback function called when the widget is triggered
+			TriggerFun callback = []{}   /// callback function called when the widget is triggered
 		);
 
 		TextButton (
 			const sf::String& text, 
 			sf::Font& font, 
-			std::function<(void)() callback = []{}
+			TriggerFun callback = []{}
 		);
 
 		/// @brief updates the button state
@@ -34,20 +36,20 @@ class TextButton : public Widget {
 		void 
 		setText(const sf::String& text);
 
-		sf::String& 
+		const sf::String& 
 		getText() const;
 
 	protected:
 		/// @brief Render button
 		void
-		render (sf::RenderTarget& target, sf::RenderState state) const override;
+		draw (sf::RenderTarget& target, sf::RenderStates state) const override;
 
 	private:
 		void
 		computeArea ();
 
-		sf::Text                    mText;
-		sf::function<(void)()>      mCallback;
-		sf::FloatRect               mArea;
+		sf::Text       mText;
+		TriggerFun     mCallback;
+		sf::FloatRect  mArea;
 };
 

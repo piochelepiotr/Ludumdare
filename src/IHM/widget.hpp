@@ -10,9 +10,12 @@ class Widget : public sf::Drawable
 		virtual void 
 		update (sf::Time t)=0;
 
+		virtual 
+		~Widget() = default;
+
 		/// @brief reacts to mouse/keyboard event
 		virtual void 
-		event (sf::Event e);
+		event (sf::Event e)=0;
 
 		/// @brief return the area covered by the widget
 		virtual sf::FloatRect
@@ -25,6 +28,6 @@ class Widget : public sf::Drawable
 	protected:
 		/// @brief Render button
 		virtual void
-		render (sf::RenderTarget& target, sf::RenderState state) const=0;
-}
+		draw (sf::RenderTarget& target, sf::RenderStates state) const=0;
+};
 

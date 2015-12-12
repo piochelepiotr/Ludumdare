@@ -1,7 +1,7 @@
 #include <IHM/textbutton.hpp>
 
 TextButton::TextButton (sf::Font& font, TextButton::TriggerFun callback) : 
-	mText(font),
+	mText("button",font),
 	mCallback(callback){
 	computeArea();
 }
@@ -18,9 +18,14 @@ TextButton::update (sf::Time t) {
 }
 
 void
+TextButton::draw (sf::RenderTarget& target, sf::RenderStates states) const {
+	
+}
+
+void
 TextButton::event (sf::Event e) {
-	if (event.type == sf::Event::KeyPressed) {
-		if (event.key.code = sf::Keyboard::Enter)
+	if (e.type == sf::Event::KeyPressed) {
+		if (e.key.code = sf::Keyboard::Return)
 		{
 			mCallback();
 		}
@@ -38,7 +43,7 @@ TextButton::setText(const sf::String& text) {
 	computeArea();
 }
 
-sf::String&
+const sf::String&
 TextButton::getText() const {
 	return mText.getString();
 }

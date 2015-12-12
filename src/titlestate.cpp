@@ -26,6 +26,8 @@ bool TitleState::handleEvent(const sf::Event& event)
 bool TitleState::update(sf::Time dt)
 {
     mTextEffectTime += dt;
+
+	// blinking text effect
     if (mTextEffectTime >= sf::seconds(0.7f))
     {
         mShowText = !mShowText;
@@ -37,7 +39,7 @@ bool TitleState::update(sf::Time dt)
 void TitleState::draw()
 {
     mContext.window->clear();
-    //mContext.window->draw(mBackgroundSprite);
+    mContext.window->draw(mBackgroundSprite);
     if (mShowText)
         mContext.window->draw(mText);
     mContext.window->display();

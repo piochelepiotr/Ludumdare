@@ -10,6 +10,15 @@ FIND_PACKAGE(SFML COMPONENTS audio graphics window system REQUIRED)
 SET(
     SRCS
     src/main.cpp
+	src/application.cpp
+	src/textureholder.cpp
+	src/titlestate.cpp
+	src/state.cpp
+	src/statestack.cpp
+	src/font.cpp
+	src/gamestate.cpp
+	src/player.cpp
+	src/IHM/textbutton.cpp
 )
 
 ADD_EXECUTABLE(
@@ -24,6 +33,7 @@ ADD_DEFINITIONS(
 
 INCLUDE_DIRECTORIES(
     ${SFML_INCLUDE_DIR}
+	src/
 )
 
 TARGET_LINK_LIBRARIES(
