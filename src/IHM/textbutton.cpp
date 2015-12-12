@@ -19,7 +19,7 @@ TextButton::update (sf::Time t) {
 
 void
 TextButton::draw (sf::RenderTarget& target, sf::RenderStates states) const {
-	
+	target.draw(mText);
 }
 
 void

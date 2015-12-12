@@ -12,6 +12,9 @@ int main()
     window.setFramerateLimit(60);
     TextureHolder textures;
     FontHolder fonts;
+
+	fonts.load(Font::Text, "fonts/text.ttf");
+
     Player player;
     struct State::Context context(window, textures, fonts, player);
     Application app(context);

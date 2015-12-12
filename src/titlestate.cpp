@@ -1,4 +1,5 @@
 #include "titlestate.hpp"
+#include <iostream>
 
 TitleState::TitleState(StateStack& mystack, Context context)
 : State(mystack, context)
@@ -6,8 +7,8 @@ TitleState::TitleState(StateStack& mystack, Context context)
 , mText()
 , mShowText(true)
 , mTextEffectTime()
+, mQuitButton("Quit", context.fonts->get(Font::Text), []{std::cout << "quittage en cours" << std::endl;})
 {
-    mContext.fonts->load(Font::Text, "font/text.ttf");
     mText.setFont(mContext.fonts->get(Font::Text));
     mText.setPosition(250.,300.);
     mText.setString("press any button");
@@ -42,5 +43,6 @@ void TitleState::draw()
     mContext.window->draw(mBackgroundSprite);
     if (mShowText)
         mContext.window->draw(mText);
+	mContext.window->draw(mQuitButton);
     mContext.window->display();
 }

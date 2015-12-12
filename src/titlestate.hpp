@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "state.hpp"
+#include <IHM/textbutton.hpp>
 
 class TitleState : public State
 {
@@ -14,4 +15,6 @@ class TitleState : public State
         sf::Text mText;
         bool mShowText;
         sf::Time mTextEffectTime;
+
+		TextButton mQuitButton;
 };
