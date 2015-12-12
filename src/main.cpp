@@ -10,6 +10,12 @@
 
 int main()
 {
+	Graph g;
+	g.addNode(Node(45, 35));
+	g.addNode(Node(-20, 35));
+	g.newEdge(Node(45, 35), Node(-20, 35));
+
+
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 640), "SpaceCheologue");
     window.setFramerateLimit(60);

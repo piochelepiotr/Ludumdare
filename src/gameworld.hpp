@@ -2,7 +2,9 @@
 #include "SFML/Graphics.hpp"
 #include <graph/graph.hpp>
 
-struct Node {};
+class Insect {};
+class InsectType {};
+
 enum NodeType{};
 
 class GameWorld
