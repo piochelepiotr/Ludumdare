@@ -1,7 +1,21 @@
-#include <iostream>
+#include <SFML/Graphics.hpp>
+#include "textureholder.hpp"
+#include "font.hpp"
+#include "player.hpp"
+#include "state.hpp"
+#include "application.hpp"
 
-int main(int argc, char** argv)
+int main()
 {
-    std::cout << "Hello, Radon-Nikoteam!" << std::endl;
-    return 0;
+    // Create the main window
+    sf::RenderWindow window(sf::VideoMode(800, 640), "SpaceCheologue");
+    window.setFramerateLimit(60);
+    TextureHolder textures;
+    FontHolder fonts;
+    Player player;
+    struct State::Context context(window, textures, fonts, player);
+    Application app(context);
+    int truc = app.run();
+
+    return truc;
 }
