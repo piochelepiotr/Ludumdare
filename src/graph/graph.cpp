@@ -11,6 +11,13 @@ Graph::Graph()
 	forceNewEdge(Node(0, 0), Node(0, 10));
 }
 
+bool Graph::isCulDeSac(Branch b) const
+{
+	auto it1 = m_nodes.find(b.getFirstNode());
+	auto it2 = m_nodes.find(b.getSecondNode());
+	return (it1 == m_nodes.end() || it2 == m_nodes.end() || it1->second.size() < 2 || it2->second.size() < 2);
+}
+
 // TODO: pour l’instant, cette fonction ne renvoie que le nombre de nœuds intermédiaires
 // TODO: De plus, on ne fait pas de vérification de EdgeType
 float Graph::distance(Node n1, Node n2)
