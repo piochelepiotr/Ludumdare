@@ -52,9 +52,34 @@ VerticalMenu::recompute() {
 				x_center + mWidth/2 - w->getArea().width/2, 
 				y_pos
 			};
-
 			setWidgetPosition(*w, position);
 
+			y_pos += w->getArea().height+5.f;
+		}
+	}
+	else if (mAlignPolicy == LEFT) {
+		
+		for (auto w : mWidgets)
+		{
+			sf::Vector2f position = {
+				x_center, 
+				y_pos
+			};
+			setWidgetPosition(*w, position);
+			
+			y_pos += w->getArea().height+5.f;
+		}
+	}
+	else if (mAlignPolicy == RIGHT) {
+		
+		for (auto w : mWidgets)
+		{
+			sf::Vector2f position = {
+				x_center + mWidth - w->getArea().width, 
+				y_pos
+			};
+			setWidgetPosition(*w, position);
+			
 			y_pos += w->getArea().height+5.f;
 		}
 	}
