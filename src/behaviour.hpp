@@ -6,10 +6,10 @@ class Behaviour:
 {
     enum ID {Offensive, Dumb, Coward};
     public:
-        Behaviour(Behaviour::ID, Node*, Graph*);
+        Behaviour(Behaviour::ID, Node, Graph*);
     private:
-        Node choice(Behaviour::ID, Node*, Node*, Graph*);
+        Branch choice(Behaviour::ID, Node, Node, Graph*);
     private:
-        std::vector<Node> mPath;
+        std::vector<(Node, Branch)> mPath;
         Behaviour::ID mID;
 }
