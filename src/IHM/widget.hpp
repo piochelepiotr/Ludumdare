@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <IHM/layout.hpp>
+
 /// @brief : base class for widget with conveniance function for alignment purpose
 class Widget : public sf::Drawable
 {
@@ -25,9 +27,25 @@ class Widget : public sf::Drawable
 		virtual sf::Vector2f
 		getShift() const { return {0,0}; }
 
+		const sf::Vector2f&
+		getPosition() const;
+
 	protected:
+		friend class Layout;
+
 		/// @brief Render button
+		void
+		draw (sf::RenderTarget& target, sf::RenderStates states) const;
+
 		virtual void
-		draw (sf::RenderTarget& target, sf::RenderStates state) const=0;
+		render (sf::RenderTarget& target, sf::RenderStates states) const=0;
+
+	private:
+
+		virtual void
+		setPosition (const sf::Vector2f& position);
+
+		sf::Vector2f mPosition;
+
 };
 

@@ -1,7 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "state.hpp"
+
 #include <IHM/textbutton.hpp>
+#include <IHM/verticalmenu.hpp>
 
 class TitleState : public State
 {
@@ -16,5 +18,6 @@ class TitleState : public State
         bool mShowText;
         sf::Time mTextEffectTime;
 
+		VerticalMenu mVerticalMenu;
 		TextButton mQuitButton;
 };

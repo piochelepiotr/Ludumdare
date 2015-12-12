@@ -42,7 +42,7 @@ class TextButton : public Widget {
 	protected:
 		/// @brief Render button
 		void
-		draw (sf::RenderTarget& target, sf::RenderStates state) const override;
+		render (sf::RenderTarget& target, sf::RenderStates state) const override;
 
 	private:
 		void

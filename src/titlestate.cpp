@@ -7,11 +7,15 @@ TitleState::TitleState(StateStack& mystack, Context context)
 , mText()
 , mShowText(true)
 , mTextEffectTime()
+, mVerticalMenu({0.f,300.f}, 800)
 , mQuitButton("Quit", context.fonts->get(Font::Text), []{std::cout << "quittage en cours" << std::endl;})
 {
     mText.setFont(mContext.fonts->get(Font::Text));
     mText.setPosition(250.,300.);
     mText.setString("press any button");
+
+	mVerticalMenu.setHorizontalAlignment(VerticalMenu::CENTER);
+	mVerticalMenu.append(mQuitButton);
 }
 
 bool TitleState::handleEvent(const sf::Event& event)

@@ -18,7 +18,10 @@ SET(
 	src/font.cpp
 	src/gamestate.cpp
 	src/player.cpp
+	src/IHM/widget.cpp
+	src/IHM/layout.cpp
 	src/IHM/textbutton.cpp
+	src/IHM/verticalmenu.cpp
 )
 
 ADD_EXECUTABLE(
