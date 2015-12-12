@@ -97,8 +97,7 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 Branch const& Graph::newEdge(Node n1, Node n2)
 {
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
-	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
-	if (it1 != m_nodes.end() && it2 != m_nodes.end() && (n1 < n2 && hasDownEdge(n1) || n2 < n1 && hasDownEdge(n2)))
+	if (it1 != m_nodes.end() && it2 != m_nodes.end() && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2))))
 	{
 		Branch b(n1, n2);
 		it1->second.insert(std::make_pair(n2, b));
@@ -112,7 +111,6 @@ Branch const& Graph::newEdge(Node n1, Node n2)
 Branch const& Graph::forceNewEdge(Node n1, Node n2)
 {
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
-	sf::Vector2f const& p1 = n1.getPosition(), p2 = n2.getPosition();
 	if (it1 != m_nodes.end() && it2 != m_nodes.end())
 	{
 		Branch b(n1, n2);

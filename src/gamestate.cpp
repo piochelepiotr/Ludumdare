@@ -44,13 +44,3 @@ bool GameState::update(sf::Time dt)
     return true;
 }
 
-void GameState::draw()
-{
-    mContext.window->clear();
-    std::multimap<int,sf::Drawable> objects = mGameWorld.objects();
-    for(std::multimap<int,sf::Drawable>::const_iterator it = objetcs.begin(); it != objetcs.end(); it++)
-    {
-	mContext.window->draw(it.value());
-    }
-    mContext.window
-}
