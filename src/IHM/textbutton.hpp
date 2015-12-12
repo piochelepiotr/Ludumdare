@@ -5,6 +5,12 @@
 
 #include <functional>
 
+/*struct TextButtonStyle {
+	
+};*/
+
+//button.setStyle(TextButton::Focused, style);
+
 class TextButton : public Widget {
 	public:
 		using TriggerFun = std::function<void()>;
@@ -43,6 +49,12 @@ class TextButton : public Widget {
 		/// @brief Render button
 		void
 		render (sf::RenderTarget& target, sf::RenderStates state) const override;
+		
+		virtual void
+		enableFocus ();
+		
+		virtual void
+		disableFocus();
 
 	private:
 		void

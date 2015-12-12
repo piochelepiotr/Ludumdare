@@ -4,6 +4,7 @@ TextButton::TextButton (sf::Font& font, TextButton::TriggerFun callback) :
 	mText("button",font),
 	mCallback(callback){
 	computeArea();
+	mText.setCharacterSize(25);
 }
 
 TextButton::TextButton (const sf::String& text, sf::Font& font, TextButton::TriggerFun callback) : 
@@ -22,14 +23,14 @@ TextButton::render (sf::RenderTarget& target, sf::RenderStates states) const {
 	auto box = sf::RectangleShape({getArea().width, getArea().height});
 	box.setPosition(getPosition());
 	box.setFillColor(sf::Color::White);
-	target.draw(box);
+	//target.draw(box);
 	target.draw(mText, states);
 }
 
 void
 TextButton::event (sf::Event e) {
 	if (e.type == sf::Event::KeyPressed) {
-		if (e.key.code = sf::Keyboard::Return)
+		if (e.key.code == sf::Keyboard::Return)
 		{
 			mCallback();
 		}
@@ -56,3 +57,16 @@ void
 TextButton::computeArea() {
 	mArea = mText.getGlobalBounds();
 }
+
+void
+TextButton::enableFocus ()
+{
+	mText.setColor(sf::Color::Red);
+}
+
+void
+TextButton::disableFocus()
+{
+	mText.setColor(sf::Color::White);
+}
+

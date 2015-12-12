@@ -55,7 +55,7 @@ VerticalMenu::recompute() {
 
 			setWidgetPosition(*w, position);
 
-			y_pos + w->getArea().height+5.f;
+			y_pos += w->getArea().height+5.f;
 		}
 	}
 }

@@ -51,13 +51,13 @@ FocusGroup::next()
 	if(mWidgets.size() == 0)
 		return nullptr;
 
-	auto it = std::find(mWidgets.rbegin(), mWidgets.rend(), mCurrent);
-	if (it == mWidgets.rend())
+	auto it = std::find(mWidgets.begin(), mWidgets.end(), mCurrent);
+	++it;
+	if (it == mWidgets.end())
 	{
-		setFocus(**mWidgets.rbegin());
+		setFocus(**mWidgets.begin());
 		return mCurrent;
 	}
-	++it;
 	setFocus(**it);
 	return mCurrent;
 }
@@ -68,13 +68,13 @@ FocusGroup::previous()
 	if(mWidgets.size() == 0)
 		return nullptr;
 
-	auto it = std::find(mWidgets.begin(), mWidgets.end(), mCurrent);
-	if (it == mWidgets.end())
+	auto it = std::find(mWidgets.rbegin(), mWidgets.rend(), mCurrent);
+	++it;
+	if (it == mWidgets.rend())
 	{
 		setFocus(**mWidgets.begin());
 		return mCurrent;
 	}
-	++it;
 	setFocus(**it);
 	return mCurrent;
 }
