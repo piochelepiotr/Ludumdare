@@ -17,8 +17,8 @@ int main()
 
 
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 640), "SpaceCheologue");
-    window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode(1280, 1024), "SpaceCheologue");
+    window.setFramerateLimit(90);
     TextureHolder textures;
     FontHolder fonts;
 

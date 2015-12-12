@@ -5,14 +5,25 @@
 
 #include <functional>
 
-/*struct TextButtonStyle {
+struct TextButtonStyle {
+	sf::Color color;
+	sf::Font* font;
+	std::size_t char_size;
 	
-};*/
+	
+	enum StyleType {
+		Normal,
+		Focus
+	};
+};
 
 //button.setStyle(TextButton::Focused, style);
 
+
 class TextButton : public Widget {
 	public:
+		
+		
 		using TriggerFun = std::function<void()>;
 
 
@@ -24,6 +35,13 @@ class TextButton : public Widget {
 		TextButton (
 			const sf::String& text, 
 			sf::Font& font, 
+			TriggerFun callback = []{}
+		);
+		
+		TextButton (
+			const sf::String& text,
+			TextButtonStyle normal,
+			TextButtonStyle focus,
 			TriggerFun callback = []{}
 		);
 
@@ -44,6 +62,12 @@ class TextButton : public Widget {
 
 		const sf::String& 
 		getText() const;
+		
+		void 
+		setStyle(TextButtonStyle style);
+		
+		void
+		defineStyle(TextButtonStyle::StyleType type, TextButtonStyle style);
 
 	protected:
 		/// @brief Render button
@@ -63,5 +87,10 @@ class TextButton : public Widget {
 		sf::Text       mText;
 		TriggerFun     mCallback;
 		sf::FloatRect  mArea;
+		
+		TextButtonStyle mStyleNormal;
+		TextButtonStyle mStyleFocus;
+		
+		TextButtonStyle::StyleType mStyleType;
 };
 

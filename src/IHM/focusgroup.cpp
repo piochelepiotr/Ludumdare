@@ -72,7 +72,7 @@ FocusGroup::previous()
 	++it;
 	if (it == mWidgets.rend())
 	{
-		setFocus(**mWidgets.begin());
+		setFocus(**mWidgets.rbegin());
 		return mCurrent;
 	}
 	setFocus(**it);
@@ -92,3 +92,4 @@ FocusGroup::unfocus()
 		mCurrent->disableFocus();
 	mCurrentFocusGroup = nullptr;
 }
+

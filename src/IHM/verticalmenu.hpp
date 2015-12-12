@@ -3,14 +3,16 @@
 #include <SFML/Graphics.hpp>
 
 #include <IHM/layout.hpp>
+#include <observable.hpp>
+#include <observer.hpp>
 
 class Widget;
 
-class VerticalMenu : public Layout {
+class VerticalMenu : public Layout, public Observer<Updatable> {
 
 	public:
 
-		VerticalMenu (float width);
+		VerticalMenu (float width=50.f);
 
 		VerticalMenu (sf::Vector2f position, float width);
 
@@ -19,6 +21,12 @@ class VerticalMenu : public Layout {
 			CENTER,
 			RIGHT
 		};
+		
+		void
+		setPosition(sf::Vector2f position);
+		
+		void
+		setWidth(float width);
 
 		/// @brief set the alignment policy for widgets
 		void
@@ -32,6 +40,9 @@ class VerticalMenu : public Layout {
 		void
 		remove (Widget& widget);
 
+		virtual void 
+		onUpdate(Observable< Updatable >& source);
+		
 	protected:
 		void
 		recompute () override;

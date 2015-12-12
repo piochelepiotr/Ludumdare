@@ -5,8 +5,10 @@
 #include <IHM/layout.hpp>
 #include <IHM/focusgroup.hpp>
 
+#include <observable.hpp>
+
 /// @brief : base class for widget with conveniance function for alignment purpose
-class Widget : public sf::Drawable
+class Widget : public sf::Drawable, public Observable<Updatable>
 {
 	public:
 		/// @brief updates the button state

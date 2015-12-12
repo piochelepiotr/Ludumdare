@@ -8,8 +8,8 @@ VerticalMenu::VerticalMenu (float width) :
 
 
 VerticalMenu::VerticalMenu (sf::Vector2f position, float width) :
-	mPosition(position),
-	mWidth(width)
+	mWidth(width),
+	mPosition(position)
 {
 }
 
@@ -25,6 +25,7 @@ void
 VerticalMenu::append (Widget& widget)
 {
 	mWidgets.push_back(&widget);
+	widget.addListener(*this);
 	recompute();
 }
 
@@ -35,6 +36,7 @@ VerticalMenu::remove (Widget& widget)
 	if (it != mWidgets.end())
 	{
 		mWidgets.erase(it);
+		widget.removeListener(*this);
 		recompute();
 	}
 }
@@ -86,3 +88,19 @@ VerticalMenu::recompute() {
 }
 
 
+void VerticalMenu::onUpdate(Observable< Updatable >& source)
+{
+	recompute();
+}
+
+void VerticalMenu::setPosition(sf::Vector2f position)
+{
+	mPosition = position;
+	recompute();
+}
+
+void VerticalMenu::setWidth(float width)
+{
+	mWidth = width;
+	recompute();
+}
