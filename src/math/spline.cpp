@@ -51,7 +51,7 @@ SplineShape::SplineShape(float thickness, int dots, Spline spline) :
 	}
 	
 	sf::Vector2f ns = normalize(sf::Vector2f(approx[1].y - approx[0].y, approx[0].x - approx[1].x));
-	sf::Vector2f ne = normalize(sf::Vector2f(approx[dots - 1].y - approx[dots - 2].y, approx[dots - 2].y - approx[dots - 1].y));
+	sf::Vector2f ne = normalize(sf::Vector2f(approx[dots - 1].y - approx[dots - 2].y, approx[dots - 2].x - approx[dots - 1].x));
 	shape[0] = approx[0] + ns * thickness;
 	shape[1] = approx[0] - ns * thickness;
 	shape[2 * dots - 2] = approx[dots - 1] + ne * thickness;
