@@ -21,6 +21,13 @@ bool GameState::handleEvent(const sf::Event& event)
         case sf::Event::KeyReleased:
             handlePlayerInput(event.key.code, false);
             break;
+	
+	case sf::Event::MouseButtonPressed:
+	    break;
+	    
+	case sf::Event::MouseButtonReleased:
+	    break;
+	    
         default:
             break;
     }
