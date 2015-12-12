@@ -1,11 +1,47 @@
 #include "graph.hpp"
 #include <cmath>
+#include <queue>
+
+#include <iostream>
 
 Graph::Graph()
 {
 	addNode(Node(0, 0));
 	addNode(Node(0, 10));
 	forceNewEdge(Node(0, 0), Node(0, 10));
+}
+
+// TODO: pour l’instant, cette fonction ne renvoie que le nombre de nœuds intermédiaires
+// TODO: De plus, on ne fait pas de vérification de EdgeType
+float Graph::distance(Node n1, Node n2)
+{
+	if (m_nodes.find(n1) == m_nodes.end() || m_nodes.find(n2) == m_nodes.end())
+		return std::numeric_limits<float>::infinity();
+
+
+	std::priority_queue<std::pair<float, Node> > q;
+	std::set<Node> s;
+
+	q.push(std::make_pair(0., n1));
+	while (!q.empty())
+	{
+		std::pair<float, Node> pair = q.top();
+		float d = pair.first;
+		Node n = pair.second;
+		q.pop();
+		if (n == n2)
+			return d;
+
+		if (s.find(n) == s.end())
+		{
+			s.insert(n);
+			auto neighbours = m_nodes.find(n)->second;
+			for (auto pair : neighbours)
+				q.push(std::make_pair(d+1, pair.first)); // TODO
+		}
+	}
+
+	return std::numeric_limits<float>::infinity();
 }
 
 void Graph::addNode(Node node)
