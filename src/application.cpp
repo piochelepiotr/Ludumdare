@@ -27,6 +27,9 @@ void Application::processInput()
     sf::Event event;
     while(mWindow->pollEvent(event))
     {
+		if (event.type == sf::Event::Closed)
+			mWindow->close();
+
         mStateStack.handleEvent(event);
     }
 }
