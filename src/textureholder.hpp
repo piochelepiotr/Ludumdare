@@ -4,7 +4,16 @@
 
 namespace Texture
 {
-    enum ID {Branch,LeafBranch,AphidBranch,OffensiveLadyBug,DefensiveLadyBug,NormalLadyBug,Aphid,BackGround};
+    enum ID {
+	Branch
+	, LeafBranch
+	, AphidBranch
+	, OffensiveLadyBug
+	, DefensiveLadyBug
+	, NormalLadyBug
+	, Aphid
+	, BackGround
+    };
 }
 
 class TextureHolder: public ResourceHolder<sf::Texture, Texture::ID>
