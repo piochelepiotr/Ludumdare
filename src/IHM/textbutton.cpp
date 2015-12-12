@@ -19,6 +19,10 @@ TextButton::update (sf::Time t) {
 
 void
 TextButton::render (sf::RenderTarget& target, sf::RenderStates states) const {
+	auto box = sf::RectangleShape({getArea().width, getArea().height});
+	box.setPosition(getPosition());
+	box.setFillColor(sf::Color::White);
+	target.draw(box);
 	target.draw(mText, states);
 }
 

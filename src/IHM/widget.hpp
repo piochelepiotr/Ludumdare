@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <IHM/layout.hpp>
+#include <IHM/focusgroup.hpp>
 
 /// @brief : base class for widget with conveniance function for alignment purpose
 class Widget : public sf::Drawable
@@ -32,6 +33,7 @@ class Widget : public sf::Drawable
 
 	protected:
 		friend class Layout;
+		friend class FocusGroup;
 
 		/// @brief Render button
 		void
@@ -40,10 +42,17 @@ class Widget : public sf::Drawable
 		virtual void
 		render (sf::RenderTarget& target, sf::RenderStates states) const=0;
 
+		virtual void
+		enableFocus () {}
+
+		virtual void
+		disableFocus() {}
+
 	private:
 
 		virtual void
 		setPosition (const sf::Vector2f& position);
+
 
 		sf::Vector2f mPosition;
 
