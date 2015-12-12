@@ -17,6 +17,7 @@ SET(
 	src/statestack.cpp
 	src/font.cpp
 	src/gamestate.cpp
+	src/gameworld.cpp
 	src/player.cpp
 	src/IHM/widget.cpp
 	src/IHM/layout.cpp
@@ -26,6 +27,7 @@ SET(
 	src/graph/graph.cpp
 	src/graph/node.cpp
 	src/graph/branch.cpp
+	src/math/spline.cpp
 )
 
 ADD_EXECUTABLE(

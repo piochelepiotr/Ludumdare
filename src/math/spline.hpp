@@ -20,6 +20,7 @@ public:
 class SplineShape {
 public:
   SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent);
+  SplineShape(float thickness, int dots, Spline spline);
   void draw(sf::RenderWindow *window);
   float getLength();
     

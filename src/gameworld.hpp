@@ -27,7 +27,7 @@ class GameWorld
 	
     private:
 	Graph mGraph;
-	std::multimap<int,sf::Sprite>mDrawableObjects;
+	SplineRenderer mSplineRenderer;
 	std::vector<Insect>mLadyBugs;
 	std::vector<Insect>mAphids;
 	sf::Sprite mBackGround;
