@@ -11,3 +11,8 @@ bool Node::operator==(Node const& other) const
 {
 	return getPosition() == other.getPosition();
 }
+
+Node::Type Node::getType()
+{
+	return m_t;
+}

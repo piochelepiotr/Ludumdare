@@ -4,21 +4,23 @@ Behaviour::Behaviour(Behaviour::ID id, Node spawningNode, Graph* graph)
 : mPath()
 , mID(id)
 {
-    Branch spawningBranch = graph->find(Node).get(0);
+    Branch& spawningBranch = graph->find(Node).get(0);
     mPath.push_back((spawningNode, spawningBranch));
 
-    if (spawningBranch.getFirtsNode() =! spawningNode)
-        Node newNode = spwaningBranch.getFirstNode();
+	Node newNode;
+	
+    if (spawningBranch.getFirstNode() =! spawningNode)
+        Node newNode = spawningBranch.getFirstNode();
     else
-        Node newNode = spwaningBranch.getSecondNode();
-    Node previousNode = spwaningNode;
+        Node newNode = spawningBranch.getSecondNode();
+    Node previousNode = spawningNode;
 
-    while (newNode.getID = Texture::ID::RegularNode)
+    while (newNode.getType() == Texture::ID::RegularNode)
     {
-        newBranch = choice(id, newNode, previousNode, graph);
-        mPath.push_back((newNode,newBranch));
+        Branch& newBranch = choice(id, newNode, previousNode, graph);
+        mPath.push_back((newNode,newBranch)); // FIXME assurer l'identifiant, WARNING copie de branche
         previousNode = newNode;
-        if (newBranch.getFirtsNode() =! newNode)
+        if (newBranch.getFirstNode() =! newNode)
             newNode =newBranch.getFirstNode();
         else
             newNode = newBranch.getSecondNode();
@@ -34,11 +36,11 @@ Branch Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode,
         Branch branchChosen = neighbours.get(0);
         for (Branch* branch: neighbours)
         {
-            if (!branch->IsCulDeSac() && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
+            if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
             {
-                if (branch->getNumberLadyBug() < branchChosen->getLadyBug())
+                if (branch->getNbLadyBug() < branchChosen->getLadyBug())
                     branchChosen = branch;
-                if (branch->getNumberLadyBug() = branchChosen->getLadyBug() && graph->getLength(branch) < graph->getLength(branchChosen))
+                if (branch->getNbLadyBug() == branchChosen->getLadyBug() && branch->getLength() < branchChosen.getLength())
                     branchChosen = branch;
             }
         }
@@ -51,7 +53,7 @@ Branch Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode,
         Branch branchChosen = neighbours.get(0);
         for (Branch* branch: neighbours)
         {
-            if (!branch->IsCulDeSac() && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
+            if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
             {
                 if (branch->getLength() < branchChosen->getLength())
                     branchChosen = branch;

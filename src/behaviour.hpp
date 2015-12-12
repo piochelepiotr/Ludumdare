@@ -1,8 +1,8 @@
 #pragma once
-#include "node.hpp"
-#include "graph.hpp"
+#include <graph/node.hpp>
+#include <graph/graph.hpp>
 
-class Behaviour:
+class Behaviour
 {
     enum ID {Offensive, Dumb, Coward};
     public:
@@ -12,4 +12,4 @@ class Behaviour:
     private:
         std::vector<(Node, Branch)> mPath;
         Behaviour::ID mID;
-}
+};
