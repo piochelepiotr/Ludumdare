@@ -1,4 +1,5 @@
 #include <IHM/textbutton.hpp>
+#include <iostream>
 
 TextButton::TextButton (sf::Font& font, TextButton::TriggerFun callback) : 
 	TextButton("button",font, callback)
@@ -49,6 +50,28 @@ TextButton::event (sf::Event e) {
 		}
 	}
 }
+
+bool 
+TextButton::mouseEvent(sf::Event e, sf::Vector2f local) {
+	auto area = getArea();
+	area.left += getPosition().x;
+	area.top  += getPosition().y;
+	
+	if (e.type == sf::Event::MouseMoved) {
+		if (area.contains(local)) {
+			focus();
+			return true;
+		}
+	}
+	else if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+		if (area.contains(local)) {
+			mCallback();
+			return true;
+		}
+	}
+	return false;
+}
+
 
 sf::FloatRect
 TextButton::getArea() const {

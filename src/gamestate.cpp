@@ -49,7 +49,7 @@ bool GameState::update(sf::Time dt)
 void GameState::draw()
 {
 	getContext().window->clear();
-	
+	mRenderer.render(*getContext().window);
 	getContext().window->display();
 }
 

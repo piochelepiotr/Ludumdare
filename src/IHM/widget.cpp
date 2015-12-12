@@ -28,7 +28,13 @@ Widget::focus ()
 void
 Widget::setFocusGroup (FocusGroup* group)
 {
+	//FIXME Completer
+	if (mFocusGroup == group) return;
+	
+	if (mFocusGroup)
+		mFocusGroup->remove(*this);
 	mFocusGroup = group; 
+	group->append(*this);
 }
 
 FocusGroup*

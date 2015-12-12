@@ -27,10 +27,6 @@ TitleState::TitleState(StateStack& mystack, Context context)
 	mQuitButton.defineStyle(TextButtonStyle::Normal, normal);
 	mQuitButton.defineStyle(TextButtonStyle::Focus, focus);
 	
-    mText.setFont(mContext.fonts->get(Font::Text));
-    mText.setPosition(250.,300.);
-    mText.setString("press any button");
-
 	mVerticalMenu.setHorizontalAlignment(VerticalMenu::CENTER);
 	mVerticalMenu.append(mPlayButton);
 	mVerticalMenu.append(mQuitButton);
@@ -40,8 +36,8 @@ TitleState::TitleState(StateStack& mystack, Context context)
 	sf::Vector2f position = {width/2, context.window->getSize().y / 3.f};
 	mVerticalMenu.setPosition(position);
 
-	mFocusGroup.append(mPlayButton);
-	mFocusGroup.append(mQuitButton);
+	mPlayButton.setFocusGroup(&mFocusGroup);
+	mQuitButton.setFocusGroup(&mFocusGroup);
 }
 
 bool TitleState::handleEvent(const sf::Event& event)
@@ -49,8 +45,6 @@ bool TitleState::handleEvent(const sf::Event& event)
 	
     if (event.type == sf::Event::KeyPressed)
     {
-        /*requestStackPop();
-        requestStackPush(States::Game);*/
 		if (event.key.code == sf::Keyboard::Down) {
 			mFocusGroup.next();
 		}
@@ -61,6 +55,16 @@ bool TitleState::handleEvent(const sf::Event& event)
 		if (mFocusGroup.current())
 			mFocusGroup.current()->event(event);
     }
+    else if (
+		event.type == sf::Event::MouseButtonPressed
+		|| event.type == sf::Event::MouseButtonReleased
+		|| event.type == sf::Event::MouseMoved
+	){
+		auto w = getContext().window;
+		return mFocusGroup.mouseEvent(event, 
+			w->mapPixelToCoords(sf::Mouse::getPosition(*w))
+		);
+	}
 	
     return true;
 }

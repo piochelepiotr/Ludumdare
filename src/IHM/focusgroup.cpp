@@ -33,6 +33,8 @@ FocusGroup::remove (Widget& widget)
 void
 FocusGroup::setFocus (Widget& widget)
 {
+	if (mCurrent == &widget || std::find(mWidgets.begin(), mWidgets.end(), &widget) == mWidgets.end()) return;
+	
 	if (mCurrent)
 		mCurrent->disableFocus();
 	mCurrent = &widget;
@@ -92,4 +94,15 @@ FocusGroup::unfocus()
 		mCurrent->disableFocus();
 	mCurrentFocusGroup = nullptr;
 }
+
+bool FocusGroup::mouseEvent(sf::Event event, sf::Vector2f local)
+{
+	for (auto w : mWidgets)
+	{
+		if (w->mouseEvent(event, local))
+			return true;
+	}
+	return false;
+}
+
 

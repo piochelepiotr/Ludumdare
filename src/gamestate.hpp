@@ -13,4 +13,5 @@ class GameState : public State
         void handlePlayerInput(sf::Keyboard::Key , bool);
 	private:
 		GameWorld mGameWorld;
+		SplineRenderer mRenderer;
 };

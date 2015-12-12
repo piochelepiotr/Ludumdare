@@ -22,6 +22,9 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 		virtual void 
 		event (sf::Event e)=0;
 
+		virtual bool
+		mouseEvent (sf::Event e, sf::Vector2f local)=0;
+		
 		/// @brief return the area covered by the widget
 		virtual sf::FloatRect
 		getArea () const=0;
@@ -58,6 +61,9 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 
 		virtual void
 		disableFocus() {}
+		
+		virtual void
+		onPositionChange() {}
 
 	private:
 

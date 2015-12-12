@@ -53,6 +53,9 @@ class TextButton : public Widget {
 		void 
 		event (sf::Event e) override;
 
+		bool 
+		mouseEvent(sf::Event e, sf::Vector2f local) override;
+	
 		/// @brief return the area covered by the widget
 		sf::FloatRect
 		getArea () const override;
