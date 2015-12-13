@@ -2,6 +2,7 @@
 
 #include "state.hpp"
 #include "graph/graph.hpp"
+#include "editor/anchorpool.hpp"
 
 class EditLevelState : public State
 {
@@ -15,6 +16,10 @@ class EditLevelState : public State
     private:
 	void mousePressed(sf::Vector2f pos);
 	void mouseReleased(sf::Vector2f pos);
+	
 	Graph mGraph;
+	AnchorPool mAnchors;
 	Node::ID mFirstNode;
+	
+	std::vector<std::unique_ptr<NodeAnchorListener> > mNodeAnchors;
 };
