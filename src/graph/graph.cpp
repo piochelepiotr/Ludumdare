@@ -228,9 +228,9 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
 	if (it1 != m_neighbours.end()
 			 && it2 != m_neighbours.end()
-			 && (*this)[n1].getType() == Node::Type::RegularNode
-			 && (*this)[n2].getType() == Node::Type::RegularNode
-			 && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2)))
+//			 && (*this)[n1].getType() == Node::Type::RegularNode
+//			 && (*this)[n2].getType() == Node::Type::RegularNode
+//	TODO		 && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2)))
 			)
 	{
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));

@@ -13,12 +13,8 @@ class GameState : public State
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
-		
+
 		void finDeUnivers();
 	private:
 		GameWorld mGameWorld;
-		SplineRenderer mRenderer;
-		DialogBox mDialogbox;
-		DialogButton mYes;
-		DialogButton mNo;
 };

@@ -1,5 +1,6 @@
 #include "behaviour.hpp"
 #include "graph/graph.hpp"
+#include <iostream>
 
 AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph& graph)
 : mPath()
@@ -36,7 +37,8 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
 
 		Node::ID previousNode = spawningNode;
 
-        while (graph[newNode].getType() == Texture::ID::RegularNode)
+        int j = 0;
+        while (graph[newNode].getType() == Texture::ID::RegularNode && j<5)
         {
             Branch::ID newBranch = choice(id, newNode, previousNode, graph);
             mPath.addBranch(newNode, newBranch); // FIXME assurer l'identifiant, WARNING copie de branche // TODO C’est réglé, non ?
@@ -49,6 +51,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
 			{
                 newNode = graph[newBranch].getSecondNode();
 			}
+			j++;
         }
     }
 }

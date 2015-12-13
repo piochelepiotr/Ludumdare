@@ -4,15 +4,18 @@
 class Flower : public Node
 {
 public:
-    Flower(Node::ID id);
+    Flower(Node::ID, int, sf::Time, Texture::ID);
     bool loseOnePoint();//returns false if the flower dies
     bool isLadyBugFlower();
-    bool update(sf::Time dt);//returns true if the flower fades
+    bool update(sf::Time);//returns true if the flower fades
     void becameNode();
-    
+    sf::Time getCurrentTime()
+    {
+        return mCurrentTime;
+    }
 private:
     int mLife;
     sf::Time mCurrentTime;
-    static const int mStartLifePoints;
-    static const sf::Time mLifeDuration;
+    int mStartLifePoints;
+    sf::Time mLifeDuration;
 };

@@ -8,13 +8,14 @@
 #include "application.hpp"
 
 #include "graph/graph.hpp"
+#include "graph/flower.hpp"
 
 int main()
 {
 	Graph g;
 	g.addNode(Node::ID(250, 200));
 	g.addNode(Node::ID(350, 210));
-	g.addNode(Node::ID(450, 150));
+	g.addNode(Node::ID(450,150));
 	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
 	auto b2 = g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
 	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
@@ -32,7 +33,7 @@ int main()
     auto view = window.getDefaultView();
     view.setSize(1280,1024);
     window.setView(view);
-    
+
     window.setFramerateLimit(90);
     TextureHolder textures;
     FontHolder fonts;

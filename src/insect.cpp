@@ -1,5 +1,6 @@
 #include "insect.hpp"
 #include "graph/graph.hpp"
+#include <iostream>
 
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   Branch *b = g->getBranch(path.getBranchID(currentBranch));
@@ -7,7 +8,7 @@ void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   sf::Vector2f speedVect = b->getSpline().evaluateSpeed(pos);
   angle = atan2(speedVect.y, speedVect.x);
 
-  sprite.setRotation(angle * 180.0f / 3.14159265f);
+  sprite.setRotation(angle * 180.0f / 3.14159265f+90);
   sprite.setPosition(posVect);
   hitbox.setPosition(posVect);
   target.draw(hitbox);

@@ -1,12 +1,12 @@
 #include "flower.hpp"
 
-int Flower::mStartLifePoints = 5;
-sf::Time Flower::mLifeDuration = sf::Time(60000000);//time in microseconds
-
-Flower::Flower(Node::ID id): Node(id)
+Flower::Flower(Node::ID id, int life, sf::Time lifeDuration, Texture::ID type): Node(id)
 {
+    mStartLifePoints = life;
     mLife = mStartLifePoints;
+    mLifeDuration = lifeDuration;
     mCurrentTime = sf::Time();
+    m_t = type;
 }
 
 bool Flower::loseOnePoint()

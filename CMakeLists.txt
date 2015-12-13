@@ -31,7 +31,6 @@ SET(
 	src/graph/branch.cpp
 	src/path.cpp
 	src/math/spline.cpp
-	src/splinerenderer.cpp
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
 	src/editor/nodeanchorlistener.cpp
@@ -40,6 +39,7 @@ SET(
 	src/behaviour.cpp
 	src/editlevelstate.cpp
 	src/dialogbox.cpp
+	src/graph/flower.cpp
 )
 
 ADD_EXECUTABLE(

@@ -1,9 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <graph/graph.hpp>
-#include <splinerenderer.hpp>
 #include "insect.hpp"
-
+#include "graph/flower.hpp"
 
 
 enum NodeType{};
@@ -12,26 +11,26 @@ class GameWorld
 {
 public:
   GameWorld(); //this shouldnt exist. gameworld needs sprites!
-  GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid);
+  GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph g);
   ~GameWorld();
-	
+
   void
   render (sf::RenderTarget& target);
-	
+
   void
   update (sf::Time dt);
-	
+
   void
   spawnInsect (Insect::type type, Node node);
-	
+
   void
   spawnNode (NodeType type, sf::Vector2f position);
-	
+
 private:
   Graph mGraph;
-  SplineRenderer mSplineRenderer;
-  std::vector<LadyBug>mLadyBugs;
-  std::vector<Aphid>mAphids;
+  std::vector<LadyBug> mLadyBugs;
+  std::vector<Aphid> mAphids;
+  std::vector<Flower> mFlowers;
   sf::Sprite mBackGround;
   sf::Sprite mInsectSprites[4];
 };

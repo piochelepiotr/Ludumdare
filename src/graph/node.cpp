@@ -20,7 +20,10 @@ void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::CircleShape c(10);
 	c.setOrigin(10, 10);
-	c.setFillColor(sf::Color::Red);
+	if (m_t == Texture::ID::AphidFlower)
+        c.setFillColor(sf::Color::Yellow);
+    else
+        c.setFillColor(sf::Color::Red);
 	sf::Transform movement;
 	movement.translate(m_pos);
 	states.transform *= movement;
