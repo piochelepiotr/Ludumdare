@@ -125,7 +125,8 @@ void SelectorWidget::recompute()
 	
 	mText.setCharacterSize(120);
 	mText.setString(mEntries[mCursor].second);
-	auto w = mText.getLocalBounds().width;
+	mText.getLocalBounds().width;
+	//auto w = mText.getLocalBounds().width;
 	//mText.setPosition({-w/2.f,0.f});
 	
 	notify();

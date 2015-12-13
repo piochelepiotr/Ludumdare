@@ -54,10 +54,9 @@ bool GameState::handleEvent(const sf::Event& event)
 			break;
 
 		case sf::Event::MouseButtonPressed:
-		case sf::Event::MouseButtonReleased: {
-			sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+		case sf::Event::MouseButtonReleased:
+			getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
 			break;
-		}
 
         default:
             break;
@@ -72,7 +71,7 @@ void GameState::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 bool GameState::update(sf::Time dt)
 {
-  sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+  getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
   mGameWorld.update(dt);
   return true;
 }
