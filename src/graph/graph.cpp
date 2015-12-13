@@ -152,9 +152,9 @@ Path Graph::getPath(Node::ID n1, Node::ID n2) const
 	auto node = n1;
 	auto branch = it->second.second;
 	auto &realBranch = m_branchs.find(branch)->second;
-	while (it != m_paths.end() && realBranch.getLength())
+	while (it != m_paths.end() && !(realBranch.getSecondNode() == n2))
 	{
-		p.addBranch(node, branch);
+		p.addBranch(node, branch, realBranch.getLength());
 		it = m_paths.find(std::make_pair(node, realBranch.getFirstNode()));
 		node = realBranch.getFirstNode();
 		branch = it->second.second;
