@@ -13,9 +13,9 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
         {
             Node::ID node = stuff.first;
 			Node& graph_node = graph[node];
-            if (graph_node.getType() == Texture::ID::Flower && graph_node.getType() == Texture::ID::LadyBugFlower)
+            if (graph_node.getType() == Texture::ID::Flower || graph_node.getType() == Texture::ID::LadyBugFlower)
             {
-                Path path = graph.getPath(spawningNode, node);
+                Path path = graph.getPath(node, spawningNode);
                 float length = path.length(graph);
                 if (length < minLength)
                 {

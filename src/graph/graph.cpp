@@ -149,7 +149,6 @@ Path Graph::getPath(Node::ID n1, Node::ID n2)
 	Node::ID node = n1;
 	Branch::ID branch = it->second.second;
 	Branch& graph_branch = (*this)[branch];
-
 	while (it != m_paths.end() && graph_branch.getOtherNode(node) != n2)
 	{
 		p.addBranch(node, branch);
@@ -241,6 +240,7 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
+		makePath();
 		return id_n_it->first;
 	}
 	else

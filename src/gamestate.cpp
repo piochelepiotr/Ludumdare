@@ -6,7 +6,7 @@
 GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context)
 {
-	Graph g;
+	Graph& g = mGraph;
 	g.addNode(Node::ID(350, 210));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	g.addNode(nid);

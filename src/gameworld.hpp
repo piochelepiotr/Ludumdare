@@ -10,8 +10,10 @@ enum NodeType{};
 class GameWorld
 {
 public:
-  GameWorld(); //this shouldnt exist. gameworld needs sprites!
-  GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph g);
+  GameWorld()=default; //this shouldnt exist. gameworld needs sprites!
+  GameWorld(GameWorld& world)=default;
+  //Graph& operator= (GameWorld& world);
+  GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g);
   ~GameWorld();
 
   void
@@ -27,7 +29,7 @@ public:
   spawnNode (NodeType type, sf::Vector2f position);
 
 private:
-  Graph mGraph;
+  Graph* mGraph;
   std::vector<LadyBug> mLadyBugs;
   std::vector<Aphid> mAphids;
   std::vector<Flower> mFlowers;

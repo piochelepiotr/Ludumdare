@@ -2,6 +2,7 @@
 #include "state.hpp"
 #include "gameworld.hpp"
 #include "dialogbox.hpp"
+#include "graph/graph.hpp"
 #include <IHM/dialogbutton.hpp>
 
 class GameState : public State
@@ -17,4 +18,5 @@ class GameState : public State
 		void finDeUnivers();
 	private:
 		GameWorld mGameWorld;
+		Graph mGraph;
 };

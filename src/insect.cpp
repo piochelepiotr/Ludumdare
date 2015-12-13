@@ -5,10 +5,13 @@
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   Branch *b = g->getBranch(path.getBranchID(currentBranch));
   float cpos = pos;
-  if (b->getSecondNode() == path.getNodeID(currentBranch))
+  float sign = 1.0f;
+  if (b->getSecondNode() == path.getNodeID(currentBranch)) {
     cpos = 1 - pos;
+    sign = -1.0f;
+  }
   sf::Vector2f posVect = b->getSpline().evaluatePos(cpos);
-  sf::Vector2f speedVect = b->getSpline().evaluateSpeed(cpos);
+  sf::Vector2f speedVect = b->getSpline().evaluateSpeed(cpos) * sign;
   angle = atan2(speedVect.y, speedVect.x);
 
   sprite.setRotation(angle * 180.0f / 3.14159265f + 90.0f);
