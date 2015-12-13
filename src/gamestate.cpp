@@ -1,9 +1,10 @@
 #include "gamestate.hpp"
 
 GameState::GameState(StateStack& mystack, Context context)
-: State(mystack, context)
+: State(mystack, context),
+  mDialogbox(context.fonts->get(Font::Text), "Test de news")
 {
-
+	mDialogbox.setPosition(600,600);
 }
 
 GameState::~GameState()
@@ -51,5 +52,7 @@ bool GameState::update(sf::Time dt)
 
 void GameState::draw()
 {
+	getContext().window->draw(mDialogbox);
 }
+
 

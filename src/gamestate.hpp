@@ -1,6 +1,7 @@
 #pragma once
 #include "state.hpp"
 #include "gameworld.hpp"
+#include "dialogbox.hpp"
 
 class GameState : public State
 {
@@ -14,4 +15,5 @@ class GameState : public State
 	private:
 		GameWorld mGameWorld;
 		SplineRenderer mRenderer;
+		DialogBox mDialogbox;
 };

@@ -52,3 +52,9 @@ Widget::getFocusGroup ()
 {
 	return mFocusGroup;
 }
+
+void Widget::setSize ( const sf::Vector2f& size )
+{
+	mSize = size;
+	notify();
+}

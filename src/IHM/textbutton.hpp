@@ -6,10 +6,18 @@
 #include <functional>
 
 struct TextButtonStyle {
+	TextButtonStyle() = default;
+	
+	TextButtonStyle(sf::Color c, sf::Font* f, std::size_t s) : color(c), font(f), char_size(s) {}
+	
 	sf::Color color;
 	sf::Font* font;
-	std::size_t char_size;
+	std::size_t char_size=18;
 	
+	sf::Color frame_color=sf::Color::White;
+	float thickness=0.f;
+	
+	sf::Color fill_color= sf::Color::Transparent;
 	
 	enum StyleType {
 		Normal,
