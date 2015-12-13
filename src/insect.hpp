@@ -29,9 +29,11 @@ private:
 class LadyBug : public Insect {
 public:
   LadyBug(Insect::type type, Node spawn, Graph *g);
-  void RedefinePath(Path newPath, Graph *g);
+  void RedefinePath(Path newPath, Graph &g);
+  void move(float dt, Graph* g);
 private:
   Node objective;
+  bool reachedObjective;
   Path futurePath;
   bool busy;
 };

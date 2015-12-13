@@ -6,6 +6,10 @@ Path::Path()
 {
 }
 
+void Path::insertBranch(Node::ID node, Branch::ID branch) {
+  mPath.insert(mPath.begin(), std::make_pair(node, branch));
+}
+
 void Path::addBranch(Node::ID node, Branch::ID branch)
 {
     mPath.push_back(std::make_pair(node, branch));
@@ -14,6 +18,23 @@ void Path::addBranch(Node::ID node, Branch::ID branch)
 
 Branch::ID Path::getBranchID(int n) {
   return mPath[n].second;
+}
+
+Node::ID Path::getNodeID(int n) {
+  return mPath[n].first;
+}
+
+int Path::size() {
+  return mPath.size();;
+}
+
+std::set<Node::ID> Path::getNodes(Graph &g) {
+  std::set<Node::ID> result;
+  result.insert(getLastNodeID(g));
+  for (auto &i : mPath) {
+    result.insert(i.first);
+  }
+  return result;
 }
 
 Node::ID Path::getLastNodeID(Graph &g) {

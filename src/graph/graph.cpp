@@ -162,6 +162,10 @@ Path Graph::getPath(Node::ID n1, Node::ID n2)
 	return p;
 }
 
+float Graph::getDist(Node::ID n1, Node::ID n2) {
+  return m_paths[std::make_pair(n1, n2)].first;
+}
+
 
 Node::ID Graph::addNode(Node node)
 {
@@ -226,24 +230,26 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 
 Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 {
-	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
-	if (it1 != m_neighbours.end()
-			 && it2 != m_neighbours.end()
-			 && (*this)[n1].getType() == Node::Type::RegularNode
-			 && (*this)[n2].getType() == Node::Type::RegularNode
-			 && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2)))
-			)
-	{
-		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
-		it1->second.insert(std::make_pair(n2, id_n_it->first));
-		it2->second.insert(std::make_pair(n1, id_n_it->first));
-		makePath();
-		return id_n_it->first;
-	}
-	else
-	{
-		return Branch::ID(0);
-	}
+  auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
+  if (it1 != m_neighbours.end()
+      && it2 != m_neighbours.end()
+      && m_nodes.find(n1)->second.getType() == Node::Type::RegularNode
+      && m_nodes.find(n2)->second.getType() == Node::Type::RegularNode
+      && ((n1 < n2 && hasDownEdge(n1))
+	  || (n2 < n1 && hasDownEdge(n2))
+	  )
+      )
+    {
+      auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
+      it1->second.insert(std::make_pair(n2, id_n_it->first));
+      it2->second.insert(std::make_pair(n1, id_n_it->first));
+      makePath();
+      return id_n_it->first;
+    }
+  else
+    {
+      return Branch::ID(0);
+    }
 }
 
 Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)

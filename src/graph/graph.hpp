@@ -55,6 +55,7 @@ class Graph
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	Path getPath(Node::ID n1, Node::ID n2);
+        float getDist(Node::ID n1, Node::ID n2);
 
 	private:
 
