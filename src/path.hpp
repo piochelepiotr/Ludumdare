@@ -1,14 +1,12 @@
 #pragma once
-#include "graph/node.hpp"
-#include "graph/branch.hpp"
-
 
 class Path
 {
     public:
         Path();
         void addBranch(Node::ID, Branch::ID);
-        //float length();
+        float length();
+        Branch::ID getBranchID(int n);
     private:
-        std::vector<std::pair<Node::ID, Branch::ID> > mPath;
+        std::vector<(Node::ID, Branch::ID)> mPath;
 };

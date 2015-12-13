@@ -6,6 +6,7 @@ struct CubicCurve {
 public:
   CubicCurve(float c0, float c1, float c2, float c3);
   float evaluate(float val);
+  float deriv(float val);
 private:
   float c0, c1, c2, c3; //c0 + c1 X + c2 X^2 + c3 X^3
 };
@@ -13,6 +14,8 @@ private:
 class Spline {
 public:
   Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent);
+  sf::Vector2f evaluatePos(float val);
+  sf::Vector2f evaluateSpeed(float val);
   CubicCurve x;
   CubicCurve y;
 };

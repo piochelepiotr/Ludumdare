@@ -1,7 +1,7 @@
 #include "insect.hpp"
 
-void Insect::draw(sf::RenderTarget target, Graph *g, sf::Sprite sprite) {
-  b = g->getBranch(path[currentBranch].first());
+void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
+  Branch b = g->getBranch(path.getBranchID(currentBranch));
   sf::Vector2f posVect = b.getSpline().evaluatePos(pos);
   sf::Vecrot2f speedVect = b.getSpline().evaluateSpeed(pos);
   angle = arctan(speedVect.y / speedVect.x); // BE FUCKING CAREFUL THERE, BUDDY

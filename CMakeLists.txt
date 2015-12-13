@@ -32,6 +32,7 @@ SET(
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
 	src/menustate.cpp
+	src/insect.cpp
 )
 
 ADD_EXECUTABLE(
