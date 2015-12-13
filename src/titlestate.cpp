@@ -9,8 +9,11 @@ TitleState::TitleState(StateStack& mystack, Context context)
 , mShowText(true)
 , mTextEffectTime()
 , mVerticalMenu()
+, mFocusGroup()
 , mPlayButton("Play", context.fonts->get(Font::Text), std::bind(&TitleState::play, this))
+, mSettingButton("Setting", context.fonts->get(Font::Text), []{})
 , mQuitButton("Quit", context.fonts->get(Font::Text), std::bind(&TitleState::quit, this))
+
 { 
 	TextButtonStyle normal;
 	normal.color = sf::Color::White;
@@ -26,9 +29,12 @@ TitleState::TitleState(StateStack& mystack, Context context)
 	mPlayButton.defineStyle(TextButtonStyle::Focus, focus);
 	mQuitButton.defineStyle(TextButtonStyle::Normal, normal);
 	mQuitButton.defineStyle(TextButtonStyle::Focus, focus);
+	mSettingButton.defineStyle(TextButtonStyle::Normal, normal);
+	mSettingButton.defineStyle(TextButtonStyle::Focus, focus);
 	
 	mVerticalMenu.setHorizontalAlignment(VerticalMenu::CENTER);
 	mVerticalMenu.append(mPlayButton);
+	mVerticalMenu.append(mSettingButton);
 	mVerticalMenu.append(mQuitButton);
 	
 	float width = context.window->getSize().x;
@@ -37,6 +43,7 @@ TitleState::TitleState(StateStack& mystack, Context context)
 	mVerticalMenu.setPosition(position);
 
 	mPlayButton.setFocusGroup(&mFocusGroup);
+	mSettingButton.setFocusGroup(&mFocusGroup);
 	mQuitButton.setFocusGroup(&mFocusGroup);
 }
 
@@ -89,6 +96,7 @@ void TitleState::draw()
     //if (mShowText)
         //mContext.window->draw(mText);
 	mContext.window->draw(mPlayButton);
+	mContext.window->draw(mSettingButton);
 	mContext.window->draw(mQuitButton);
     mContext.window->display();
 }
