@@ -18,7 +18,8 @@ Node::Type Node::getType()
 
 void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	sf::CircleShape c(50);
+	sf::CircleShape c(10);
+	c.setOrigin(10, 10);
 	c.setFillColor(sf::Color::Red);
 	sf::Transform movement;
 	movement.translate(m_pos);

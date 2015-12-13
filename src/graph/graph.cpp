@@ -227,12 +227,10 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 {
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
 	if (it1 != m_neighbours.end()
-			&& it2 != m_neighbours.end()
-			&& m_nodes.find(n1)->second.getType() == Node::Type::RegularNode
-			&& m_nodes.find(n2)->second.getType() == Node::Type::RegularNode
-			&& ((n1 < n2 && hasDownEdge(n1))
-				|| (n2 < n1 && hasDownEdge(n2))
-				)
+			 && it2 != m_neighbours.end()
+			 && (*this)[n1].getType() == Node::Type::RegularNode
+			 && (*this)[n2].getType() == Node::Type::RegularNode
+			 && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2)))
 			)
 	{
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
@@ -241,7 +239,10 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 		return id_n_it->first;
 	}
 	else
+	{
+		std::cout << 4 << std::endl;
 		return Branch::ID(0);
+	}
 }
 
 Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)

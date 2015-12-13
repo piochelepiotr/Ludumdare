@@ -8,9 +8,9 @@ class Node
 		typedef Texture::ID Type;
 		struct ID
 		{
-			ID(sf::Vector2f v) : id(v) {};
-			ID(Node n) : id(n.getPosition()) {};
-			ID(float x, float y) : id(x, y) {};
+			ID(sf::Vector2f v) : id(v), type(Node::Type::RegularNode) {};
+			ID(Node n) : id(n.getPosition()), type(n.getType()) {};
+			ID(float x, float y) : id(x, y), type(Node::Type::RegularNode) {};
 			bool operator<(Node::ID const& other) const;
 			bool operator==(Node::ID const& other) const;
 			bool operator!=(Node::ID const& other) const
