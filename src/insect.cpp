@@ -4,11 +4,14 @@
 
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   Branch *b = g->getBranch(path.getBranchID(currentBranch));
-  sf::Vector2f posVect = b->getSpline().evaluatePos(pos);
-  sf::Vector2f speedVect = b->getSpline().evaluateSpeed(pos);
+  float cpos = pos;
+  if (b->getSecondNode() == path.getNodeID(currentBranch))
+    cpos = 1 - pos;
+  sf::Vector2f posVect = b->getSpline().evaluatePos(cpos);
+  sf::Vector2f speedVect = b->getSpline().evaluateSpeed(cpos);
   angle = atan2(speedVect.y, speedVect.x);
 
-  sprite.setRotation(angle * 180.0f / 3.14159265f+90);
+  sprite.setRotation(angle * 180.0f / 3.14159265f + 90.0f);
   sprite.setPosition(posVect);
   hitbox.setPosition(posVect);
   target.draw(hitbox);
@@ -30,16 +33,16 @@ Insect::type Insect::getType() {
   return mType;
 }
 
-Insect::Insect(type mType, float hitbox
+Insect::Insect(type mType, float fhitbox
 	       ,int currentBranch
 	       , float pos, float speed, float angle) : mType(mType)
-						      , hitbox(hitbox)
+						      , hitbox(fhitbox)
 						      , currentBranch(currentBranch)
 						      , pos(pos)
 						      , speed(speed)
 						      , angle(angle)
 {
-
+  hitbox.setOrigin(fhitbox, fhitbox);
 }
 
 Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 1.0f, 0.0f)
