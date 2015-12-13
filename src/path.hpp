@@ -13,4 +13,5 @@ class Path
         Branch::ID getBranchID(int n);
     private:
         std::vector<std::pair<Node::ID, Branch::ID> > mPath;
+		float m_length;
 };
