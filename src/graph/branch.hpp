@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "node.hpp"
-#include "math/spline.hpp"
+#include "../math/spline.hpp"
 
 class Branch
 {
