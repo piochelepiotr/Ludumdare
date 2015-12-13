@@ -48,6 +48,10 @@ Behaviour::Behaviour(Behaviour::ID id, Node spawningNode, Graph* graph)
     }
 }
 
+Path Behaviour::getPath() {
+  return mPath;
+}
+
 
 Branch::ID Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode, Graph* graph)
 {

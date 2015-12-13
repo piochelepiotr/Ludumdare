@@ -1,15 +1,15 @@
 #include "insect.hpp"
 
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
-  Branch b = g->getBranch(path.getBranchID(currentBranch));
-  sf::Vector2f posVect = b.getSpline().evaluatePos(pos);
-  sf::Vecrot2f speedVect = b.getSpline().evaluateSpeed(pos);
-  angle = arctan(speedVect.y / speedVect.x); // BE FUCKING CAREFUL THERE, BUDDY
+  Branch *b = g->getBranch(path.getBranchID(currentBranch));
+  sf::Vector2f posVect = b->getSpline().evaluatePos(pos);
+  sf::Vector2f speedVect = b->getSpline().evaluateSpeed(pos);
+  angle = atan2(speedVect.x, speedVect.y);
   hitbox.setPosition(posVect);
   target.draw(hitbox);
 }
 
-void Insect::move(dt) {
+void Insect::move(float dt) {
   pos += speed * dt;
   if (pos > 1.0f) {
     pos = 0.0f;
@@ -19,26 +19,26 @@ void Insect::move(dt) {
   }
 }
 
-Aphid::Aphid(Behaviour::id b, Node spawn, Graph *g) : mType(Insect::APHID)
-						    , hitbox(10)
+Insect::Insect(type mType, float hitbox
+	       ,int currentBranch, float pos, float speed, float angle) : mType(mType)
+									, hitbox(hitbox)
+									, currentBranch(currentBranch)
+									, pos(pos)
+									, speed(speed)
+									, angle(angle)
+{
+
+}
+									  
+									  
+Aphid::Aphid(Behaviour::ID b, Node spawn, Graph *g) : Insect(Insect::APHID, 10, 0, 0.0f, 1.0f, 0.0f)
 						    , behaviour(b, spawn, g)
-						    , currentBranch(0)
-						    , pos(0.0f)
-						    , speed(1.0f)
-						    , angle(0.0f)
-						    , path()
 {
   path = behaviour.getPath();
 }
 
 
-LadyBug::LadyBug() : mType(Insect::LADYBUG)
-		   , hitbox(12)
-		   , currentBranch(0)
-		   , pos(0.0f)
-		   , speed(1.5f)
-		   , angle(0.0f)
-		   , path()
+LadyBug::LadyBug(Node spawn, Graph *g) : Insect(Insect::LADYBUG, 12, 0, 0.0f, 1.5f, 0.0f)
 {
   
 }

@@ -1,12 +1,13 @@
 #pragma once
 #include "behaviour.hpp"
+#include <cmath>
 
 class Insect {
 public:
   enum type {LADYBUG, APHID};
-  Insect() = default;
+  Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle);
   void move(float dt);
-  void draw(sf::RenderTarget& target);
+  void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
 protected:
   Path path;
   type mType;
@@ -19,7 +20,7 @@ protected:
 
 class Aphid : public Insect {
 public:
-  Aphid(Behaviour::id b, Node spawn, Graph *g);
+  Aphid(Behaviour::ID b, Node spawn, Graph *g);
 private:
   Behaviour behaviour;
 };

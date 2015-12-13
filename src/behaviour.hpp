@@ -8,6 +8,7 @@ class Behaviour
     public:
         enum ID {Offensive, Dumb, Coward};
         Behaviour(Behaviour::ID, Node, Graph*);
+        Path getPath();
     private:
         Branch::ID choice(Behaviour::ID, Node, Node, Graph*);
     private:

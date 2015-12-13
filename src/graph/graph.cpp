@@ -145,7 +145,7 @@ void Graph::makePath()
 			m_paths.insert(std::make_pair(std::make_pair(toID.find(i)->second, toID.find(j)->second), matrix[i][j]));
 }
 
-Path Graph::getPath(Node::ID n1, Node::ID n2) const
+Path Graph::getPath(Node::ID n1, Node::ID n2)
 {
 	Path p;
 	auto it = m_paths.find(std::make_pair(n1, n2));

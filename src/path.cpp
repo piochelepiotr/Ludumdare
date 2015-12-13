@@ -5,15 +5,15 @@ Path::Path()
 {
 }
 
-void Path:addBranch(Node::ID node, Branch::ID branch, float len)
+void Path::addBranch(Node::ID node, Branch::ID branch, float len)
 {
-    mPath.push_back(std::make_pair(node, branch));
-	m_length += d;
+  mPath.push_back(std::make_pair(node, branch));
+	m_length += len;
 }
 
 
 Branch::ID Path::getBranchID(int n) {
-  return mPath[n].second();
+  return mPath[n].second;
 }
 
 /*float Path::length()

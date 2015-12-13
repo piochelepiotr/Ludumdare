@@ -1,4 +1,6 @@
 #pragma once
+#include "graph/node.hpp"
+#include "graph/branch.hpp"
 
 class Path
 {
