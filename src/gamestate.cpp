@@ -4,7 +4,7 @@
 
 GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context)
-  , mDialogbox(context.fonts->get(Font::Text), L"Souhaitez vous declencher la fin de l univers")
+  , mDialogbox(context.fonts->get(Font::Standard), L"Souhaitez vous declencher\nla fin de l univers ?")
   , mYes(context.fonts->get(Font::Text), "YES", std::bind(&GameState::finDeUnivers, this))
   , mNo(context.fonts->get(Font::Text), "NO", std::bind(&DialogBox::close, &mDialogbox))
 {

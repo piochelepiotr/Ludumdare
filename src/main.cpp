@@ -38,6 +38,7 @@ int main()
     FontHolder fonts;
 
 	fonts.load(Font::Text, "fonts/text.ttf");
+	fonts.load(Font::Standard, "fonts/standard.ttf");
 
     Player player;
     struct State::Context context(window, textures, fonts, player);

@@ -5,7 +5,8 @@
 namespace Font
 {
     enum ID {
-		Text
+		Text,
+		Standard
 	};
 }
 
