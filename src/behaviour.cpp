@@ -1,11 +1,11 @@
 #include "behaviour.hpp"
 #include "graph/graph.hpp"
 
-Behaviour::Behaviour(Behaviour::ID id, Node::ID spawningNode, Graph& graph)
+AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph& graph)
 : mPath()
 , mID(id)
 {
-    if (id == Behaviour::Offensive)
+    if (id == AphidBehaviour::Offensive)
     {
         float minLength = 100000000;
         for (auto stuff : graph)
@@ -53,14 +53,14 @@ Behaviour::Behaviour(Behaviour::ID id, Node::ID spawningNode, Graph& graph)
     }
 }
 
-Path & Behaviour::getPath() {
+Path & AphidBehaviour::getPath() {
   return mPath;
 }
 
 
-Branch::ID Behaviour::choice(Behaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph& graph)
+Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph& graph)
 {
-    if (id == Behaviour::Coward)
+    if (id == AphidBehaviour::Coward)
     {
         auto neighbours = graph.getNeighbours(actualNode);
         Branch::ID branchChosen = neighbours.begin()->second;

@@ -37,7 +37,7 @@ void GameWorld::render(sf::RenderTarget& target)
 void GameWorld::spawnInsect(Insect::type type, Node node)
 {
   if (type == Insect::Aphid) {
-    mAphids.push_back(Aphid(Behaviour::Dumb, node, &mGraph));
+    mAphids.push_back(Aphid(AphidBehaviour::Dumb, node, &mGraph));
   } else {
     mLadyBugs.push_back(LadyBug(type, node, &mGraph));
   }

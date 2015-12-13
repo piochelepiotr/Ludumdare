@@ -4,15 +4,14 @@
 
 class Graph;
 
-class Behaviour
+class AphidBehaviour
 {
     public:
         enum ID {Offensive, Dumb, Coward};
-        Behaviour(Behaviour::ID, Node::ID, Graph&);
+        AphidBehaviour(AphidBehaviour::ID, Node::ID, Graph&);
         Path & getPath();
     private:
-        Branch::ID choice(Behaviour::ID, Node::ID, Node::ID, Graph&);
-    private:
+        Branch::ID choice(AphidBehaviour::ID, Node::ID, Node::ID, Graph&);
         Path mPath;
-        Behaviour::ID mID;
+        AphidBehaviour::ID mID;
 };

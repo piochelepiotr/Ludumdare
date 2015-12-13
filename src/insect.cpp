@@ -40,7 +40,7 @@ Insect::Insect(type mType, float hitbox
 
 }
 
-Aphid::Aphid(Behaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 1.0f, 0.0f)
+Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 1.0f, 0.0f)
 						    , behaviour(b, spawn, *g)
 {
   path = behaviour.getPath();
