@@ -5,6 +5,8 @@
 class AnchorActionListener
 {
 	public:
+		virtual ~AnchorActionListener()=default;
+	    
 		virtual void 
 		onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) {};
 		

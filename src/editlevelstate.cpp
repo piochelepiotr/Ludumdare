@@ -3,7 +3,7 @@
 
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
-, mFirstNode(250.f, 200.f)
+, mFirstNode(0.f,0.f)
 {
     mGraph.addNode(Node::ID(250, 200));
     mGraph.addNode(Node::ID(350, 210));
@@ -12,7 +12,6 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
     mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
-    
     //mAnchors.addAnchor(AnchorItem(10.f), )
 }
 
@@ -23,6 +22,7 @@ EditLevelState::~EditLevelState()
 
 bool EditLevelState::handleEvent(const sf::Event& event)
 {
+    auto mouse = mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window));
     switch (event.type)
     {
 		case sf::Event::KeyPressed:
@@ -36,10 +36,10 @@ bool EditLevelState::handleEvent(const sf::Event& event)
 		    break;
 
 		case sf::Event::MouseButtonPressed:
-		    mousePressed(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
+		    mousePressed(event, mouse);
 		    break;
 		case sf::Event::MouseButtonReleased:
-		    mouseReleased(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
+		    mouseReleased(event, mouse);
 		    break;
 
         default:
@@ -66,7 +66,10 @@ void EditLevelState::draw()
 
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 {
-    mAnchors.injectEvent(event, pos);
+    if (!mAnchors.injectEvent(event, pos))
+    {
+	addNode(Node::ID(pos));
+    }
     //mFirstNode = mGraph.nodeAt(pos);
 }
 
@@ -83,3 +86,25 @@ void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 	//mGraph.addNode(Node::ID(pos.x,pos.y));
     //}
 }
+
+void EditLevelState::onNodePressed(Node::ID node)
+{
+    mFirstNode = node;
+}
+
+void EditLevelState::onNodeReleased(Node::ID node)
+{
+    if(mFirstNode.id.x != 0.f && mFirstNode != node)
+    {
+	mGraph.newEdge(mFirstNode,node);
+    }
+    mFirstNode.id.x  = 0.f;
+}
+
+void EditLevelState::addNode(Node::ID node)
+{
+    mGraph.addNode(node);
+    mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
+    mFirstNode.id.x = 0.f;
+}
+

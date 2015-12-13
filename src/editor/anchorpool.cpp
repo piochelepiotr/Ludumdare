@@ -2,11 +2,12 @@
 #include <editor/anchoractionlistener.hpp>
 #include <SFML/Window/Event.hpp>
 #include <utility>
+#include <iostream>
 
-Anchor::ID AnchorPool::addAnchor ( AnchorItem anchor, AnchorActionListener& listener )
+AnchorPool::~AnchorPool()
 {
-	mAnchors.push_back(std::pair<AnchorItem, AnchorActionListener*>(anchor, &listener));
-	return mAnchors.size();
+    for (auto ptr : mAnchorPtrs)
+	delete ptr;
 }
 
 bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
@@ -32,14 +33,16 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 	if (mAnchors.size() == 0) return false;
 	
 	auto first = mAnchors[0].second->getPosition();
-	float min_distance = first.x*first.x + first.y*first.y;
+	auto offset = first - mouse;
+	float min_distance = offset.x*offset.x + offset.y*offset.y;
 	std::size_t min_index = 0;
 	
 	
 	for (std::size_t i=1; i < mAnchors.size(); ++i)
 	{
 		auto pos = mAnchors[i].second->getPosition();
-		float distance = pos.x*pos.x + pos.y*pos.y;
+		auto offset = pos - mouse;
+		float distance = offset.x*offset.x + offset.y*offset.y;
 		if (distance < min_distance)
 		{
 				min_distance = distance;
@@ -47,13 +50,15 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 		}
 	}
 	
-	if (mAnchors[min_index].second != mCurrentAnchor)
+	if (mCurrentAnchor && mAnchors[min_index].second != mCurrentAnchor)
 		mCurrentAnchor->onMouseLeft();
-	
-	if (min_distance < mAnchors[min_index].first.getRadius()) {
+	float radius = mAnchors[min_index].first.getRadius();
+	if (min_distance < radius*radius) {
 		mCurrentAnchor = mAnchors[min_index].second;
 		mCurrentAnchor->onMouseEnter();
 		return true;
+	} else {
+		std::cout << "ttrop grand" << std::endl;
 	}
 	
 	return false;
