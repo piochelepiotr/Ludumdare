@@ -17,7 +17,7 @@ bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
 	{
 		case sf::Event::MouseButtonPressed:
 			mCurrentAnchor->onMouseButtonPressed(event.mouseButton.button, mouse); return true;
-			
+
 		case sf::Event::MouseButtonReleased:
 			mCurrentAnchor->onMouseButtonReleased(event.mouseButton.button, mouse); return true;
 
@@ -58,7 +58,7 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 		mCurrentAnchor->onMouseEnter();
 		return true;
 	} else {
-		std::cout << "ttrop grand" << std::endl;
+		mCurrentAnchor = nullptr;
 	}
 	
 	return false;

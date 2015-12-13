@@ -23,6 +23,7 @@ class EditLevelState : public State
 	
 	Graph mGraph;
 	AnchorPool mAnchors;
+
 	Node::ID mFirstNode;
-	
+	bool m_isNodeDragged;
 };

@@ -56,7 +56,6 @@ void EditLevelState::handlePlayerInput(sf::Keyboard::Key, bool)
 bool EditLevelState::update(sf::Time dt)
 {
     return mAnchors.injectMouse(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
-    return false;
 }
 
 void EditLevelState::draw()
@@ -66,11 +65,11 @@ void EditLevelState::draw()
 
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 {
-    if (!mAnchors.injectEvent(event, pos))
-    {
-	addNode(Node::ID(pos));
-    }
-    //mFirstNode = mGraph.nodeAt(pos);
+	if (!mAnchors.injectEvent(event, pos))
+	{
+		addNode(Node::ID(pos));
+	}
+	//mFirstNode = mGraph.nodeAt(pos);
 }
 
 void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
@@ -90,21 +89,21 @@ void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 void EditLevelState::onNodePressed(Node::ID node)
 {
     mFirstNode = node;
+	m_isNodeDragged = true;
 }
 
 void EditLevelState::onNodeReleased(Node::ID node)
 {
-    if(mFirstNode.id.x != 0.f && mFirstNode != node)
+    if(m_isNodeDragged && mFirstNode != node)
     {
-	mGraph.newEdge(mFirstNode,node);
+		mGraph.newEdge(mFirstNode,node);
     }
-    mFirstNode.id.x  = 0.f;
+	m_isNodeDragged = false;
 }
 
 void EditLevelState::addNode(Node::ID node)
 {
     mGraph.addNode(node);
     mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
-    mFirstNode.id.x = 0.f;
+	m_isNodeDragged = false;
 }
-
