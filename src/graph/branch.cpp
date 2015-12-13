@@ -31,8 +31,6 @@ Branch::Branch() :
 
 void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	std::cout << "b : " << this << std::endl;
-	sf::sleep(sf::milliseconds(100));
 	ss.draw(target, states);
 }
 
