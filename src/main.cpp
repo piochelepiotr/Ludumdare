@@ -25,10 +25,10 @@ int main()
 
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « Rose Bud », mais on n'est pas sur");
-	window.clear();
-	g.draw(window, sf::RenderStates::Default);
-	window.display();
-	sf::sleep(sf::milliseconds(1000));
+	//window.clear();
+	//g.draw(window, sf::RenderStates::Default);
+	//window.display();
+	//sf::sleep(sf::milliseconds(100000));
 
     window.setFramerateLimit(90);
     TextureHolder textures;
