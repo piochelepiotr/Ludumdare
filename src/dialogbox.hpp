@@ -48,7 +48,7 @@ class DialogBox : public sf::Drawable
 		
 	private:
 		sf::Text                 mText;
-		Orientation::Orientation mOrientation;
+		Orientation::Orientation mOrientation=Orientation::TOP;
 		sf::Vector2f             mPosition;
 		sf::RectangleShape       mBox;
 		sf::ConvexShape          mArrow;

@@ -60,46 +60,52 @@ void DialogBox::compute () {
 	float minHeight = 0.f;
 	float minWidth = 0.f;
 	
-	for(auto button : mButtons) {
-		minWidth += button->getNeededSize().x;
-		minWidth += mButtonMargin;
-	}
-	if (mButtons.size() >= 1)
-		minWidth -= mButtonMargin;
-	
-	float h = 0.f;
-	for (auto button : mButtons)
+	if(mOrientation == Orientation::TOP || mOrientation == Orientation::BOTTOM)
 	{
-		h = std::max(h, button->getNeededSize().y);
-	}
-	
-	minHeight = h + mText.getLocalBounds().height + 4*mPadding;
-	
-	minWidth = std::max(mText.getLocalBounds().width+2*mPadding, minWidth);
-	
-	mBox = sf::RectangleShape({minWidth, minHeight}); // precalculée
-	mBox.setPosition(-minWidth/2, mArrowHeight);
-	mBox.setFillColor(sf::Color::Cyan);
-	
-	mArrow = sf::ConvexShape(3);
-	mArrow.setPosition(0.f,0.f);
-	mArrow.setFillColor(sf::Color::Cyan);
-	mArrow.setPoint(0, sf::Vector2f {-mArrowWidth/2.f, mArrowHeight} );	
-	mArrow.setPoint(1, sf::Vector2f {0.f,0.f} );
-	mArrow.setPoint(2, sf::Vector2f {mArrowWidth/2.f, mArrowHeight} );	
-	
-	float w = mText.getLocalBounds().width;
-	mText.setPosition(-w/2, mArrowHeight + mPadding);
-	
-	float y = mArrowHeight + 3* mPadding + mText.getLocalBounds().height;
-	float x = -minWidth/2 + mPadding;
-	
+		
+		for(auto button : mButtons) {
+			minWidth += button->getNeededSize().x;
+			minWidth += mButtonMargin;
+		}
+		if (mButtons.size() >= 1)
+			minWidth -= mButtonMargin;
+		
+		float h = 0.f;
+		for (auto button : mButtons)
+		{
+			h = std::max(h, button->getNeededSize().y);
+		}
+		
+		minHeight = h + mText.getLocalBounds().height + 4*mPadding;
+		
+		minWidth = std::max(mText.getLocalBounds().width+2*mPadding, minWidth);
+		
+		mBox = sf::RectangleShape({minWidth, minHeight}); // precalculée
+		mBox.setPosition(-minWidth/2, mArrowHeight);
+		mBox.setFillColor(sf::Color::Cyan);
+		mBox.setOutlineColor(sf::Color::Blue);
+		mBox.setOutlineThickness(1.f);
+		
+		mArrow = sf::ConvexShape(3);
+		mArrow.setPosition(0.f,1.f);
+		mArrow.setFillColor(sf::Color::Cyan);
+		mArrow.setPoint(0, sf::Vector2f {-mArrowWidth/2.f, mArrowHeight} );	
+		mArrow.setPoint(1, sf::Vector2f {0.f,0.f} );
+		mArrow.setPoint(2, sf::Vector2f {mArrowWidth/2.f, mArrowHeight} );	
+		
+		float w = mText.getLocalBounds().width;
+		mText.setPosition(-w/2, mArrowHeight + mPadding);
+		
+		float y = mArrowHeight + 3* mPadding + mText.getLocalBounds().height;
+		float x = -minWidth/2 + mPadding;
+		
 
-	auto p = getPosition();
-	for(auto button : mButtons) {
-		button->setPosition({x+p.x,y+p.y});
-		button->setSize({(minWidth-mButtons.size()*mPadding)/ (mButtons.size()), h});
-		x += mPadding + (minWidth- (mButtons.size()+1)*mPadding) /(mButtons.size());
+		auto p = getPosition();
+		for(auto button : mButtons) {
+			button->setPosition({x+p.x,y+p.y});
+			button->setSize({(minWidth-mButtons.size()*mPadding)/ (mButtons.size()), h});
+			x += mPadding + (minWidth- (mButtons.size()+1)*mPadding) /(mButtons.size());
+		}
 	}
 }
 

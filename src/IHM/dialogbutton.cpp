@@ -34,11 +34,15 @@ void DialogButton::injectMouse ( const sf::Vector2f& mouse )
 	if (area.contains(mouse))
 	{
 		mBox.setFillColor(sf::Color::Blue);
+		mBox.setOutlineThickness(3.f);
+		mBox.setOutlineColor(sf::Color::Black);
 		mText.setColor(sf::Color::Red);
 	}
 	else
 	{
 		mBox.setFillColor(sf::Color::Green);
+		mBox.setOutlineThickness(3.f);
+		mBox.setOutlineColor(sf::Color::Black);
 		mText.setColor(sf::Color::White);
 	}
 }
