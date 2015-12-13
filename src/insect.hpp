@@ -6,7 +6,7 @@ class Insect {
 public:
   enum type {LADYBUG, APHID};
   Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle);
-  void move(float dt);
+  void move(float dt, Graph*);
   void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
 protected:
   Path path;

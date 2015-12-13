@@ -9,12 +9,12 @@ void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   target.draw(hitbox);
 }
 
-void Insect::move(float dt) {
+void Insect::move(float dt, Graph* g) {
   pos += speed * dt;
   if (pos > 1.0f) {
     pos = 0.0f;
     currentBranch += 1;
-    if (currentBranch == path.length())
+    if (currentBranch == path.length(g))
       currentBranch = 0;
   }
 }
@@ -29,8 +29,8 @@ Insect::Insect(type mType, float hitbox
 {
 
 }
-									  
-									  
+
+
 Aphid::Aphid(Behaviour::ID b, Node spawn, Graph *g) : Insect(Insect::APHID, 10, 0, 0.0f, 1.0f, 0.0f)
 						    , behaviour(b, spawn, g)
 {
@@ -40,5 +40,5 @@ Aphid::Aphid(Behaviour::ID b, Node spawn, Graph *g) : Insect(Insect::APHID, 10, 
 
 LadyBug::LadyBug(Node spawn, Graph *g) : Insect(Insect::LADYBUG, 12, 0, 0.0f, 1.5f, 0.0f)
 {
-  
+
 }

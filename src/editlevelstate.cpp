@@ -1,12 +1,13 @@
 #include "editlevelstate.hpp"
-
+/*
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
+, mFirstNode(250.f, 200.f)
 {
     mGraph.addNode(Node::ID(250, 200));
     mGraph.addNode(Node::ID(350, 210));
     mGraph.addNode(Node::ID(450, 150));
-    
+
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
     mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
@@ -37,7 +38,7 @@ bool EditLevelState::handleEvent(const sf::Event& event)
 	case sf::Event::MouseButtonReleased:
 	    mouseReleased(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
 	    break;
-	
+
         default:
             break;
     }
@@ -77,4 +78,4 @@ void EditLevelState::mouseReleased(sf::Vector2f pos)
 	mGraph.addNode(Node::ID(pos.x,pos.y));
     }
 }
-
+*/

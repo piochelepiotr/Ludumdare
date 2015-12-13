@@ -26,6 +26,18 @@ class Graph
 	Branch* getBranch(Branch::ID id);
 	Node const* getNode(Node::ID id) const;
 	Node* getNode(Node::ID id);
+	NeighbourHood getNeighbour(Node::ID node)
+	{
+	    return m_neighbours.find(node)->second;
+	}
+	Branch* operator[](Branch::ID branch)
+	{
+	    return getBranch(branch);
+	}
+	Node* operator[](Node::ID node)
+	{
+	    return getNode(node);
+	}
 	// Pour itérer sur les std::pair<Node::ID, NeighbourHood>
 	std::map<Node::ID, NeighbourHood>::iterator begin()
 	{ return m_neighbours.begin(); }

@@ -51,7 +51,7 @@ Node* Graph::getNode(Node::ID id)
 
 bool Graph::isCulDeSac(Branch::ID b) const
 {
-	
+
 	auto it1 = m_neighbours.find(getBranch(b)->getFirstNode());
 	auto it2 = m_neighbours.find(getBranch(b)->getSecondNode());
 	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2);
@@ -154,7 +154,7 @@ Path Graph::getPath(Node::ID n1, Node::ID n2)
 	auto &realBranch = m_branchs.find(branch)->second;
 	while (it != m_paths.end() && !(realBranch.getSecondNode() == n2))
 	{
-		p.addBranch(node, branch, realBranch.getLength());
+		p.addBranch(node, branch);
 		it = m_paths.find(std::make_pair(node, realBranch.getFirstNode()));
 		node = realBranch.getFirstNode();
 		branch = it->second.second;
@@ -190,7 +190,7 @@ EdgeType Graph::newEdge(Node n1, Node n2)
 			t = LEAF;
 	}
 	else if (n1 < n2 && hasDownEdge(n1) || n2 < n1 && hasDownEdge(n2))
-		t = BRANCH; 
+		t = BRANCH;
 	auto it1 = m_nodes.find(n1), it2 = m_nodes.find(n2);
 	if (it1 != m_nodes.end() && it2 != m_nodes.end() && t != NONE)
 	{
@@ -240,7 +240,7 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
 		return id_n_it->first;
 	}
-	else 
+	else
 		return Branch::ID(0);
 }
 
@@ -254,7 +254,7 @@ Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
 		return id_n_it->first;
 	}
-	else 
+	else
 		return Branch::ID(0);
 }
 

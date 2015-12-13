@@ -6,14 +6,14 @@ Behaviour::Behaviour(Behaviour::ID id, Node spawningNode, Graph* graph)
 {
     if (id == Behaviour::Offensive)
     {
-        minLength = 100000000;
-        for (auto stuff : graph)
+        float minLength = 100000000;
+        for (auto stuff : *graph)
         {
-            Node::ID node = stuff.fs;
-            if (node.getType() == Texture::ID::Flower && node.getType() == Texture::ID::LadyBugFlower)
+            Node::ID node = stuff.first;
+            if (node.type == Texture::ID::Flower && node.type == Texture::ID::LadyBugFlower)
             {
-                Path path = graph->getPath(actualNode, node);
-                float length = path.length();
+                Path path = graph->getPath(spawningNode, node);
+                float length = path.length(graph);
                 if (length < minLength)
                 {
                     mPath = path;
@@ -23,27 +23,27 @@ Behaviour::Behaviour(Behaviour::ID id, Node spawningNode, Graph* graph)
     }
     else
     {
-        Branch::ID spawningBranch = graph->find(Node).get(0);
+        Branch::ID spawningBranch = graph->getNeighbour(spawningNode).begin()->second;
         mPath.addBranch(spawningNode, spawningBranch);
-
-        Node newNode;
-
-        if (spawningBranch.getFirstNode() =! spawningNode)
-            Node newNode = spawningBranch.getFirstNode();
+        Branch* realSpawningBranch = graph->getBranch(spawningBranch);
+        Node::ID newNode(0.f, 0.f);
+        if (!(realSpawningBranch->getFirstNode() == spawningNode))
+            newNode = realSpawningBranch->getFirstNode();
         else
-            Node newNode = spawningBranch.getSecondNode();
+            newNode = realSpawningBranch->getSecondNode();
 
         Node previousNode = spawningNode;
 
-        while (newNode.getType() == Texture::ID::RegularNode)
+        while (newNode.type == Texture::ID::RegularNode)
         {
             Branch::ID newBranch = choice(id, newNode, previousNode, graph);
             mPath.addBranch(newNode,newBranch); // FIXME assurer l'identifiant, WARNING copie de branche
             previousNode = newNode;
-            if (newBranch.getFirstNode() =! newNode)
-                newNode =newBranch.getFirstNode();
+            Branch* realNewBranch = graph->getBranch(newBranch);
+            if (!(realNewBranch->getFirstNode() == newNode))
+                newNode =realNewBranch->getFirstNode();
             else
-                newNode = newBranch.getSecondNode();
+                newNode = realNewBranch->getSecondNode();
         }
     }
 }
@@ -53,34 +53,39 @@ Path Behaviour::getPath() {
 }
 
 
-Branch::ID Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode, Graph* graph)
+Branch::ID Behaviour::choice(Behaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph* graph)
 {
     if (id == Behaviour::Coward)
     {
-        auto neighbours = graph->find(*actualNode);
-        Branch::ID branchChosen = neighbours.get(0);
-        for (Branch::ID branch: neighbours)
+        auto neighbours = graph->getNeighbour(actualNode);
+        Branch::ID branchChosen = neighbours.begin()->second;
+        Branch* realBranchChosen = (*graph)[branchChosen];
+        for (auto stuff: neighbours)
         {
-            if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
+            Branch::ID branch = stuff.second;
+            Branch* realBranch = graph->getBranch(branch);
+            if (!graph->isCulDeSac(branch) && !(realBranch->getFirstNode()==previousNode) && !(realBranch->getSecondNode()==previousNode))
             {
-                if (branch->getNbLadyBug() < branchChosen->getLadyBug())
+                if (realBranch->getNbLadyBug() < realBranchChosen->getNbLadyBug())
                     branchChosen = branch;
-                if (branch->getNbLadyBug() == branchChosen->getLadyBug() && branch->getLength() < branchChosen.getLength())
+            if (realBranch->getNbLadyBug() == realBranchChosen->getNbLadyBug() && realBranch->getLength() < realBranchChosen->getLength())
                     branchChosen = branch;
             }
         }
         return branchChosen;
     }
-
-    if (id == Behaviour::Dumb)
+    else
     {
-        auto neighbours = graph->find(*actualNode);
-        Branch::ID branchChosen = neighbours.get(0);
-        for (Branch::ID branch: neighbours)
+        auto neighbours = graph->getNeighbour(actualNode);
+        Branch::ID branchChosen = neighbours.begin()->second;
+        Branch* realBranchChosen = (*graph)[branchChosen];
+        for (auto stuff: neighbours)
         {
-            if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
+            Branch::ID branch = stuff.second;
+            Branch* realBranch = (*graph)[branch];
+            if (!graph->isCulDeSac(branch) && !(realBranch->getFirstNode()==previousNode) && !(realBranch->getSecondNode()==previousNode))
             {
-                if (branch->getLength() < branchChosen->getLength())
+                if (realBranch->getLength() < realBranchChosen->getLength())
                     branchChosen = branch;
             }
         }

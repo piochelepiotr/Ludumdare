@@ -10,7 +10,7 @@ class Behaviour
         Behaviour(Behaviour::ID, Node, Graph*);
         Path getPath();
     private:
-        Branch::ID choice(Behaviour::ID, Node, Node, Graph*);
+        Branch::ID choice(Behaviour::ID, Node::ID, Node::ID, Graph*);
     private:
         Path mPath;
         Behaviour::ID mID;
