@@ -29,6 +29,8 @@ SET(
 	src/graph/branch.cpp
 	src/math/spline.cpp
 	src/splinerenderer.cpp
+	src/editor/anchoritem.cpp
+	src/editor/anchorpool.cpp
 )
 
 ADD_EXECUTABLE(

@@ -25,6 +25,6 @@ class TitleState : public State
 		VerticalMenu mVerticalMenu;
 		FocusGroup   mFocusGroup;
 		TextButton   mPlayButton;
-		TextButton   mSettingButton;
+		TextButton   mSettingsButton;
 		TextButton   mQuitButton;
 };

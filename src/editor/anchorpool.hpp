@@ -3,6 +3,9 @@
 #include <vector>
 #include <utility>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
+
+#include <editor/anchoritem.hpp>
 
 namespace Anchor {
 	using ID = std::size_t;

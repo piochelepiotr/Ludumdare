@@ -6,13 +6,13 @@ class AnchorActionListener
 {
 	public:
 		virtual void 
-		onMouseButtonPressed() {};
+		onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) {};
 		
 		virtual void
 		onMouseDragged(sf::Mouse::Button button, const sf::Vector2f& position) {}
 		
 		virtual void
-		onMouseButtonReleased() {}
+		onMouseButtonReleased(sf::Mouse::Button button, const sf::Vector2f& position) {}
 		
 		virtual void
 		onMouseEnter() {}
@@ -20,5 +20,7 @@ class AnchorActionListener
 		virtual void
 		onMouseLeft() {}
 	
+		virtual sf::Vector2f
+		getPosition()=0;
 };
 
