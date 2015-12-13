@@ -22,6 +22,7 @@ public:
   SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent);
   SplineShape(float thickness, int dots, Spline spline);
   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+  void partialDraw(sf::RenderTarget& target, sf::RenderStates states, float start, float end);
   float getLength();
     
 private:

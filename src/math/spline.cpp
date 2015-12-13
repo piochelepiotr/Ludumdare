@@ -58,7 +58,7 @@ SplineShape::SplineShape(float thickness, int dots, Spline spline) :
 	shape[2 * dots - 1] = approx[dots - 1] - ne * thickness;
 	for (int i = 1; i < dots - 1; i++) {
 		sf::Vector2f d1 = normalize(sf::Vector2f(approx[i].y - approx[i - 1].y, approx[i - 1].x - approx[i].x));
-		sf::Vector2f d2 = normalize(sf::Vector2f(approx[i + 1].y - approx[i].y, approx[i].y - approx[i + 1].y));
+		sf::Vector2f d2 = normalize(sf::Vector2f(approx[i + 1].y - approx[i].y, approx[i].x - approx[i + 1].x));
 		sf::Vector2f d = normalize(d1 + d2);
 		shape[2*i] = approx[i] + d * thickness;
 		shape[2*i + 1] = approx[i] - d * thickness;
@@ -68,4 +68,26 @@ SplineShape::SplineShape(float thickness, int dots, Spline spline) :
 
 void SplineShape::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(shape, states);
+}
+
+void SplineShape::partialDraw(sf::RenderTarget& target, sf::RenderStates states, float start, float end) {
+  if (start < 0.01 && end > 0.99)
+    draw(target, states);
+  else {
+    if (end > 0.99f)
+      end = 1.0f;
+    if (start < 0.01f)
+      start = 0.0f;
+    int startDot = static_cast<int>(start * static_cast<float>(dots - 1));
+    int endDot = static_cast<int>(end * static_cast<float>(dots - 1));
+    
+    if (endDot - startDot > 1) {
+      sf::VertexArray partialArray(sf::TrianglesStrip, 2*(endDot - startDot + 1));
+      for (int i = startDot; i < endDot + 1; i++) {
+	partialArray[2*(i - startDot)] = shape[2*i];
+	partialArray[2*(i - startDot) + 1] = shape[2*i + 1];
+      }
+      target.draw(partialArray, states);
+    }
+  }
 }
