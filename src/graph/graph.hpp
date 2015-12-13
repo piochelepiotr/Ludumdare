@@ -26,6 +26,11 @@ class Graph
 	Branch* getBranch(Branch::ID id);
 	Node const* getNode(Node::ID id) const;
 	Node* getNode(Node::ID id);
+	// Pour itérer sur les std::pair<Node::ID, NeighbourHood>
+	std::map<Node::ID, NeighbourHood>::iterator begin()
+	{ return m_neighbours.begin(); }
+	std::map<Node::ID, NeighbourHood>::iterator end()
+	{ return m_neighbours.end(); }
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
