@@ -25,7 +25,7 @@ GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite black
   aphid.setOrigin(50.0f, 75.0f);
   mInsectSprites[static_cast<int>(Insect::Aphid)] = aphid;
 
-  for (auto stuff : g)
+  for (auto& stuff : mGraph)
   {
       Node::ID node = stuff.first;
       if (g[node].m_t == Texture::ID::AphidFlower)

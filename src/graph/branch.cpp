@@ -1,4 +1,6 @@
 #include "branch.hpp"
+#include <iostream>
+
 
 Branch Branch::noneBranch = getNoneBranch(Node::ID(2, 3), Node::ID(4, 4));
 
@@ -22,6 +24,8 @@ Branch::Branch(Node _n1, Node _n2) :
 
 void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	std::cout << "b : " << this << std::endl;
+	sf::sleep(sf::milliseconds(100));
 	ss.draw(target, states);
 }
 

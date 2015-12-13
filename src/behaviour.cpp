@@ -9,7 +9,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
     if (id == AphidBehaviour::Offensive)
     {
         float minLength = 100000000;
-        for (auto stuff : graph)
+        for (auto& stuff : graph)
         {
             Node::ID node = stuff.first;
 			Node& graph_node = graph[node];
@@ -68,7 +68,7 @@ Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, No
         auto neighbours = graph.getNeighbours(actualNode);
         Branch::ID branchChosen = neighbours.begin()->second;
         Branch& graph_branchChosen = graph[branchChosen];
-        for (auto stuff: neighbours)
+        for (auto& stuff: neighbours)
         {
             Branch::ID branch = stuff.second;
             Branch& graph_branch = graph[branch];
@@ -90,7 +90,7 @@ Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, No
         auto neighbours = graph.getNeighbours(actualNode);
         Branch::ID branchChosen = neighbours.begin()->second;
         Branch& graph_branchChosen = graph[branchChosen];
-        for (auto stuff: neighbours)
+        for (auto& stuff: neighbours)
         {
             Branch::ID branch = stuff.second;
             Branch& graph_branch = graph[branch];

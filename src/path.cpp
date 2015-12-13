@@ -61,7 +61,7 @@ void Path::makeCyclic(Graph &g) {
 float Path::length(Graph& graph)
 {
     float mLength = 0;
-    for (auto stuff : mPath)
+    for (auto& stuff : mPath)
     {
         mLength += graph[stuff.second].getLength();
     }

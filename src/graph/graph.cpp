@@ -99,19 +99,19 @@ void Graph::makePath()
 	std::map<int, Node::ID> toID;
 
 	int i = 0; //, j = 0, k = 0;
-	for (auto pair : m_nodes)
+	for (auto& pair : m_nodes)
 	{
 		toInt.insert(std::make_pair(pair.first, i));
 		toID.insert(std::make_pair(i++, pair.first));
 	}
 
 	i = 0;
-	for (auto node_neighbours : m_neighbours)
+	for (auto& node_neighbours : m_neighbours)
 	{
 		Node::ID const& previousNode(sf::Vector2f(std::numeric_limits<float>::infinity(), 0));
 		float previousDist(0);
 
-		for (auto node_branch : node_neighbours.second)
+		for (auto& node_branch : node_neighbours.second)
 		{
 			Node::ID const& node2 = node_branch.first;
 			Branch::ID branch = node_branch.second;
@@ -284,12 +284,13 @@ bool Graph::hasDownEdge(Node::ID n) const
 
 void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (auto pair : m_branchs)
+	
+	for (auto& pair : m_branchs)
 	{
 		pair.second.draw(target, states);
 	}
 
-	for (auto pair : m_nodes)
+	for (auto& pair : m_nodes)
 	{
 		pair.second.draw(target, states);
 	}
