@@ -154,7 +154,7 @@ Path Graph::getPath(Node::ID n1, Node::ID n2)
 	auto &realBranch = m_branchs.find(branch)->second;
 	while (it != m_paths.end() && !(realBranch.getSecondNode() == n2))
 	{
-		p.addBranch(node, branch, realBranch.getLength());
+		p.addBranch(node, branch);
 		it = m_paths.find(std::make_pair(node, realBranch.getFirstNode()));
 		node = realBranch.getFirstNode();
 		branch = it->second.second;
