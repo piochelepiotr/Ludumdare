@@ -43,6 +43,8 @@ class VerticalMenu : public Layout, public Observer<Updatable> {
 		virtual void 
 		onUpdate(Observable< Updatable >& source);
 		
+		
+		
 	protected:
 		void
 		recompute () override;

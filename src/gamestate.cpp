@@ -1,9 +1,16 @@
 #include "gamestate.hpp"
 
+#include <iostream>
+
 GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context)
+  , mDialogbox(context.fonts->get(Font::Text), L"Souhaitez vous declencher la fin de l univers")
+  , mYes(context.fonts->get(Font::Text), "YES", std::bind(&GameState::finDeUnivers, this))
+  , mNo(context.fonts->get(Font::Text), "NO", std::bind(&DialogBox::close, &mDialogbox))
 {
-
+	mDialogbox.setPosition(600,600);
+	mDialogbox.addButton(mYes);
+	mDialogbox.addButton(mNo);
 }
 
 GameState::~GameState()
@@ -28,10 +35,11 @@ bool GameState::handleEvent(const sf::Event& event)
 			break;
 	
 		case sf::Event::MouseButtonPressed:
+		case sf::Event::MouseButtonReleased: {
+			sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+			mDialogbox.injectEvent(event, mouse);
 			break;
-			
-		case sf::Event::MouseButtonReleased:
-			break;
+		}
 	    
         default:
             break;
@@ -46,11 +54,17 @@ void GameState::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 bool GameState::update(sf::Time dt)
 {
+	sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+	mDialogbox.injectMouse(mouse);
     return true;
 }
 
 void GameState::draw()
 {
-    
+	getContext().window->draw(mDialogbox);
 }
 
+void GameState::finDeUnivers()
+{
+	std::cout << "BOOM" << std::endl;
+}

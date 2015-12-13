@@ -24,6 +24,8 @@ SET(
 	src/IHM/textbutton.cpp
 	src/IHM/verticalmenu.cpp
 	src/IHM/focusgroup.cpp
+	src/IHM/selectorwidget.cpp
+	src/IHM/dialogbutton.cpp
 	src/graph/graph.cpp
 	src/graph/node.cpp
 	src/graph/branch.cpp
@@ -36,6 +38,7 @@ SET(
 	src/insect.cpp
 	src/behaviour.cpp
 	src/editlevelstate.cpp
+	src/dialogbox.cpp
 )
 
 ADD_EXECUTABLE(
