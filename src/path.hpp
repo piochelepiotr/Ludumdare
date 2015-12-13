@@ -12,6 +12,8 @@ public:
   void addBranch(Node::ID, Branch::ID);
   float length(Graph&);
   Branch::ID getBranchID(int n);
+  std::pair<Node::ID, Branch::ID>& operator[](int n) { return mPath[n]; }
+  int getSize() const { return mPath.size(); }
   Node::ID getLastNodeID(Graph &g);
   std::unordered_set<Node::ID> getNodes(Graph &g);
   bool isCyclic(Graph &g);
