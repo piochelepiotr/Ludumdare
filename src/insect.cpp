@@ -4,11 +4,11 @@
 
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   Branch *b = g->getBranch(path.getBranchID(currentBranch));
-  float cpos = pos;
-  float sign = 1.0f;
+  float cpos = 1-pos;
+  float sign = -1.0f;
   if (b->getSecondNode() == path.getNodeID(currentBranch)) {
-    cpos = 1 - pos;
-    sign = -1.0f;
+    cpos = pos;
+    sign = 1.0f;
   }
   sf::Vector2f posVect = b->getSpline().evaluatePos(cpos);
   sf::Vector2f speedVect = b->getSpline().evaluateSpeed(cpos) * sign;
