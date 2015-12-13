@@ -94,7 +94,7 @@ Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, No
         {
             Branch::ID branch = stuff.second;
             Branch& graph_branch = graph[branch];
-            if (!graph.isCulDeSac(branch) && graph_branch.getFirstNode() != previousNode && graph_branch.getSecondNode()==previousNode)
+            if (!graph.isCulDeSac(branch) && graph_branch.getFirstNode() != previousNode && graph_branch.getSecondNode()!=previousNode)
             {
                 if (graph_branch.getLength() < graph_branchChosen.getLength())
 				{

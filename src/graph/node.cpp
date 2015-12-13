@@ -22,6 +22,8 @@ void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	c.setOrigin(10, 10);
 	if (m_t == Texture::ID::AphidFlower)
         c.setFillColor(sf::Color::Yellow);
+    else if (m_t == Texture::ID::Flower)
+        c.setFillColor(sf::Color::Magenta);
     else
         c.setFillColor(sf::Color::Red);
 	sf::Transform movement;

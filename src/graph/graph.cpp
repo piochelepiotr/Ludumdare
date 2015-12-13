@@ -7,8 +7,8 @@
 Graph::Graph() : m_branchId(0)
 {
 	addNode(Node::ID(300, 300));
-	addNode(Node::ID(300, 270));
-	forceNewEdge(Node::ID(300, 300), Node::ID(300, 270));
+	addNode(Node::ID(300, 170));
+	forceNewEdge(Node::ID(300, 300), Node::ID(300, 170));
 }
 
 Branch const* Graph::getBranch(Branch::ID id) const
@@ -52,7 +52,7 @@ bool Graph::isCulDeSac(Branch::ID b) const
 
 	auto it1 = m_neighbours.find(getBranch(b)->getFirstNode());
 	auto it2 = m_neighbours.find(getBranch(b)->getSecondNode());
-	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2);
+	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2 || (*this)[getBranch(b)->getFirstNode()].m_t != Texture::ID::RegularNode || (*this)[getBranch(b)->getSecondNode()].m_t != Texture::ID::RegularNode);
 }
 
 /*

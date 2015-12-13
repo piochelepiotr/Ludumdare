@@ -30,6 +30,10 @@ GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite black
       {
           mFlowers.push_back(Flower(node, 5, sf::seconds(1), Texture::ID::AphidFlower));
       }
+      if (mGraph[node].m_t == Texture::ID::Flower)
+      {
+          mFlowers.push_back(Flower(node, 5, sf::seconds(60), Texture::ID::Flower));
+      }
   }
 }
 
@@ -83,7 +87,6 @@ void GameWorld::update(sf::Time dt)
         {
             spawnInsect(Insect::Aphid, flower);
             flower.becameNode();
-            mFlowers.clear();
         }
         if (type == Texture::ID::LadyBugFlower)
         {

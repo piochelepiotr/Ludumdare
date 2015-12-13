@@ -45,7 +45,7 @@ Insect::Insect(type mType, float fhitbox
   hitbox.setOrigin(fhitbox, fhitbox);
 }
 
-Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 1.0f, 0.0f)
+Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 50.0f, 0.0f)
 						    , behaviour(b, spawn, *g)
 {
   path = behaviour.getPath();

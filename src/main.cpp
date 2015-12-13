@@ -29,7 +29,6 @@ int main()
 
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « Rose Bud », mais on n'est pas sur");
-	sf::sleep(sf::milliseconds(100));
 /*
 	window.clear();
 

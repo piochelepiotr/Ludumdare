@@ -7,12 +7,13 @@ GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context)
 {
 	Graph g;
-	g.addNode(Node::ID(250, 200));
 	g.addNode(Node::ID(350, 210));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	g.addNode(nid);
-	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
-	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
+	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::Flower);
+	g.addNode(fleur);
+	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(250, 200));
+	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(350, 210));
 	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
 
     context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
