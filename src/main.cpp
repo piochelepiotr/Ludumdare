@@ -15,10 +15,9 @@ int main()
 	g.addNode(Node::ID(250, 200));
 	g.addNode(Node::ID(350, 210));
 	g.addNode(Node::ID(450, 150));
-	auto b1 = g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
+	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
 	auto b2 = g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
-	auto b3 = g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
-	std::cout << g.distance(Node::ID(250, 200), Node::ID(300, 270)) << std::endl;
+	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
 	std::cout << g.isCulDeSac(b2) << std::endl;
 
 

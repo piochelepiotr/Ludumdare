@@ -55,6 +55,7 @@ bool Graph::isCulDeSac(Branch::ID b) const
 	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2);
 }
 
+/*
 // TODO: pour l’instant, cette fonction ne renvoie que le nombre de nœuds intermédiaires
 float Graph::distance(Node::ID n1, Node::ID n2)
 {
@@ -86,6 +87,65 @@ float Graph::distance(Node::ID n1, Node::ID n2)
 
 	return std::numeric_limits<float>::infinity();
 }
+
+*/
+
+void Graph::makePath()
+{
+	int n = m_nodes.size();
+	std::vector<std::pair<float, Branch::ID> > ligne(n);
+	std::vector<std::vector<std::pair<float, Branch::ID> > > matrix(n, ligne);
+	std::map<Node::ID, int> toInt;
+	std::map<int, Node::ID> toID;
+
+	int i = 0;
+	for (auto pair : m_nodes)
+	{
+		toInt.insert(std::make_pair(pair.first, i));
+		toID.insert(std::make_pair(i++, pair.first));
+	}
+
+	i = 0;
+	for (auto node_neighbours : m_neighbours)
+	{
+		Node::ID const& previousNode(sf::Vector2f(std::numeric_limits<float>::infinity(), 0));
+		float previousDist(0);
+
+		for (auto node_branch : node_neighbours.second)
+		{
+			Node::ID const& node2 = node_branch.first;
+			Branch::ID branch = node_branch.second;
+			float dist = m_branchs.find(branch)->second.getLength();
+			if (!(node2 == previousNode) || dist < previousDist)
+				matrix[i][toInt[node2]] = std::make_pair(dist, branch);
+		}
+		i++;
+	}
+
+
+	for (int k = 0 ; k < n ; k++)
+	{
+		for (i = 0 ; i < n ; i++)
+		{
+			for (int j = 0 ; j < n ; j++)
+			{
+				auto &a = matrix[i][j];
+				float d = matrix[i][k].first + matrix[k][j].first;
+				if (a.first > d)
+					a = std::make_pair(d, matrix[i][k].second);
+			}
+		}
+	}
+
+	m_paths.clear();
+	for (i = 0 ; i < n ; i++)
+		for (int j = 0 ; j < n ; j++)
+			m_paths.insert(std::make_pair(std::make_pair(toID.find(i)->second, toID.find(j)->second), matrix[i][j]));
+}
+
+
+std::vector<
+
 
 Node::ID Graph::addNode(Node node)
 {
@@ -149,7 +209,14 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 {
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
-	if (it1 != m_neighbours.end() && it2 != m_neighbours.end() && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2))))
+	if (it1 != m_neighbours.end()
+			&& it2 != m_neighbours.end()
+			&& m_nodes.find(n1)->second.getType() == Node::Type::RegularNode
+			&& m_nodes.find(n2)->second.getType() == Node::Type::RegularNode
+			&& ((n1 < n2 && hasDownEdge(n1))
+				|| (n2 < n1 && hasDownEdge(n2))
+				)
+			)
 	{
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));

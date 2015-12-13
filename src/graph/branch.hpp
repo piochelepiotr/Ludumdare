@@ -16,7 +16,7 @@ class Branch
 
 	Branch(Node _n1, Node _n2);
 
-	float getLength();
+	float getLength() { return ss.getLength(); };
 	Node::ID const getFirstNode() const { return n1; }
 	Node::ID getFirstNode() { return n1; }
 	Node::ID const getSecondNode() const { return n2; }

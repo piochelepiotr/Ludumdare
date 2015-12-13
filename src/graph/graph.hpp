@@ -13,7 +13,7 @@ class Graph
 
 	public:
 	Graph(); // TODO: Pour l’instant, cette fonction est un peu bidon
-	float distance(Node::ID n1, Node::ID n2);
+	//float distance(Node::ID n1, Node::ID n2);
 	Node::ID addNode(Node n);
 	void addNode(Node::ID n);
 	Branch::ID newEdge(Node::ID n1, Node::ID n2);
@@ -26,10 +26,13 @@ class Graph
 	Node const* getNode(Node::ID id) const;
 	Node* getNode(Node::ID id);
 
-
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+
 	private:
+
+	void makePath();
+
 	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
 	std::map<Node::ID, NeighbourHood> m_neighbours;
 
@@ -38,6 +41,6 @@ class Graph
 	Branch::ID m_branchId;
 	std::map<Branch::ID, Branch> m_branchs;
 
-
+	std::map<std::pair<Node::ID, Node::ID>, std::pair<float, Branch::ID> > m_paths;
 };
 
