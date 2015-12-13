@@ -15,3 +15,4 @@ class AphidBehaviour
         Path mPath;
         AphidBehaviour::ID mID;
 };
+

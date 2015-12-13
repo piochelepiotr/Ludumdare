@@ -44,10 +44,10 @@ void GameWorld::render(sf::RenderTarget& target)
   target.draw(mBackGround);
   mGraph.draw(target, sf::RenderStates::Default);
   for (auto &ldb : mLadyBugs) {
-    ldb.draw(target, &mGraph, mInsectSprites[static_cast<int>(ldb.getType())]);
+    ldb.draw(target, &mGraph, mInsectSprites[static_cast<size_t>(ldb.getType())]);
   }
   for (auto &apd : mAphids) {
-    apd.draw(target, &mGraph, mInsectSprites[static_cast<int>(Insect::Aphid)]);
+    apd.draw(target, &mGraph, mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
   }
 }
 

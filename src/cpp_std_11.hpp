@@ -2,11 +2,12 @@
 
 #include <memory>
 #include <type_traits>
+#include <utility>
 
 // Stephan T. Lavavej implementation
 template <typename T, typename... Args>
-std::unique_ptr<T> make_unique_helper(std::false_type, Args&&... args) {
-	return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+std::unique_ptr<T>&& make_unique_helper(std::false_type, Args&&... args) {
+	return std::move(std::unique_ptr<T>(new T(std::forward<Args>(args)...)));
 }
 
 template <typename T, typename... Args>
@@ -19,6 +20,6 @@ std::unique_ptr<T> make_unique_helper(std::true_type, Args&&... args) {
 }
 
 template <typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args) {
-	return make_unique_helper<T>(std::is_array<T>(), std::forward<Args>(args)...);
+std::unique_ptr<T>&& make_unique(Args&&... args) {
+	return std::move(make_unique_helper<T>(std::is_array<T>(), std::forward<Args>(args)...));
 }

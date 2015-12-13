@@ -9,8 +9,6 @@ Graph::Graph() : m_branchId(0)
 	addNode(Node::ID(300, 300));
 	addNode(Node::ID(300, 270));
 	forceNewEdge(Node::ID(300, 300), Node::ID(300, 270));
-
-	makePath();
 }
 
 Branch const* Graph::getBranch(Branch::ID id) const
@@ -95,12 +93,12 @@ float Graph::distance(Node::ID n1, Node::ID n2)
 void Graph::makePath()
 {
 	int n = m_nodes.size();
-	std::vector<std::pair<float, Branch::ID> > ligne(n);
+	std::vector<std::pair<float, Branch::ID> > ligne(n, std::make_pair(std::numeric_limits<float>::infinity(), 0));
 	std::vector<std::vector<std::pair<float, Branch::ID> > > matrix(n, ligne);
 	std::map<Node::ID, int> toInt;
 	std::map<int, Node::ID> toID;
 
-	int i = 0;
+	int i = 0; //, j = 0, k = 0;
 	for (auto pair : m_nodes)
 	{
 		toInt.insert(std::make_pair(pair.first, i));
@@ -123,7 +121,6 @@ void Graph::makePath()
 		}
 		i++;
 	}
-
 
 	for (int k = 0 ; k < n ; k++)
 	{
@@ -149,18 +146,24 @@ Path Graph::getPath(Node::ID n1, Node::ID n2)
 {
 	Path p;
 	auto it = m_paths.find(std::make_pair(n1, n2));
-	auto node = n1;
-	auto branch = it->second.second;
-	auto &realBranch = m_branchs.find(branch)->second;
-	while (it != m_paths.end() && !(realBranch.getSecondNode() == n2))
+	Node::ID node = n1;
+	Branch::ID branch = it->second.second;
+	Branch& graph_branch = (*this)[branch];
+
+	while (it != m_paths.end() && graph_branch.getOtherNode(node) != n2)
 	{
 		p.addBranch(node, branch);
-		it = m_paths.find(std::make_pair(node, realBranch.getFirstNode()));
-		node = realBranch.getFirstNode();
+		it = m_paths.find(std::make_pair(graph_branch.getOtherNode(node), n2));
+		node = graph_branch.getOtherNode(node);
 		branch = it->second.second;
-		realBranch = m_branchs.find(branch)->second;
+		graph_branch = (*this)[branch];
 	}
+	p.addBranch(node, branch);
 	return p;
+}
+
+float Graph::getDist(Node::ID n1, Node::ID n2) {
+  return m_paths[std::make_pair(n1, n2)].first;
 }
 
 
@@ -170,6 +173,7 @@ Node::ID Graph::addNode(Node node)
 	Node::ID ni(node);
 	m_neighbours.insert(std::make_pair(ni, nh));
 	m_nodes.insert(std::make_pair(ni, node));
+	makePath();
 	return ni;
 }
 
@@ -178,6 +182,7 @@ void Graph::addNode(Node::ID ni)
 	NeighbourHood nh;
 	m_neighbours.insert(std::make_pair(ni, nh));
 	m_nodes.emplace(ni, ni);
+	makePath();
 }
 /*
 EdgeType Graph::newEdge(Node n1, Node n2)
@@ -253,6 +258,7 @@ Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
+		makePath();
 		return id_n_it->first;
 	}
 	else

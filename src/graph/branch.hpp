@@ -17,10 +17,11 @@ class Branch
 	Branch(Node _n1, Node _n2);
 
 	float getLength() { return ss.getLength(); };
-	Node::ID const getFirstNode() const { return n1; }
-	Node::ID getFirstNode() { return n1; }
-	Node::ID const getSecondNode() const { return n2; }
-	Node::ID getSecondNode() { return n2; }
+	Node::ID getFirstNode() const { return n1; }
+	Node::ID getSecondNode() const { return n2; }
+	Node::ID getOtherNode(Node::ID node) const
+	{ return n1 == node ? n2 : n1; }
+
 	int getNbLadyBug() { return nbLadyBug; }
         Spline getSpline(); //this is a Spline, not a SplineShape!
 

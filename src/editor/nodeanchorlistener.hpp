@@ -2,11 +2,11 @@
 #include "editor/anchoractionlistener.hpp"
 #include "graph/node.hpp"
 
-class Graph;
+class EditLevelState;
 
 class NodeAnchorListener : public AnchorActionListener {
     public:
-	NodeAnchorListener(Graph& graph, Node::ID node);
+	NodeAnchorListener(EditLevelState& editLevelState, Node::ID node);
 	
 	void 
 	onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) override;
@@ -28,6 +28,6 @@ class NodeAnchorListener : public AnchorActionListener {
 
 
 	private:
-	Graph& m_graph;
+	EditLevelState& m_editLevelState;
 	Node::ID m_node;
 };
