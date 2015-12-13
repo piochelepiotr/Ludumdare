@@ -29,7 +29,10 @@ int main()
 	//g.draw(window, sf::RenderStates::Default);
 	//window.display();
 	//sf::sleep(sf::milliseconds(100000));
-
+    auto view = window.getDefaultView();
+    view.setSize(1280,1024);
+    window.setView(view);
+    
     window.setFramerateLimit(90);
     TextureHolder textures;
     FontHolder fonts;
