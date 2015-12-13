@@ -1,13 +1,14 @@
 #include "editlevelstate.hpp"
+#include <iostream>
 
 
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
 , mFirstNode(0.f,0.f)
 {
-    mGraph.addNode(Node::ID(250, 200));
-    mGraph.addNode(Node::ID(350, 210));
-    mGraph.addNode(Node::ID(450, 150));
+    addNode(Node::ID(250, 200));
+    addNode(Node::ID(350, 210));
+    addNode(Node::ID(450, 150));
 
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
@@ -75,6 +76,10 @@ void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 {
     mAnchors.injectEvent(event, pos);
+	if (m_isNodeDragged)
+	{
+	}
+	m_isNodeDragged = false;
     //Node::ID secondNode = mGraph.nodeAt(pos);
     //if(mFirstNode.id.x >= 0 && secondNode.id.x >= 0 && !(mFirstNode.id == secondNode.id))
     //{
@@ -92,8 +97,10 @@ void EditLevelState::onNodePressed(Node::ID node)
 	m_isNodeDragged = true;
 }
 
+
 void EditLevelState::onNodeReleased(Node::ID node)
 {
+	std::cout << node.id.x << "  " << mFirstNode.id.x << std::endl;
     if(m_isNodeDragged && mFirstNode != node)
     {
 		mGraph.newEdge(mFirstNode,node);

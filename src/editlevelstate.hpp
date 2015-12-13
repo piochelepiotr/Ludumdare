@@ -17,6 +17,11 @@ class EditLevelState : public State
 	void onNodePressed(Node::ID node);
 	void onNodeReleased(Node::ID node);
 	void addNode(Node::ID node);
+	void addEdge(Node::ID n1, Node::ID);
+
+	std::pair<bool, Node::ID> getNodeDragged()
+	{ return std::make_pair(m_isNodeDragged, mFirstNode); }
+
     private:
 	void mousePressed(sf::Event event, sf::Vector2f pos);
 	void mouseReleased(sf::Event event, sf::Vector2f pos);
@@ -24,6 +29,6 @@ class EditLevelState : public State
 	Graph mGraph;
 	AnchorPool mAnchors;
 
-	Node::ID mFirstNode;
 	bool m_isNodeDragged;
+	Node::ID mFirstNode;
 };
