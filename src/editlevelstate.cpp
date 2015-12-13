@@ -1,6 +1,6 @@
 #include "editlevelstate.hpp"
 
-/*
+
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
 , mFirstNode(250.f, 200.f)
@@ -13,7 +13,7 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
     mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
     
-    mAnchors.addAnchor(AnchorItem(10.f), )
+    //mAnchors.addAnchor(AnchorItem(10.f), )
 }
 
 EditLevelState::~EditLevelState()
@@ -55,7 +55,7 @@ void EditLevelState::handlePlayerInput(sf::Keyboard::Key, bool)
 
 bool EditLevelState::update(sf::Time dt)
 {
-    return mAnchors.injectMouse(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window));
+    return mAnchors.injectMouse(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
     //return false;
 }
 
@@ -83,4 +83,3 @@ void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 	//mGraph.addNode(Node::ID(pos.x,pos.y));
     //}
 }
-*/

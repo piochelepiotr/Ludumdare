@@ -15,8 +15,8 @@ class EditLevelState : public State
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
     private:
-	void mousePressed(sf::Vector2f pos);
-	void mouseReleased(sf::Vector2f pos);
+	void mousePressed(sf::Event event, sf::Vector2f pos);
+	void mouseReleased(sf::Event event, sf::Vector2f pos);
 	
 	Graph mGraph;
 	AnchorPool mAnchors;
