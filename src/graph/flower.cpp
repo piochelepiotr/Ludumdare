@@ -2,14 +2,11 @@
 
 int Flower::mStartLifePoints = 5;
 sf::Time Flower::mLifeDuration = sf::Time(60000000);//time in microseconds
-int Flower::mRaduis = 50;
-sf::Time mTimeBetweenGeration = sf::Time(20000000);
 
-Flower::Flower(Node::ID id,sf::Time startTime): Node(id)
+Flower::Flower(Node::ID id): Node(id)
 {
     mLife = mStartLifePoints;
-    mStartTime = startTime;
-    mTimeLastGeneration = startTime;
+    mCurrentTime = sf::Time();
 }
 
 bool Flower::loseOnePoint()
@@ -18,23 +15,23 @@ bool Flower::loseOnePoint()
     return mLife;
 }
 
-bool Flower::isFaded(sf::Time time)
+bool Flower::isLadyBugFlower()
 {
-    return time - mStartTime >= mLifeDuration;
+    return getType() == Texture::ID::LadyBugFlower;
 }
 
-bool Flower::generateLadyBug(sf::Time time)
+void Flower::becameNode()
 {
-    if(time-mTimeLastGeneration > mTimeBetweenGeration)
-    {
-	mTimeLastGeneration = time;
-	return true;
-    }
-    else
-    {
-	return false;
-    }
+    m_t = Texture::ID::RegularNode;
 }
+
+bool Flower::update(sf::Time dt)
+{
+    mCurrentTime += dt;
+    return mCurrentTime >= mLifeDuration;
+}
+
+
 
 
 

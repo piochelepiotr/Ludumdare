@@ -4,16 +4,15 @@
 class Flower : public Node
 {
 public:
-    Flower(Node::ID id,sf::Time startTime);
+    Flower(Node::ID id);
     bool loseOnePoint();//returns false if the flower dies
-    bool isFaded(sf::Time time);
-    bool generateLadyBug(sf::Time time);
+    bool isLadyBugFlower();
+    bool update(sf::Time dt);//returns true if the flower fades
+    void becameNode();
+    
 private:
     int mLife;
-    sf::Time mStartTime;
-    sf::Time mTimeLastGeneration;//last time when a lady bug was generated
+    sf::Time mCurrentTime;
     static const int mStartLifePoints;
     static const sf::Time mLifeDuration;
-    static const sf::Time mTimeBetweenGeration;
-    static const int mRaduis;
 };
