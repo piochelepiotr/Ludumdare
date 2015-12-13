@@ -40,10 +40,12 @@ void StateStack::update(sf::Time dt)
 
 void StateStack::draw()
 {
-    for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
+	mContext.window->clear();
+    for (auto it = mStack.begin(); it != mStack.end(); ++it)
     {
-        (*itr)->draw();
+        (*it)->draw();
     }
+    mContext.window->display();
 }
 
 void StateStack::applyPendingChanges()

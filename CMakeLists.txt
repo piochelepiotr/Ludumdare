@@ -31,6 +31,7 @@ SET(
 	src/splinerenderer.cpp
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
+	src/menustate.cpp
 )
 
 ADD_EXECUTABLE(

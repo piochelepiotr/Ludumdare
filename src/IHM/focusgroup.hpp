@@ -17,6 +17,8 @@ class FocusGroup
 		remove (Widget& widget);
 	
 	public:
+		~FocusGroup();
+		
 		void
 		setFocus (Widget& widget);
 

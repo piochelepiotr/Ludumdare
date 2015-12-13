@@ -91,19 +91,17 @@ bool TitleState::update(sf::Time dt)
 
 void TitleState::draw()
 {
-    mContext.window->clear();
     mContext.window->draw(mBackgroundSprite);
     //if (mShowText)
         //mContext.window->draw(mText);
 	mContext.window->draw(mPlayButton);
 	mContext.window->draw(mSettingsButton);
 	mContext.window->draw(mQuitButton);
-    mContext.window->display();
 }
 
 void TitleState::play()
 {
-	requestStateClear();
+	requestStackClear();
 	requestStackPush(States::Game);
 }
 

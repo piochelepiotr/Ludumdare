@@ -1,8 +1,19 @@
 #include <IHM/focusgroup.hpp>
 #include <IHM/widget.hpp>
 #include <algorithm>
+#include <iostream>
 
 FocusGroup* FocusGroup::mCurrentFocusGroup = nullptr;
+
+FocusGroup::~FocusGroup()
+{
+	if (mCurrentFocusGroup == this)
+		mCurrentFocusGroup = nullptr;
+	for(auto w : mWidgets) {
+		w->setFocusGroup(nullptr);
+	}
+}
+
 
 void
 FocusGroup::append (Widget& widget)
@@ -24,9 +35,13 @@ FocusGroup::remove (Widget& widget)
 		}
 
 		else if (&widget == mCurrent) {
-			next();
+			//next();
 			mWidgets.erase(it);
+			//if (mCurrent == &widget)
+				mCurrent = nullptr;
 		}
+		
+		else mWidgets.erase(it);
 	}
 }
 
@@ -39,7 +54,7 @@ FocusGroup::setFocus (Widget& widget)
 		mCurrent->disableFocus();
 	mCurrent = &widget;
 
-	if (mCurrentFocusGroup)
+	if (mCurrentFocusGroup && mCurrentFocusGroup != this)
 		mCurrentFocusGroup->unfocus();
 
 	mCurrentFocusGroup = this;
@@ -92,6 +107,7 @@ FocusGroup::unfocus()
 {
 	if (mCurrent)
 		mCurrent->disableFocus();
+	//mCurrent = false;
 	mCurrentFocusGroup = nullptr;
 }
 

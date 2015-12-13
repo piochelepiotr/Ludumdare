@@ -18,7 +18,10 @@ bool GameState::handleEvent(const sf::Event& event)
 		
 		
 		case sf::Event::KeyPressed:
-			handlePlayerInput(event.key.code, true);
+			if (event.key.code == sf::Keyboard::Escape)
+				requestStackPush(States::Menu);
+			else
+				handlePlayerInput(event.key.code, true);
 			break;
 		case sf::Event::KeyReleased:
 			handlePlayerInput(event.key.code, false);
@@ -48,8 +51,5 @@ bool GameState::update(sf::Time dt)
 
 void GameState::draw()
 {
-	getContext().window->clear();
-	mRenderer.render(*getContext().window);
-	getContext().window->display();
 }
 

@@ -1,5 +1,12 @@
 #include <IHM/widget.hpp>
 #include <IHM/focusgroup.hpp>
+#include <iostream>
+
+Widget::~Widget()
+{
+	if (mFocusGroup)
+		mFocusGroup->remove(*this);
+}
 
 void
 Widget::setPosition (const sf::Vector2f& position)
@@ -33,8 +40,11 @@ Widget::setFocusGroup (FocusGroup* group)
 	
 	if (mFocusGroup)
 		mFocusGroup->remove(*this);
+	
 	mFocusGroup = group; 
-	group->append(*this);
+	
+	if (mFocusGroup)
+		mFocusGroup->append(*this);
 }
 
 FocusGroup*

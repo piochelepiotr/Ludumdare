@@ -16,7 +16,7 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 		update (sf::Time t)=0;
 
 		virtual 
-		~Widget() = default;
+		~Widget();
 
 		/// @brief reacts to mouse/keyboard event
 		virtual void 
@@ -72,6 +72,6 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 
 
 		sf::Vector2f mPosition;
-		FocusGroup* mFocusGroup;
+		FocusGroup* mFocusGroup=nullptr;
 };
 
