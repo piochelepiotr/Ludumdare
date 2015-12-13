@@ -4,6 +4,7 @@
 
 #include <IHM/textbutton.hpp>
 #include <IHM/verticalmenu.hpp>
+#include <IHM/selectorwidget.hpp>
 
 class MenuState : public State
 {
@@ -16,13 +17,13 @@ class MenuState : public State
 		
 		void resume();
 		void main_screen();
-		void save();
+		void setSoundState(int);
 		void quit();
 
-		VerticalMenu mVerticalMenu;
-		FocusGroup   mFocusGroup;
-		TextButton   mResumeButton;
-		TextButton   mMainScreenButton;
-		TextButton   mSaveButton;
-		TextButton   mQuitButton;
+		VerticalMenu     mVerticalMenu;
+		FocusGroup       mFocusGroup;
+		TextButton       mResumeButton;
+		TextButton       mMainScreenButton;
+		SelectorWidget   mSoundButton;
+		TextButton       mQuitButton;
 };

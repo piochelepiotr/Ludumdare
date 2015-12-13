@@ -35,9 +35,9 @@ FocusGroup::remove (Widget& widget)
 		}
 
 		else if (&widget == mCurrent) {
-			//next();
+			next();
 			mWidgets.erase(it);
-			//if (mCurrent == &widget)
+			if (mCurrent == &widget)
 				mCurrent = nullptr;
 		}
 		

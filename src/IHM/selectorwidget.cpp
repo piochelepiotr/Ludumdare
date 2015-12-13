@@ -1,9 +1,17 @@
 #include <IHM/selectorwidget.hpp>
+#include <algorithm>
+
+SelectorWidget::SelectorWidget(sf::Font& font, TriggerFun callback) :
+	mCallback()
+{
+	mText.setFont(font);
+}
 
 
 void SelectorWidget::addEntry ( int id, const sf::String& name )
 {
 	mEntries.push_back(std::pair<int, sf::String>(id,name));
+	recompute();
 }
 
 void SelectorWidget::event ( sf::Event e )
@@ -39,7 +47,22 @@ sf::FloatRect SelectorWidget::getArea() const
 
 bool SelectorWidget::mouseEvent ( sf::Event e, sf::Vector2f local )
 {
-
+	auto area = getArea();
+	area.left += getPosition().x;
+	area.top  += getPosition().y;
+	
+	if (e.type == sf::Event::MouseMoved) {
+		if (area.contains(local)) {
+			focus();
+			return true;
+		}
+	}
+		else if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+			if (area.contains(local)) {
+				return true;
+			}
+		}
+			return false;
 	return false;
 }
 
@@ -48,6 +71,8 @@ void SelectorWidget::next()
 	++mCursor;
 	if (mCursor >= mEntries.size())
 		mCursor %= mEntries.size();
+	recompute();
+	//mCallback(mEntries[mCursor].first);
 }
 
 void SelectorWidget::previous()
@@ -56,22 +81,26 @@ void SelectorWidget::previous()
 		mCursor = mEntries.size()-1; return;
 	}
 	--mCursor;
+	recompute();
+	//mCallback(mEntries[mCursor].first);
 }
 
 void SelectorWidget::removeEntry ( const sf::String& name )
 {
-	
+	std::remove_if(mEntries.begin(), mEntries.end(), [&name](std::pair<int,sf::String>& e) {return e.second == name;});
+	recompute();
 }
 
 void SelectorWidget::removeEntry ( int id )
 {
-
+	std::remove_if(mEntries.begin(), mEntries.end(), [&id](std::pair<int,sf::String> e) {return e.first == id; });
+	recompute();
 }
 
 void SelectorWidget::render ( sf::RenderTarget& target, sf::RenderStates states ) const
 {
 	//FIXME dessin de l'entry [mCursor]
-	states.transform.translate(getPosition());
+	//states.transform.translate(getPosition());
 	target.draw(mText, states);
 }
 
@@ -82,10 +111,22 @@ void SelectorWidget::update ( sf::Time t )
 
 void SelectorWidget::disableFocus()
 {
-    Widget::disableFocus();
+    mText.setColor(sf::Color::White);
 }
 
 void SelectorWidget::enableFocus()
 {
-    Widget::enableFocus();
+    mText.setColor(sf::Color::Red);
+}
+
+void SelectorWidget::recompute()
+{
+	if (mEntries.empty()) return;
+	
+	mText.setCharacterSize(120);
+	mText.setString(mEntries[mCursor].second);
+	auto w = mText.getLocalBounds().width;
+	//mText.setPosition({-w/2.f,0.f});
+	
+	notify();
 }

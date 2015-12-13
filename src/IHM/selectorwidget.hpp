@@ -1,10 +1,15 @@
 #pragma once
 
 #include <IHM/widget.hpp>
+#include <functional>
 
 class SelectorWidget : public Widget
 {
 	public:
+		using TriggerFun = std::function<void(int)>;
+		
+		SelectorWidget(sf::Font& font, TriggerFun callback=[](int){});
+		
 		void 
 		event ( sf::Event e ) override;
 
@@ -34,6 +39,9 @@ class SelectorWidget : public Widget
 	
 	protected:
 		
+		void
+		recompute();	
+		
 		virtual void
 		enableFocus () override;
 		
@@ -47,5 +55,6 @@ class SelectorWidget : public Widget
 		sf::Text                                    mText;
 		std::size_t                                 mCursor = 0;
 		std::vector< std::pair<int, sf::String> >   mEntries;
+		TriggerFun                                  mCallback;
 	
 };
