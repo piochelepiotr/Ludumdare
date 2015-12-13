@@ -18,4 +18,6 @@ class AnchorItem
 		float
 		getRadius () const;
 	
+	private:
+		float mRadius;
 };
