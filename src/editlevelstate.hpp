@@ -3,6 +3,7 @@
 #include "state.hpp"
 #include "graph/graph.hpp"
 #include "editor/anchorpool.hpp"
+#include "editor/nodeanchorlistener.hpp"
 
 class EditLevelState : public State
 {

@@ -74,13 +74,13 @@ void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 {
     mAnchors.injectEvent(event, pos);
     //Node::ID secondNode = mGraph.nodeAt(pos);
-    /*if(mFirstNode.id.x >= 0 && secondNode.id.x >= 0 && !(mFirstNode.id == secondNode.id))
-    {
-	mGraph.newEdge(mFirstNode,secondNode);
-    }
-    else
-    {
-	mGraph.addNode(Node::ID(pos.x,pos.y));
-    }*/
+    //if(mFirstNode.id.x >= 0 && secondNode.id.x >= 0 && !(mFirstNode.id == secondNode.id))
+    //{
+	//mGraph.newEdge(mFirstNode,secondNode);
+    //}
+    //else
+    //{
+	//mGraph.addNode(Node::ID(pos.x,pos.y));
+    //}
 }
 */

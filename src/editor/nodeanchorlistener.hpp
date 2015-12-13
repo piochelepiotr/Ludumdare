@@ -1,6 +1,8 @@
 #pragma once
+#include "graph/graph.hpp"
+#include "editor/anchoractionlistener.hpp"
 
-class NodeAnchorListener : public NodeAnchorListener {
+class NodeAnchorListener : public AnchorActionListener {
     public:
 	NodeAnchorListener(Graph& graph, Node::ID node);
 	
@@ -21,4 +23,9 @@ class NodeAnchorListener : public NodeAnchorListener {
 
 	sf::Vector2f
 	getPosition() override;
+
+
+	private:
+	Graph& m_graph;
+	Node::ID m_node;
 };
