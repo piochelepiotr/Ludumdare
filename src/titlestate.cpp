@@ -19,12 +19,12 @@ TitleState::TitleState(StateStack& mystack, Context context)
 	TextButtonStyle normal;
 	normal.color = sf::Color::White;
 	normal.font = &context.fonts->get(Font::Text);
-	normal.char_size = 180;
+	normal.char_size = 150;
 	
 	TextButtonStyle focus;
 	focus.color = sf::Color::Red;
 	focus.font = &context.fonts->get(Font::Text);
-	focus.char_size = 200;
+	focus.char_size = 170;
 	
 	mPlayButton.defineStyle(TextButtonStyle::Normal, normal);
 	mPlayButton.defineStyle(TextButtonStyle::Focus, focus);

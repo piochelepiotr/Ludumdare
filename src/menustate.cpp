@@ -52,11 +52,18 @@ bool MenuState::handleEvent(const sf::Event& event)
 	
     if (event.type == sf::Event::KeyPressed)
     {
-		if (event.key.code == sf::Keyboard::Down) {
-			mFocusGroup.next();
-		}
-		else if (event.key.code == sf::Keyboard::Up) {
-			mFocusGroup.previous();
+		switch (event.key.code)
+		{
+			case sf::Keyboard::Down:
+				mFocusGroup.next(); break;
+			case sf::Keyboard::Up:
+				mFocusGroup.previous(); break;
+			
+			case sf::Keyboard::Escape:
+				resume();
+				
+			default:
+				break;
 		}
 
 		if (mFocusGroup.current())
@@ -68,22 +75,26 @@ bool MenuState::handleEvent(const sf::Event& event)
 		|| event.type == sf::Event::MouseMoved
 	){
 		auto w = getContext().window;
-		return mFocusGroup.mouseEvent(event, 
-			w->mapPixelToCoords(sf::Mouse::getPosition(*w))
+		mFocusGroup.mouseEvent(
+			event 
+			, w->mapPixelToCoords(sf::Mouse::getPosition(*w))
 		);
 	}
 	
-    return true;
+    return false;
 }
 
 bool MenuState::update(sf::Time dt)
 {
-
-    return true;
+    return false;
 }
 
 void MenuState::draw()
 {
+	sf::Vector2f size = mContext.window->getView().getSize();
+	sf::RectangleShape background (size);
+	background.setFillColor(sf::Color(0,0,0,175));
+	mContext.window->draw(background);
         //mContext.window->draw(mText);
 	mContext.window->draw(mResumeButton);
 	mContext.window->draw(mMainScreenButton);
