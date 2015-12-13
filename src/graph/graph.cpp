@@ -144,7 +144,7 @@ void Graph::makePath()
 		for (int j = 0 ; j < n ; j++)
 			m_paths.insert(std::make_pair(std::make_pair(toID.find(i)->second, toID.find(j)->second), matrix[i][j]));
 }
-/*
+
 Path Graph::getPath(Node::ID n1, Node::ID n2) const
 {
 	Path p;
@@ -155,9 +155,13 @@ Path Graph::getPath(Node::ID n1, Node::ID n2) const
 	while (it != m_paths.end() && realBranch.getLength())
 	{
 		p.addBranch(node, branch);
-		node
+		it = m_paths.find(std::make_pair(node, realBranch.getFirstNode()));
+		node = realBranch.getFirstNode();
+		branch = it->second.second;
+		realBranch = m_branchs.find(branch)->second;
 	}
-*/
+	return p;
+}
 
 
 Node::ID Graph::addNode(Node node)
