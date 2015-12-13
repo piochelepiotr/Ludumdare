@@ -34,8 +34,10 @@ class Node
 		Type getType();
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-        Type m_t;
 	protected:
 		sf::Vector2f m_pos;
+	public:
+        Type m_t;
+	protected:
 		sf::Vector2f m_derivee;
 };
