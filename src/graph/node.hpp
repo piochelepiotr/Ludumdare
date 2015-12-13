@@ -38,6 +38,4 @@ class Node
 		sf::Vector2f m_pos;
 	public:
         Type m_t;
-	protected:
-		sf::Vector2f m_derivee;
 };

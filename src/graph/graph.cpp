@@ -142,20 +142,20 @@ void Graph::makePath()
 			m_paths.insert(std::make_pair(std::make_pair(toID.find(i)->second, toID.find(j)->second), matrix[i][j]));
 }
 
-Path Graph::getPath(Node::ID n1, Node::ID n2)
+Path Graph::getPath(Node::ID n1, Node::ID n2) const
 {
 	Path p;
 	auto it = m_paths.find(std::make_pair(n1, n2));
 	Node::ID node = n1;
 	Branch::ID branch = it->second.second;
-	Branch& graph_branch = (*this)[branch];
-	while (it != m_paths.end() && graph_branch.getOtherNode(node) != n2)
+	Branch const* graph_branch = &(*this)[branch];
+	while (it != m_paths.end() && graph_branch->getOtherNode(node) != n2)
 	{
 		p.addBranch(node, branch);
-		it = m_paths.find(std::make_pair(graph_branch.getOtherNode(node), n2));
-		node = graph_branch.getOtherNode(node);
+		it = m_paths.find(std::make_pair(graph_branch->getOtherNode(node), n2));
+		node = graph_branch->getOtherNode(node);
 		branch = it->second.second;
-		graph_branch = (*this)[branch];
+		graph_branch = &(*this)[branch];
 	}
 	p.addBranch(node, branch);
 	return p;
@@ -237,7 +237,7 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 //	TODO		 && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2)))
 			)
 	{
-		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
+		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2, *this));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
 		makePath();
@@ -255,7 +255,7 @@ Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
 	if (it1 != m_neighbours.end() && it2 != m_neighbours.end())
 	{
-		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
+		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2, *this));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
 		makePath();

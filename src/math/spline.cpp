@@ -30,6 +30,8 @@ sf::Vector2f Spline::evaluateSpeed(float val) {
 
 sf::Vector2f normalize(sf::Vector2f v) {
   float norm = sqrt(v.x*v.x + v.y*v.y);
+  if (norm == 0)
+	  return sf::Vector2f(0, 0);
   return sf::Vector2f(v.x/norm, v.y/norm);
 }
 
@@ -47,9 +49,9 @@ SplineShape::SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vect
 
 }
 
-SplineShape::SplineShape(float thickness, int dots, Spline spline) :
+SplineShape::SplineShape(float thickness, int dotNb, Spline spline) :
   spline(spline)
-  , dots(dots)
+  , dots(std::max(dotNb, 2))
   , thickness(thickness)
   , approx(dots, sf::Vector2f(0.f, 0.f))
   , shape(sf::TrianglesStrip, 2*dots)

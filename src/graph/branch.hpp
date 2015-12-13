@@ -5,6 +5,8 @@
 #include "node.hpp"
 #include "../math/spline.hpp"
 
+class Graph;
+
 class Branch
 {
 	public:
@@ -14,9 +16,10 @@ class Branch
 	};
 	typedef unsigned int ID;
 
-	Branch(Node _n1, Node _n2);
+	Branch(Node::ID _n1, Node::ID _n2, Graph& graph);
+	Branch();
 
-	float getLength() { return ss.getLength(); };
+	float getLength() { return ss.getLength(); }
 	Node::ID getFirstNode() const { return n1; }
 	Node::ID getSecondNode() const { return n2; }
 	Node::ID getOtherNode(Node::ID node) const
@@ -29,7 +32,6 @@ class Branch
 
 	static Branch noneBranch;
 	private:
-	static Branch getNoneBranch(Node _n1, Node _n2) { Branch b(_n1, _n2); b.t = None; return b; }
 
 	Node n1;
    	Node n2;

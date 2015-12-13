@@ -3,7 +3,6 @@
 #include "gamestate.hpp"
 #include <menustate.hpp>
 #include "editlevelstate.hpp"
-#include <iostream>
 
 Application::Application(State::Context context)
 : mStateStack(context)
