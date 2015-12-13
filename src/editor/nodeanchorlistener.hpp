@@ -1,6 +1,8 @@
 #pragma once
-#include "graph/graph.hpp"
 #include "editor/anchoractionlistener.hpp"
+#include "graph/node.hpp"
+
+class Graph;
 
 class NodeAnchorListener : public AnchorActionListener {
     public:

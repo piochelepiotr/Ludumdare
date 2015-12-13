@@ -13,6 +13,8 @@ class Node
 			ID(float x, float y) : id(x, y) {};
 			bool operator<(Node::ID const& other) const;
 			bool operator==(Node::ID const& other) const;
+			bool operator!=(Node::ID const& other) const
+			{ return !(*this == other); }
 			sf::Vector2f id;
 			Type type;
 		};
@@ -20,7 +22,9 @@ class Node
 		bool operator<(Node const& other) const
 		{ return Node::ID(*this) < Node::ID(other); }
 		bool operator==(Node const& other) const
-		{ return Node::ID(*this) < Node::ID(other); }
+		{ return Node::ID(*this) == Node::ID(other); }
+		bool operator!=(Node const& other) const
+		{ return Node::ID(*this) != Node::ID(other); }
 
 		inline Node(Node::ID id) : m_pos(id.id), m_t(id.type) {}
 

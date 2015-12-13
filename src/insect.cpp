@@ -1,4 +1,5 @@
 #include "insect.hpp"
+#include "graph/graph.hpp"
 
 void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   Branch *b = g->getBranch(path.getBranchID(currentBranch));
@@ -14,7 +15,7 @@ void Insect::move(float dt, Graph* g) {
   if (pos > 1.0f) {
     pos = 0.0f;
     currentBranch += 1;
-    if (currentBranch == path.length(g))
+    if (currentBranch == path.length(*g))
       currentBranch = 0;
   }
 }
@@ -32,7 +33,7 @@ Insect::Insect(type mType, float hitbox
 
 
 Aphid::Aphid(Behaviour::ID b, Node spawn, Graph *g) : Insect(Insect::APHID, 10, 0, 0.0f, 1.0f, 0.0f)
-						    , behaviour(b, spawn, g)
+						    , behaviour(b, spawn, *g)
 {
   path = behaviour.getPath();
 }

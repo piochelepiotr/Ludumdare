@@ -1,4 +1,5 @@
 #include "editlevelstate.hpp"
+
 /*
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
@@ -12,7 +13,6 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
     mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
     
-    NodeAn
     mAnchors.addAnchor(AnchorItem(10.f), )
 }
 

@@ -34,6 +34,7 @@ SET(
 	src/splinerenderer.cpp
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
+	src/editor/nodeanchorlistener.cpp
 	src/menustate.cpp
 	src/insect.cpp
 	src/behaviour.cpp

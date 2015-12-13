@@ -16,13 +16,12 @@ Branch::ID Path::getBranchID(int n) {
   return mPath[n].second;
 }
 
-float Path::length(Graph* graph)
+float Path::length(Graph& graph)
 {
     float mLength = 0;
     for (auto stuff : mPath)
     {
-        Branch::ID branch = stuff.second;
-        mLength += graph->getBranch(branch)->getLength();
+        mLength += graph[stuff.second].getLength();
     }
     return mLength;
 }

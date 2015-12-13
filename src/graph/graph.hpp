@@ -9,8 +9,13 @@ float constexpr leafLimit = 0.3f;
 
 class Graph
 {
-	typedef std::multimap<Node::ID, Branch::ID> NeighbourHood;
-	typedef NeighbourHood multimap;
+	struct NeighbourHood : public std::multimap<Node::ID, Branch::ID>
+	{
+		Branch::ID operator[](Node::ID n)
+		{ return find(n)->second; }
+		Branch::ID const& operator[](Node::ID n) const
+		{ return find(n)->second; }
+	};
 
 	public:
 	Graph(); // TODO: Pour l’instant, cette fonction est un peu bidon
@@ -24,20 +29,23 @@ class Graph
 
 	Branch const* getBranch(Branch::ID id) const;
 	Branch* getBranch(Branch::ID id);
+	Branch& operator[](Branch::ID b)
+	{ return m_branchs.find(b)->second; }
+	Branch const& operator[](Branch::ID b) const
+	{ return m_branchs.find(b)->second; }
+
 	Node const* getNode(Node::ID id) const;
 	Node* getNode(Node::ID id);
-	NeighbourHood getNeighbour(Node::ID node)
-	{
-	    return m_neighbours.find(node)->second;
-	}
-	Branch* operator[](Branch::ID branch)
-	{
-	    return getBranch(branch);
-	}
-	Node* operator[](Node::ID node)
-	{
-	    return getNode(node);
-	}
+	Node& operator[](Node::ID n)
+	{ return m_nodes.find(n)->second; }
+	Node const& operator[](Node::ID n) const
+	{ return m_nodes.find(n)->second; }
+
+	NeighbourHood& getNeighbours(Node::ID node)
+	{ return m_neighbours.find(node)->second; }
+	NeighbourHood const& getNeighbours(Node::ID node) const
+	{ return m_neighbours.find(node)->second; }
+
 	// Pour itérer sur les std::pair<Node::ID, NeighbourHood>
 	std::map<Node::ID, NeighbourHood>::iterator begin()
 	{ return m_neighbours.begin(); }
