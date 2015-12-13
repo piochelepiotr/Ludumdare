@@ -3,8 +3,17 @@
 #include <graph/graph.hpp>
 #include <splinerenderer.hpp>
 
-class Insect {};
-class InsectType {};
+class Insect {
+public:
+  
+private:
+  InsectType type;
+  sf::CircleShape hitbox;
+  bool busy;
+  Path path; 
+};
+
+enum InsectType {LADYBUG, APHID};
 
 enum NodeType{};
 
