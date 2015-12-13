@@ -15,7 +15,8 @@ void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
 }
 
 void Insect::move(float dt, Graph* g) {
-  pos += speed * dt;
+  float len = g->getBranch(path.getBranchID(currentBranch))->getLength();
+  pos += speed * dt / len;
   if (pos > 1.0f) {
     pos = 0.0f;
     currentBranch += 1;
@@ -48,6 +49,21 @@ Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid,
 
 
 LadyBug::LadyBug(Insect::type type, Node spawn, Graph *g) : Insect(type, 12, 0, 0.0f, 1.5f, 0.0f)
+							  , objective(spawn)
 {
 
 }
+/*
+void LadyBug::RedefinePath(Path newPath, Graph &g) {
+  futurePath = newPath;
+  if (!futurePath.isCyclic(g))
+    futurePath.makeCyclic(g);
+  //try to get to that new path, dijkstrfrzka style
+  std::unordered_set<Node::ID> nodes = newPath.getNodes();
+  std::unordered_map<Node::ID, float> shortestPath;
+  bool finished = false;
+  while (!finished) {
+    finished = true; //todo
+  }
+}
+*/

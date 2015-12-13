@@ -8,13 +8,13 @@ GameWorld::GameWorld() {
 GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite blackLdb, sf::Sprite aphid) {
   //looks ugly, but has to be done at some point?
   redLdb.setOrigin(50.0f, 70.0f);
-  mInsectSprites[static_cast<int>(Insect::RedLadybug)] = redLdb;
+  mInsectSprites[static_cast<size_t>(Insect::RedLadybug)] = redLdb;
   redBlackLdb.setOrigin(50.0f, 70.0f);  
-  mInsectSprites[static_cast<int>(Insect::RedBlackLadybug)] = redBlackLdb;
+  mInsectSprites[static_cast<size_t>(Insect::RedBlackLadybug)] = redBlackLdb;
   blackLdb.setOrigin(50.0f, 70.0f);  
-  mInsectSprites[static_cast<int>(Insect::BlackLadybug)] = blackLdb;
+  mInsectSprites[static_cast<size_t>(Insect::BlackLadybug)] = blackLdb;
   aphid.setOrigin(50.0f, 75.0f);  
-  mInsectSprites[static_cast<int>(Insect::Aphid)] = aphid;
+  mInsectSprites[static_cast<size_t>(Insect::Aphid)] = aphid;
 }
 
 GameWorld::~GameWorld()
@@ -27,10 +27,10 @@ void GameWorld::render(sf::RenderTarget& target)
 {
   target.draw(mBackGround);
   for (auto &ldb : mLadyBugs) {
-    ldb.draw(target, &mGraph, mInsectSprites[static_cast<int>(ldb.getType())]);
+    ldb.draw(target, &mGraph, mInsectSprites[static_cast<size_t>(ldb.getType())]);
   }
   for (auto &apd : mAphids) {
-    apd.draw(target, &mGraph, mInsectSprites[static_cast<int>(Insect::Aphid)]);
+    apd.draw(target, &mGraph, mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
   }
 }
 

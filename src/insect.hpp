@@ -29,7 +29,10 @@ private:
 class LadyBug : public Insect {
 public:
   LadyBug(Insect::type type, Node spawn, Graph *g);
+  void RedefinePath(Path newPath, Graph *g);
 private:
+  Node objective;
+  Path futurePath;
   bool busy;
 };
 
