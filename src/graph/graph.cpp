@@ -281,4 +281,10 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		pair.second.draw(target, states);
 	}
+
+	for (auto pair : m_nodes)
+	{
+		pair.second.draw(target, states);
+	}
+
 }

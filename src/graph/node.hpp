@@ -29,6 +29,8 @@ class Node
 
 		Type getType();
 
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	private:
 		sf::Vector2f m_pos;
 		Type m_t;
