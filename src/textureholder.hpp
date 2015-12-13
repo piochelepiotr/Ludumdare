@@ -16,7 +16,7 @@ namespace Texture
 	, RegularNode
 	, Flower
 	, LadyBugFlower
-	, SamperFlower
+	, SemperFlower
     };
 }
 

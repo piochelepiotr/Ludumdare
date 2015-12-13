@@ -4,37 +4,58 @@ Behaviour::Behaviour(Behaviour::ID id, Node spawningNode, Graph* graph)
 : mPath()
 , mID(id)
 {
-    Branch& spawningBranch = graph->find(Node).get(0);
-    mPath.push_back((spawningNode, spawningBranch));
-
-	Node newNode;
-	
-    if (spawningBranch.getFirstNode() =! spawningNode)
-        Node newNode = spawningBranch.getFirstNode();
-    else
-        Node newNode = spawningBranch.getSecondNode();
-    Node previousNode = spawningNode;
-
-    while (newNode.getType() == Texture::ID::RegularNode)
+    if (id == Behaviour::Offensive)
     {
-        Branch& newBranch = choice(id, newNode, previousNode, graph);
-        mPath.push_back((newNode,newBranch)); // FIXME assurer l'identifiant, WARNING copie de branche
-        previousNode = newNode;
-        if (newBranch.getFirstNode() =! newNode)
-            newNode =newBranch.getFirstNode();
+        minLength = 100000000;
+        for (auto stuff : graph)
+        {
+            Node::ID node = stuff.fs;
+            if (node.getType() == Texture::ID::Flower && node.getType() == Texture::ID::LadyBugFlower)
+            {
+                Path path = graph->getPath(actualNode, node);
+                float length = path.length();
+                if (length < minLength)
+                {
+                    mPath = path;
+                }
+            }
+        }
+    }
+    else
+    {
+        Branch::ID spawningBranch = graph->find(Node).get(0);
+        mPath.addBranch(spawningNode, spawningBranch);
+
+        Node newNode;
+
+        if (spawningBranch.getFirstNode() =! spawningNode)
+            Node newNode = spawningBranch.getFirstNode();
         else
-            newNode = newBranch.getSecondNode();
+            Node newNode = spawningBranch.getSecondNode();
+
+        Node previousNode = spawningNode;
+
+        while (newNode.getType() == Texture::ID::RegularNode)
+        {
+            Branch::ID newBranch = choice(id, newNode, previousNode, graph);
+            mPath.addBranch(newNode,newBranch); // FIXME assurer l'identifiant, WARNING copie de branche
+            previousNode = newNode;
+            if (newBranch.getFirstNode() =! newNode)
+                newNode =newBranch.getFirstNode();
+            else
+                newNode = newBranch.getSecondNode();
+        }
     }
 }
 
 
-Branch Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode, Graph* graph)
+Branch::ID Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode, Graph* graph)
 {
     if (id == Behaviour::Coward)
     {
         auto neighbours = graph->find(*actualNode);
-        Branch branchChosen = neighbours.get(0);
-        for (Branch* branch: neighbours)
+        Branch::ID branchChosen = neighbours.get(0);
+        for (Branch::ID branch: neighbours)
         {
             if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
             {
@@ -50,8 +71,8 @@ Branch Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode,
     if (id == Behaviour::Dumb)
     {
         auto neighbours = graph->find(*actualNode);
-        Branch branchChosen = neighbours.get(0);
-        for (Branch* branch: neighbours)
+        Branch::ID branchChosen = neighbours.get(0);
+        for (Branch::ID branch: neighbours)
         {
             if (!graph->isCulDeSac(branch) && branch->getFirstNode()!=previousNode && branch->getSecondNode()!=previousNode)
             {
@@ -60,10 +81,5 @@ Branch Behaviour::Choice(Behaviour::ID id, Node* actualNode, Node* previousNode,
             }
         }
         return branchChosen;
-    }
-
-    if (id == Behaviour::Offensive)
-    {
-
     }
 }

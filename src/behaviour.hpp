@@ -1,6 +1,7 @@
 #pragma once
 #include <graph/node.hpp>
 #include <graph/graph.hpp>
+#include "path.hpp"
 
 class Behaviour
 {
@@ -8,8 +9,8 @@ class Behaviour
     public:
         Behaviour(Behaviour::ID, Node, Graph*);
     private:
-        Branch choice(Behaviour::ID, Node, Node, Graph*);
+        Branch::ID choice(Behaviour::ID, Node, Node, Graph*);
     private:
-        std::vector<(Node, Branch)> mPath;
+        Path mPath;
         Behaviour::ID mID;
 };
