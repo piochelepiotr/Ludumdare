@@ -16,7 +16,7 @@ class Graph
 	float distance(Node::ID n1, Node::ID n2);
 	Node::ID addNode(Node n);
 	void addNode(Node::ID n);
-	Branch const* newEdge(Node::ID n1, Node::ID n2);
+	Branch::ID newEdge(Node::ID n1, Node::ID n2);
 	// static bool isItLeaf(Node::ID n1, Node::ID n2);
 	bool hasDownEdge(Node::ID n) const;
 	bool isCulDeSac(Branch::ID b) const;
@@ -27,13 +27,17 @@ class Graph
 	Node* getNode(Node::ID id);
 
 
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	private:
-	Branch const* forceNewEdge(Node::ID n1, Node::ID n2);
+	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
 	std::map<Node::ID, NeighbourHood> m_neighbours;
+
 	std::map<Node::ID, Node> m_nodes;
 
 	Branch::ID m_branchId;
 	std::map<Branch::ID, Branch> m_branchs;
+
 
 };
 

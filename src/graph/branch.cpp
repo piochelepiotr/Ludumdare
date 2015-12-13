@@ -9,11 +9,18 @@ Branch::Branch(Node _n1, Node _n2) :
 	t(),
 	nbLadyBug(0),
 	ss(
-			3.0f,
-			20,
+			6.0f,
+			30,
 			std::min(_n1, _n2).getPosition(),
 			std::max(_n1, _n2).getPosition(),
 			sf::Vector2f(0, -100),
 			sf::Vector2f(0, -100)
 	  )
 {}
+
+
+
+void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	ss.draw(target, states);
+}

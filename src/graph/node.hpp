@@ -14,6 +14,7 @@ class Node
 			bool operator<(Node::ID const& other) const;
 			bool operator==(Node::ID const& other) const;
 			sf::Vector2f id;
+			Type type;
 		};
 
 		bool operator<(Node const& other) const
@@ -21,7 +22,7 @@ class Node
 		bool operator==(Node const& other) const
 		{ return Node::ID(*this) < Node::ID(other); }
 
-		inline Node(Node::ID id) : m_pos(id.id), m_t(Texture::RegularNode) {}
+		inline Node(Node::ID id) : m_pos(id.id), m_t(id.type) {}
 
 		inline sf::Vector2f const& getPosition() const { return m_pos; }
 		inline sf::Vector2f& getPosition() { return m_pos; }

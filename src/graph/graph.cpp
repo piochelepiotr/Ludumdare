@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Graph::Graph()
+Graph::Graph() : m_branchId(0)
 {
 	addNode(Node::ID(300, 300));
 	addNode(Node::ID(300, 270));
@@ -146,7 +146,7 @@ EdgeType Graph::forceNewEdge(Node n1, Node n2)
 }
 */
 
-Branch const* Graph::newEdge(Node::ID n1, Node::ID n2)
+Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 {
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
 	if (it1 != m_neighbours.end() && it2 != m_neighbours.end() && ((n1 < n2 && hasDownEdge(n1)) || (n2 < n1 && hasDownEdge(n2))))
@@ -154,13 +154,13 @@ Branch const* Graph::newEdge(Node::ID n1, Node::ID n2)
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
-		return &id_n_it->second;
+		return id_n_it->first;
 	}
 	else 
-		return nullptr;
+		return Branch::ID(0);
 }
 
-Branch const* Graph::forceNewEdge(Node::ID n1, Node::ID n2)
+Branch::ID Graph::forceNewEdge(Node::ID n1, Node::ID n2)
 {
 	auto it1 = m_neighbours.find(n1), it2 = m_neighbours.find(n2);
 	if (it1 != m_neighbours.end() && it2 != m_neighbours.end())
@@ -168,10 +168,10 @@ Branch const* Graph::forceNewEdge(Node::ID n1, Node::ID n2)
 		auto id_n_it = m_branchs.emplace_hint(m_branchs.end(), std::piecewise_construct, std::forward_as_tuple(m_branchId++), std::forward_as_tuple(n1, n2));
 		it1->second.insert(std::make_pair(n2, id_n_it->first));
 		it2->second.insert(std::make_pair(n1, id_n_it->first));
-		return &id_n_it->second;
+		return id_n_it->first;
 	}
 	else 
-		return nullptr;
+		return Branch::ID(0);
 }
 
 /*
@@ -191,3 +191,10 @@ bool Graph::hasDownEdge(Node::ID n) const
 	return pair != it->second.end() && pair->first < n;
 }
 
+void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (auto pair : m_branchs)
+	{
+		pair.second.draw(target, states);
+	}
+}
