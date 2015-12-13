@@ -16,6 +16,7 @@ class TitleState : public State
 		
 		void play();
 		void quit();
+		void editor();
 		
         sf::Sprite mBackgroundSprite;
         sf::Text mText;
@@ -27,4 +28,5 @@ class TitleState : public State
 		TextButton   mPlayButton;
 		TextButton   mSettingsButton;
 		TextButton   mQuitButton;
+		TextButton   mLevelEditorButton;
 };

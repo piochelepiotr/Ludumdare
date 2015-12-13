@@ -51,5 +51,6 @@ bool GameState::update(sf::Time dt)
 
 void GameState::draw()
 {
+    
 }
 

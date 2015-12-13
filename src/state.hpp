@@ -13,7 +13,7 @@ class StateStack;
 
 namespace States
 {
-    enum ID { Title, Menu, Pause, Game, Speech };
+    enum ID { Title, Menu, Pause, Game, Speech, Editor };
 }
 
 class State

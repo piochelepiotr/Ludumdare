@@ -35,6 +35,7 @@ SET(
 	src/menustate.cpp
 	src/insect.cpp
 	src/behaviour.cpp
+	src/editlevelstate.cpp
 )
 
 ADD_EXECUTABLE(

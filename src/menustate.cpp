@@ -38,7 +38,7 @@ MenuState::MenuState(StateStack& mystack, Context context)
 	
 	float width = context.window->getSize().x;
 	mVerticalMenu.setWidth(width/2);
-	sf::Vector2f position = {width/2, context.window->getSize().y / 3.f};
+	sf::Vector2f position = {width/4, context.window->getSize().y / 3.f};
 	mVerticalMenu.setPosition(position);
 
 	mResumeButton.setFocusGroup(&mFocusGroup);
