@@ -19,6 +19,11 @@ Widget::getPosition () const {
 	return mPosition;
 }
 
+const sf::Vector2f&
+Widget::getSize() const {
+	return mSize;
+}
+
 void
 Widget::draw (sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform.translate(mPosition);

@@ -79,3 +79,13 @@ void SelectorWidget::update ( sf::Time t )
 {
 	
 }
+
+void SelectorWidget::disableFocus()
+{
+    Widget::disableFocus();
+}
+
+void SelectorWidget::enableFocus()
+{
+    Widget::enableFocus();
+}

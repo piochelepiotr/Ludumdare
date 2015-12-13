@@ -5,17 +5,17 @@
 class SelectorWidget : public Widget
 {
 	public:
-		virtual void 
-		event ( sf::Event e );
+		void 
+		event ( sf::Event e ) override;
 
-		virtual sf::FloatRect 
-		getArea() const;
+		sf::FloatRect 
+		getArea() const override;
 
-		virtual bool 
-		mouseEvent ( sf::Event e, sf::Vector2f local );
+		bool 
+		mouseEvent ( sf::Event e, sf::Vector2f local ) override;
 		
-		virtual void 
-		update ( sf::Time t );
+		void 
+		update ( sf::Time t ) override;
 		
 		void
 		addEntry(int id, const sf::String& name);
@@ -33,6 +33,12 @@ class SelectorWidget : public Widget
 		previous();
 	
 	protected:
+		
+		virtual void
+		enableFocus () override;
+		
+		virtual void
+		disableFocus() override;
 	
 		virtual void render ( sf::RenderTarget& target, sf::RenderStates states ) const;
 

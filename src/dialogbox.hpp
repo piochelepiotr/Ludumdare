@@ -10,6 +10,8 @@ namespace Orientation {
 	};
 }
 
+class DialogButton;
+
 class DialogBox : public sf::Drawable
 {
 	public:
@@ -25,10 +27,21 @@ class DialogBox : public sf::Drawable
 		virtual void
 		injectEvent (sf::Event event, const sf::Vector2f& mouse);
 		
+		void
+		injectMouse (const sf::Vector2f& mouse);
+		
 		void compute();
 		
 		void setPosition (float x, float y);
 		void setPosition (const sf::Vector2f& position);
+		
+		sf::Vector2f
+		getPosition() const;
+		
+		void addButton (DialogButton& button);
+		void removeButton (DialogButton& button);
+		
+		void close();
 		
 	protected:
 		virtual void draw ( sf::RenderTarget& target, sf::RenderStates states ) const;
@@ -40,9 +53,15 @@ class DialogBox : public sf::Drawable
 		sf::RectangleShape       mBox;
 		sf::ConvexShape          mArrow;
 		
+		std::vector<DialogButton*> mButtons;
+		
+		bool mIsVisible=true;
+		
 		float mArrowHeight = 20.f;
 		float mArrowWidth  = 40.f;
 		float mWidth       = 250.f;
 		float mHeight      = 160.f;
-		float mPadding     = 5.f;
+		float mPadding     = 15.f;
+		float mButtonMargin= 5.f;
+		
 };

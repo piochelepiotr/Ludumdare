@@ -35,6 +35,9 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 
 		const sf::Vector2f&
 		getPosition() const;
+		
+		const sf::Vector2f&
+		getSize() const;
 
 		void
 		setFocusGroup(FocusGroup* group);

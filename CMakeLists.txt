@@ -25,6 +25,7 @@ SET(
 	src/IHM/verticalmenu.cpp
 	src/IHM/focusgroup.cpp
 	src/IHM/selectorwidget.cpp
+	src/IHM/dialogbutton.cpp
 	src/graph/graph.cpp
 	src/graph/node.cpp
 	src/graph/branch.cpp
@@ -34,7 +35,6 @@ SET(
 	src/editor/anchorpool.cpp
 	src/menustate.cpp
 	src/dialogbox.cpp
-	
 )
 
 ADD_EXECUTABLE(
