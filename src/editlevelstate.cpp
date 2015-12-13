@@ -25,27 +25,27 @@ bool EditLevelState::handleEvent(const sf::Event& event)
 {
     switch (event.type)
     {
-	case sf::Event::KeyPressed:
-	    if (event.key.code == sf::Keyboard::Escape)
-		requestStackPush(States::Menu);
-	    else
-		handlePlayerInput(event.key.code, true);
-	    break;
-	case sf::Event::KeyReleased:
-	    handlePlayerInput(event.key.code, false);
-	    break;
+		case sf::Event::KeyPressed:
+		    if (event.key.code == sf::Keyboard::Escape)
+				requestStackPush(States::Menu);
+		    else
+				handlePlayerInput(event.key.code, true);
+		    break;
+		case sf::Event::KeyReleased:
+		    handlePlayerInput(event.key.code, false);
+		    break;
 
-	case sf::Event::MouseButtonPressed:
-	    mousePressed(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
-	    break;
-	case sf::Event::MouseButtonReleased:
-	    mouseReleased(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
-	    break;
+		case sf::Event::MouseButtonPressed:
+		    mousePressed(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
+		    break;
+		case sf::Event::MouseButtonReleased:
+		    mouseReleased(event, mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
+		    break;
 
         default:
-            break;
+	        break;
     }
-    return true;
+    return false;
 }
 
 void EditLevelState::handlePlayerInput(sf::Keyboard::Key, bool)
@@ -56,7 +56,7 @@ void EditLevelState::handlePlayerInput(sf::Keyboard::Key, bool)
 bool EditLevelState::update(sf::Time dt)
 {
     return mAnchors.injectMouse(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
-    //return false;
+    return false;
 }
 
 void EditLevelState::draw()

@@ -28,5 +28,5 @@ class AnchorPool
 		
 	private:
 		std::vector<std::pair<AnchorItem, AnchorActionListener*> > mAnchors;
-		AnchorActionListener* mCurrentAnchor;
+		AnchorActionListener* mCurrentAnchor=nullptr;
 };
