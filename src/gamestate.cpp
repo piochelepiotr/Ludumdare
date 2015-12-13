@@ -54,9 +54,10 @@ void GameState::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 bool GameState::update(sf::Time dt)
 {
-	sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
-	mDialogbox.injectMouse(mouse);
-    return true;
+  sf::Vector2f mouse = getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+  mDialogbox.injectMouse(mouse);
+  mGameWorld.update(dt);
+  return true;
 }
 
 void GameState::draw()

@@ -11,6 +11,7 @@ enum NodeType{};
 class GameWorld
 {
 public:
+  GameWorld(); //this shouldnt exist. gameworld needs sprites!
   GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid);
   ~GameWorld();
 	
@@ -18,7 +19,7 @@ public:
   render (sf::RenderTarget& target);
 	
   void
-  update (sf::Time time);
+  update (sf::Time dt);
 	
   void
   spawnInsect (Insect::type type, Node node);

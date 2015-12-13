@@ -1,5 +1,10 @@
 #include "gameworld.hpp"
 
+//shouldnt exist
+GameWorld::GameWorld() {
+
+}
+
 GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite blackLdb, sf::Sprite aphid) {
   //looks ugly, but has to be done at some point?
   redLdb.setOrigin(50.0f, 70.0f);
@@ -44,13 +49,13 @@ void GameWorld::spawnNode(NodeType type, sf::Vector2f position)
 }
 
 
-void GameWorld::update(sf::Time time)
+void GameWorld::update(sf::Time dt)
 {
   for (auto &ldb : mLadyBugs) {
-    ldb.move();
+    ldb.move(dt.asSeconds(), &mGraph);
   }
   for (auto &apd : mAphids) {
-    apd.move();
+    apd.move(dt.asSeconds(), &mGraph);
   }
 }
 
