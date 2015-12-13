@@ -22,6 +22,7 @@ class Branch
 	Node::ID const getSecondNode() const { return n2; }
 	Node::ID getSecondNode() { return n2; }
 	int getNbLadyBug() { return nbLadyBug; }
+        Spline getSpline(); //this is a Spline, not a SplineShape!
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

@@ -2,14 +2,19 @@
 #include "behaviour.hpp"
 
 class Insect {
-enum type {LADYBUG, APHID};
 public:
+  enum type {LADYBUG, APHID};
   Insect() = default;
+  void move(float dt);
+  void draw(sf::RenderTarget& target);
 protected:
+  Path path;
   type mType;
   sf::CircleShape hitbox;
-  Branch currentBranch;
+  int currentBranch;
   float pos;
+  float speed;
+  float angle;
 };
 
 class Aphid : public Insect {
@@ -21,7 +26,7 @@ private:
 
 class LadyBug : public Insect {
 public:
-  LadyBug();
+  LadyBug(Node spawn, Graph *g);
 private:
   bool busy;
 };

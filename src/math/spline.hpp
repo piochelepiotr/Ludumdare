@@ -24,6 +24,7 @@ public:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   void partialDraw(sf::RenderTarget& target, sf::RenderStates states, float start, float end);
   float getLength();
+  Spline getSpline();
     
 private:
   Spline spline;
