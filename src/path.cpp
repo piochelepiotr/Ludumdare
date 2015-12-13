@@ -3,7 +3,6 @@
 Path::Path()
 : mPath()
 {
-
 }
 
 void Path:addBranch(Node::ID node, Branch::ID branch)
@@ -11,7 +10,7 @@ void Path:addBranch(Node::ID node, Branch::ID branch)
     mPath.push_back((node, branch));
 }
 
-float Path::length()
+/*float Path::length()
 {
     float length = 0.f;
     for (auto pere : mPath)
@@ -20,4 +19,4 @@ float Path::length()
         length += branch.getLength();
     }
     return length;
-}
+}*/

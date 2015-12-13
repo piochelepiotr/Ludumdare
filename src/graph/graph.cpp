@@ -9,6 +9,8 @@ Graph::Graph() : m_branchId(0)
 	addNode(Node::ID(300, 300));
 	addNode(Node::ID(300, 270));
 	forceNewEdge(Node::ID(300, 300), Node::ID(300, 270));
+
+	makePath();
 }
 
 Branch const* Graph::getBranch(Branch::ID id) const
@@ -142,9 +144,20 @@ void Graph::makePath()
 		for (int j = 0 ; j < n ; j++)
 			m_paths.insert(std::make_pair(std::make_pair(toID.find(i)->second, toID.find(j)->second), matrix[i][j]));
 }
-
-
-std::vector<
+/*
+Path Graph::getPath(Node::ID n1, Node::ID n2) const
+{
+	Path p;
+	auto it = m_paths.find(std::make_pair(n1, n2));
+	auto node = n1;
+	auto branch = it->second.second;
+	auto &realBranch = m_branchs.find(branch)->second;
+	while (it != m_paths.end() && realBranch.getLength())
+	{
+		p.addBranch(node, branch);
+		node
+	}
+*/
 
 
 Node::ID Graph::addNode(Node node)

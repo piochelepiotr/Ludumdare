@@ -3,6 +3,7 @@
 #include <set>
 #include "node.hpp"
 #include "branch.hpp"
+#include "../path.hpp"
 
 float constexpr leafLimit = 0.3f;
 
@@ -28,6 +29,8 @@ class Graph
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	//Path getPath(Node::ID n1, Node::ID n2) const;
+
 
 	private:
 
@@ -43,4 +46,3 @@ class Graph
 
 	std::map<std::pair<Node::ID, Node::ID>, std::pair<float, Branch::ID> > m_paths;
 };
-
