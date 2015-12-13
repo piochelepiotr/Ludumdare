@@ -4,10 +4,11 @@
 
 class Insect {
 public:
-  enum type {LADYBUG, APHID};
+  enum type {RedLadybug, RedBlackLadybug, BlackLadybug, Aphid};
   Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle);
   void move(float dt, Graph*);
   void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
+  type getType();
 protected:
   Path path;
   type mType;
@@ -27,7 +28,7 @@ private:
 
 class LadyBug : public Insect {
 public:
-  LadyBug(Node spawn, Graph *g);
+  LadyBug(Insect::type type, Node spawn, Graph *g);
 private:
   bool busy;
 };
