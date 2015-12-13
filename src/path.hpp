@@ -4,9 +4,10 @@ class Path
 {
     public:
         Path();
-        void addBranch(Node::ID, Branch::ID);
-        float length();
-        Branch::ID getBranchID(int n);
+        void addBranch(Node::ID, Branch::ID, float len);
+        float length() { return m_length; }
+        Branch::ID getBranchID(int n);  
     private:
-        std::vector<(Node::ID, Branch::ID)> mPath;
+        std::vector<std::pair<Node::ID, Branch::ID> > mPath;
+		float m_length;
 };

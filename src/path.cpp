@@ -5,10 +5,12 @@ Path::Path()
 {
 }
 
-void Path:addBranch(Node::ID node, Branch::ID branch)
+void Path:addBranch(Node::ID node, Branch::ID branch, float len)
 {
     mPath.push_back((node, branch));
+	m_length += d;
 }
+
 
 Branch::ID Path::getBranchID(int n) {
   return mPath[n].second();
