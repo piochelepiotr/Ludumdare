@@ -12,7 +12,7 @@ Flower::Flower(Node::ID id, int life, sf::Time lifeDuration, Texture::ID type): 
 bool Flower::loseOnePoint()
 {
     mLife--;
-    return mLife;
+    return (mLife<0);
 }
 
 bool Flower::isLadyBugFlower()

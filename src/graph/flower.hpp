@@ -13,6 +13,7 @@ public:
     {
         return mCurrentTime;
     }
+    void setCurrentTime(sf::Time dt){mCurrentTime = dt;};
 private:
     int mLife;
     sf::Time mCurrentTime;

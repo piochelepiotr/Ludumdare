@@ -5,12 +5,14 @@
 class Insect {
 public:
   enum type {RedLadybug, RedBlackLadybug, BlackLadybug, Aphid};
-  Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle);
+  Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle, Node::ID obj, bool bo);
   void move(float dt, Graph *g);
   void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
   type getType();
   Branch::ID getBranch(){return path.getBranchID(currentBranch);};
   float getPos(Graph*);
+  bool getReachedObjective(){return reachedObjective;};
+  Node::ID getObjective(){return objective;};
 protected:
   Path path;
   type mType;
@@ -19,6 +21,8 @@ protected:
   float pos;
   float speed;
   float angle;
+  Node::ID objective;
+  bool reachedObjective;
 };
 
 class Aphid : public Insect {
@@ -38,8 +42,6 @@ public:
   void setBusyTime(sf::Time dt){busyTime = dt;};
   sf::Time getBusyTime(){return busyTime;};
 private:
-  Node objective;
-  bool reachedObjective;
   Path futurePath;
   bool busy;
   sf::Time busyTime = sf::seconds(0);

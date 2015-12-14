@@ -28,7 +28,10 @@ void Insect::move(float dt, Graph* g) {
     pos = 0.0f;
     currentBranch += 1;
     if (currentBranch == path.size())
-      currentBranch = 0;
+    {
+        currentBranch = 0;
+        reachedObjective = true;
+    }
   }
 }
 
@@ -38,26 +41,27 @@ Insect::type Insect::getType() {
 
 Insect::Insect(type mType, float fhitbox
 	       ,int currentBranch
-	       , float pos, float speed, float angle) : mType(mType)
+	       , float pos, float speed, float angle, Node::ID obj, bool bo) : mType(mType)
 						      , hitbox(fhitbox)
 						      , currentBranch(currentBranch)
 						      , pos(pos)
 						      , speed(speed)
 						      , angle(angle)
+						      , objective(obj)
+						      , reachedObjective(bo)
 {
   hitbox.setOrigin(fhitbox, fhitbox);
 }
 
-Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 50.0f, 0.0f)
+Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid, 10, 0, 0.0f, 50.0f, 0.0f, spawn, false)
 						    , behaviour(b, spawn, *g)
 {
   path = behaviour.getPath();
+  objective = behaviour.getObjective();
 }
 
 
-LadyBug::LadyBug(Insect::type type, Node spawn, Graph *g) : Insect(type, 12, 0, 0.0f, 50.f*1.5f, 0.0f)
-							  , objective(spawn)
-							  , reachedObjective(true)
+LadyBug::LadyBug(Insect::type type, Node spawn, Graph *g) : Insect(type, 12, 0, 0.0f, 50.f*1.5f, 0.0f, spawn, true)
 {
     path = AphidBehaviour(AphidBehaviour::Offensive, Node::ID(spawn), *g).getPath();
 }

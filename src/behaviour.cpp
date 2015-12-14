@@ -5,6 +5,7 @@
 AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph& graph)
 : mPath()
 , mID(id)
+, mObjective(0.f,0.f)
 {
     if (id == AphidBehaviour::Offensive)
     {
@@ -20,6 +21,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
                 if (length < minLength)
                 {
                     mPath = path;
+                    mObjective = node;
                 }
             }
         }

@@ -83,13 +83,14 @@ void GameWorld::update(sf::Time dt)
     if (!ldb.getBusy())
         ldb.move(dt.asSeconds(), mGraph);
     ldb.setBusyTime(ldb.getBusyTime() + dt);
-    if (ldb.getBusyTime() > sf::seconds(4))
+    if (ldb.getBusyTime() > sf::seconds(3))
     {
         ldb.setBusy(false);
+        ldb.setBusyTime(sf::seconds(0));
     }
     for (unsigned int i=0; i<mAphids.size(); ++i)
     {
-        Aphid apd = mAphids[i];
+        Aphid &apd = mAphids[i];
         if (ldb.getBranch() == apd.getBranch())
         {
             if (ldb.getPos(mGraph) < apd.getPos(mGraph)+0.1 && ldb.getPos(mGraph) > apd.getPos(mGraph)-0.1 && !ldb.getBusy())
@@ -100,8 +101,27 @@ void GameWorld::update(sf::Time dt)
         }
     }
   }
-  for (auto &apd : mAphids) {
+  for (unsigned int i=0; i<mAphids.size(); ++i)
+  {
+    Aphid &apd = mAphids[i];
     apd.move(dt.asSeconds(), mGraph);
+    if (apd.getReachedObjective())
+    {
+        Node::ID node = apd.getObjective();
+        Node graph_node = (*mGraph)[node];
+        for (unsigned int j=0; j<mFlowers.size(); ++j)
+        {
+            Flower &flower = mFlowers[j];
+            if (flower == node)
+            {
+                if (flower.loseOnePoint())
+                {
+                    mFlowers.erase(mFlowers.begin()+i);
+                }
+            }
+        }
+        mAphids.erase(mAphids.begin()+i);
+    }
   }
   for (auto &flower : mFlowers) {
     bool isReady = flower.update(dt);
@@ -110,8 +130,11 @@ void GameWorld::update(sf::Time dt)
         Node::Type type = flower.getType();
         if (type == Texture::ID::AphidFlower)
         {
-            spawnInsect(Insect::Aphid, flower);
-            flower.becameNode();
+            if (flower.getCurrentTime() > sf::seconds(2))
+            {
+                spawnInsect(Insect::Aphid, flower);
+                flower.setCurrentTime(sf::seconds(0));
+            }
         }
         if (type == Texture::ID::LadyBugFlower)
         {
