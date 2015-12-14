@@ -5,14 +5,15 @@ GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context), mDraggedNode(0, 0)
 {
 	Graph& g = mGraph;
-	addNode(Node::ID(350, 210));
+	g.charge("niveau1");
+	/*addNode(Node::ID(350, 210));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	addNode(nid);
 	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::LadyBugFlower);
 	addNode(fleur);
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(250, 200));
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(350, 210));
-	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
+	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));*/
 
     context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
     context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
@@ -116,6 +117,16 @@ void GameState::onNodeReleased(Node::ID node)
 	if (mIsDragged && mDraggedNode != node)
 		addEdge(mDraggedNode, node);
 }
+
+void GameState::updateAnchors()
+{
+    std::vector<Node::ID> nodes = mGraph.getNodes();
+    for(auto node : nodes)
+    {
+	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, node);
+    }
+}
+
 
 /*
 void GameState::finDeUnivers()
