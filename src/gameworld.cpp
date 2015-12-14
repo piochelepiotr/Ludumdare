@@ -78,8 +78,27 @@ void GameWorld::spawnNode(NodeType type, sf::Vector2f position)
 
 void GameWorld::update(sf::Time dt)
 {
-  for (auto &ldb : mLadyBugs) {
-    ldb.move(dt.asSeconds(), mGraph);
+  for (auto &ldb : mLadyBugs)
+    {
+    if (!ldb.getBusy())
+        ldb.move(dt.asSeconds(), mGraph);
+    ldb.setBusyTime(ldb.getBusyTime() + dt);
+    if (ldb.getBusyTime() > sf::seconds(4))
+    {
+        ldb.setBusy(false);
+    }
+    for (unsigned int i=0; i<mAphids.size(); ++i)
+    {
+        Aphid apd = mAphids[i];
+        if (ldb.getBranch() == apd.getBranch())
+        {
+            if (ldb.getPos(mGraph) < apd.getPos(mGraph)+0.1 && ldb.getPos(mGraph) > apd.getPos(mGraph)-0.1 && !ldb.getBusy())
+            {
+                ldb.setBusy(true);
+                mAphids.erase(mAphids.begin()+i);
+            }
+        }
+    }
   }
   for (auto &apd : mAphids) {
     apd.move(dt.asSeconds(), mGraph);

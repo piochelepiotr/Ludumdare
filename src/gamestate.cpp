@@ -10,7 +10,7 @@ GameState::GameState(StateStack& mystack, Context context)
 	g.addNode(Node::ID(350, 210));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	g.addNode(nid);
-	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::Flower);
+	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::LadyBugFlower);
 	g.addNode(fleur);
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(250, 200));
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(350, 210));

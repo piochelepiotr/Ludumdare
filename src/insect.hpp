@@ -9,6 +9,8 @@ public:
   void move(float dt, Graph *g);
   void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
   type getType();
+  Branch::ID getBranch(){return path.getBranchID(currentBranch);};
+  float getPos(Graph*);
 protected:
   Path path;
   type mType;
@@ -31,11 +33,16 @@ public:
   LadyBug(Insect::type type, Node spawn, Graph *g);
   void RedefinePath(Path newPath, Graph &g);
   void move(float dt, Graph* g);
+  void setBusy(bool bo){busy = bo;};
+  bool getBusy(){return busy;};
+  void setBusyTime(sf::Time dt){busyTime = dt;};
+  sf::Time getBusyTime(){return busyTime;};
 private:
   Node objective;
   bool reachedObjective;
   Path futurePath;
   bool busy;
+  sf::Time busyTime = sf::seconds(0);
 };
 
 
