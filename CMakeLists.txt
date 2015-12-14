@@ -40,6 +40,7 @@ SET(
 	src/editlevelstate.cpp
 	src/dialogbox.cpp
 	src/graph/flower.cpp
+	src/utils.cpp
 )
 
 ADD_EXECUTABLE(

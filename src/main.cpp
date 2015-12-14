@@ -14,27 +14,26 @@
 
 int main()
 {
-/*
-	Graph g;
-	g.addNode(Node::ID(250, 200));
-	g.addNode(Node::ID(350, 210));
-	g.addNode(Node::ID(450,150));
-	g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
-	auto b2 = g.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
-	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
-	//std::cout << g.isCulDeSac(b2) << std::endl;
-
-*/
-
-
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « Rose Bud », mais on n'est pas sur");
-/*
+
+	Graph g;
+	
+	/*g.addNode(Node::ID(250, 200));
+	g.addNode(Node::ID(350, 210));
+	g.addNode(Node::ID(450,150));
+	g.forceNewEdge(sf::Vector2f(250, 200),sf::Vector2f(300, 170));
+	g.forceNewEdge(sf::Vector2f(350, 210),sf::Vector2f(300, 300));
+	g.forceNewEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
+	g.save("niveau1");
+	g.charge("niveau1");
+	std::cout << g.isCulDeSac(b2) << std::endl;
 	window.clear();
 
 	g.draw(window, sf::RenderStates::Default);
+	g.save("niveau1");
 	window.display();
-	sf::sleep(sf::milliseconds(1000));
+	sf::sleep(sf::milliseconds(2000));
 
 	Path p = g.getPath(Node::ID(300, 300), Node::ID(450, 150));
 	std::cout << p.length(g) << std::endl;

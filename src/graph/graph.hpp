@@ -4,7 +4,9 @@
 #include "node.hpp"
 #include "branch.hpp"
 #include "../path.hpp"
+#include "../utils.hpp"
 #include "random"
+#include <fstream>
 
 
 float constexpr leafLimit = 0.3f;
@@ -42,6 +44,9 @@ class Graph
 	{ return m_nodes.find(n)->second; }
 	Node const& operator[](Node::ID n) const
 	{ return m_nodes.find(n)->second; }
+	int getNbrNodes() const { return m_nodes.size(); }
+	std::vector<Node::ID> const getNodes();
+	std::vector<Branch::ID> const getBranchs();
 
 	NeighbourHood& getNeighbours(Node::ID node)
 	{ return m_neighbours.find(node)->second; }
@@ -58,12 +63,15 @@ class Graph
 
 	Path getPath(Node::ID n1, Node::ID n2) const;
 	float getDist(Node::ID n1, Node::ID n2);
+	
+	void save(std::string name);
+	void charge(std::string name);
+	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
 
 	private:
 
 	void makePath();
 
-	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
 	std::map<Node::ID, NeighbourHood> m_neighbours;
 
 	std::map<Node::ID, Node> m_nodes;
@@ -72,4 +80,10 @@ class Graph
 	std::map<Branch::ID, Branch> m_branchs;
 
 	std::map<std::pair<Node::ID, Node::ID>, std::pair<float, Branch::ID> > m_paths;
+	
+	void matrixFromGraph();
+	void graphFromMatrix();
+	std::vector<std::vector<std::string>>mMatrix;
+	void addLineToMatrix(std::vector<std::string>line);
+	void clear();
 };

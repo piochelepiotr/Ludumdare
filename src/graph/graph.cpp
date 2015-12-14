@@ -1,8 +1,8 @@
 #include "graph.hpp"
 #include <cmath>
 #include <queue>
-
 #include <iostream>
+
 
 Graph::Graph() : m_branchId(0)
 {
@@ -294,5 +294,139 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		pair.second.draw(target, states);
 	}
-
 }
+
+const std::vector< Node::ID > Graph::getNodes()
+{
+    std::vector<Node::ID>nodes;
+    for(auto it = m_nodes.begin(); it != m_nodes.end(); it++)
+    {
+	nodes.push_back(it->first);
+    }
+    return nodes;
+}
+
+const std::vector< Branch::ID > Graph::getBranchs()
+{
+    std::vector<Branch::ID>branchs;
+    for(auto it = m_branchs.begin(); it != m_branchs.end(); it++)
+    {
+	branchs.push_back(it->first);
+    }
+    return branchs;
+}
+
+void Graph::charge(std::string name)
+{
+    clear();
+    std::ifstream file(name+".txt",std::ios::in);
+    if(file)
+    {
+	std::string line;
+	while(std::getline(file,line))
+	{
+	    if(!line.empty())
+	    {
+		std::vector<std::string>numbers = stringSplit(line,';');
+		addLineToMatrix(numbers);
+	    }
+	}
+	file.close();
+	graphFromMatrix();
+    }
+    else
+	std::cerr << "erreur à l'ouverture du fichier";
+}
+
+void Graph::save(std::string name)
+{
+    matrixFromGraph();
+    std::ofstream file(name+".txt",std::ios::out | std::ios::trunc);
+    if(file)
+    {
+	int l = mMatrix.size();
+	for(int i = 0; i < l ;i ++)
+	{
+	    file << concatenate(mMatrix[i],';') << '\n';
+	}
+	file.close();
+    }
+    else
+	std::cerr << "erreur à l'ouverture du fichier";
+}
+
+void Graph::graphFromMatrix()
+{
+    std::vector<std::string> textNode;
+    std::vector<Node::ID> nodes;
+    int n = mMatrix.size();
+    for(int i = 0; i < n; i++)
+    {
+	textNode = stringSplit(mMatrix[i][i],'/');
+	Node::ID node = Node::ID(::atof(textNode[0].c_str()),::atof(textNode[1].c_str()));
+	node.type = (Node::Type) ::atof(textNode[2].c_str());
+	nodes.push_back(node);
+	addNode(node);
+    }
+    for(int i = 0; i < n; i++)
+    {
+	for(int j = 0; j <n;j++)
+	{
+	    int branche = ::atof(mMatrix[i][j].c_str());
+	    if(i != j && branche == 1)
+	    {
+		forceNewEdge(nodes[i],nodes[j]);
+	    }
+	}
+    }
+}
+
+void Graph::matrixFromGraph()
+{
+    mMatrix.clear();
+    int n = getNbrNodes();
+    std::vector<Node::ID>nodes = getNodes();
+    for(int i = 0; i < n;i++)
+    {
+	mMatrix.push_back(std::vector<std::string>());
+	for(int j = 0; j < n;j++)
+	{
+	    mMatrix[i].push_back("0");
+	}
+    }
+    for(int i = 0; i < n; i++)
+    {
+	mMatrix[i][i] = std::to_string(nodes[i].id.x)+"/"+std::to_string(nodes[i].id.y)+"/"+std::to_string((int)(nodes[i].type));
+    }
+    std::vector<Branch::ID>branchs = getBranchs();
+    int l = branchs.size();
+    for(int k = 0; k < l; k++)
+    {
+	int i = findIndex<Node::ID>(nodes,(*this)[branchs[k]].getFirstNode());
+	int j = findIndex<Node::ID>(nodes,(*this)[branchs[k]].getSecondNode());
+	mMatrix[i][j] = "1";
+    }
+}
+
+void Graph::addLineToMatrix(std::vector< std::string > line)
+{
+    mMatrix.push_back(line);
+}
+
+void Graph::clear()
+{
+    m_nodes.clear();
+    m_branchs.clear();
+    m_neighbours.clear();
+    makePath();
+}
+
+
+
+
+
+
+
+
+
+
