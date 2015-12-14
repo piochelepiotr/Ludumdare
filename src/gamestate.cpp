@@ -1,8 +1,6 @@
 #include "gamestate.hpp"
 #include "graph/flower.hpp"
 
-#include <iostream>
-
 GameState::GameState(StateStack& mystack, Context context)
 : State(mystack, context), mDraggedNode(0, 0)
 {
@@ -98,10 +96,12 @@ void GameState::addNode(Node::ID node)
 
 void GameState::addEdge(Node::ID n1, Node::ID n2)
 {
-	mGraph.newEdge(n1, n2);
-	// TODO ajouter la perte des ressources
+	if (mGameWorld.getCapacity() - mGameWorld.getUsedCapacity())
+	{
+		mGraph.newEdge(n1, n2);
+		mGameWorld.increaseUsedCapacity();
+	}
 }
-
 
 
 
@@ -117,8 +117,9 @@ void GameState::onNodeReleased(Node::ID node)
 		addEdge(mDraggedNode, node);
 }
 
+/*
 void GameState::finDeUnivers()
 {
 	std::cout << "BOOM" << std::endl;
 }
-
+*/

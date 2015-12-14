@@ -15,13 +15,11 @@ sf::Vector2f NodeAnchor::getPosition()
 
 void NodeAnchor::onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position)
 {
-	std::cout << "node pressed" << std::endl;
     m_gameState.onNodePressed(m_node);
 }
 
 void NodeAnchor::onMouseButtonReleased(sf::Mouse::Button button, const sf::Vector2f& position)
 {
-	std::cout << "node released iiiiiiiiiiiiiiiiiiiiii" << std::endl;
 	m_gameState.onNodeReleased(m_node);
 }
 

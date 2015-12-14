@@ -30,7 +30,7 @@ class GameState : public State
 
 
 
-		void finDeUnivers();
+//		void finDeUnivers();
 	private:
 		GameWorld mGameWorld;
 		Graph mGraph;
@@ -38,4 +38,5 @@ class GameState : public State
 		AnchorPool mAnchors;
 		Node::ID mDraggedNode;
 		bool mIsDragged;
+
 };

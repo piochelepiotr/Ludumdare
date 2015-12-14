@@ -9,35 +9,36 @@ enum NodeType{};
 
 class GameWorld
 {
-public:
-  GameWorld()=default; //this shouldnt exist. gameworld needs sprites!
-  GameWorld(GameWorld& world)=default;
-  //Graph& operator= (GameWorld& world);
-  GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g);
-  ~GameWorld();
+	public:
+		GameWorld()=default; //this shouldnt exist. gameworld needs sprites!
+		GameWorld(GameWorld& world)=default;
+		//Graph& operator= (GameWorld& world);
+		GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g);
+		~GameWorld();
 
-  void
-  render (sf::RenderTarget& target);
+		void
+			render (sf::RenderTarget& target);
 
-  void
-  update (sf::Time dt);
+		void
+			update (sf::Time dt);
 
-  void
-  spawnInsect (Insect::type type, Node node);
+		void
+			spawnInsect (Insect::type type, Node node);
 
-  void
-  spawnNode (NodeType type, sf::Vector2f position);
+		void
+			spawnNode (NodeType type, sf::Vector2f position);
 
-    int getCapacity(){return mCapacity;};
-    void increaseCapacity(){mCapacity++;};
-    int getUsedCapacity(){return mUsedCapacity;};
-private:
-  Graph* mGraph;
-  std::vector<LadyBug> mLadyBugs;
-  std::vector<Aphid> mAphids;
-  std::vector<Flower> mFlowers;
-  sf::Sprite mBackGround;
-  sf::Sprite mInsectSprites[4];
-  int mCapacity;
-  int mUsedCapacity;
+		int getCapacity(){return mCapacity;};
+		void increaseCapacity(){mCapacity++;};
+		int getUsedCapacity(){return mUsedCapacity;};
+		void increaseUsedCapacity(){mUsedCapacity++;};
+	private:
+		Graph* mGraph;
+		std::vector<LadyBug> mLadyBugs;
+		std::vector<Aphid> mAphids;
+		std::vector<Flower> mFlowers;
+		sf::Sprite mBackGround;
+		sf::Sprite mInsectSprites[4];
+		int mCapacity;
+		int mUsedCapacity;
 };
