@@ -32,8 +32,8 @@ class GameWorld
 		inline Graph& getGraph() { return *mGraph; }
 
 		Graph* mGraph;
-		std::vector<LadyBug*> mLadyBugs;
-		std::vector<Aphid*> mAphids;
+		std::vector<LadyBug> mLadyBugs;
+		std::vector<Aphid> mAphids;
 		std::vector<Flower> mFlowers;
 		sf::Sprite mBackGround;
 		sf::Sprite mInsectSprites[4];

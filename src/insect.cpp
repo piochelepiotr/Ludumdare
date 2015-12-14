@@ -26,9 +26,6 @@ void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   target.draw(sprite);
 }
 
-sf::Vector2f Insect::getPosition() const {
-    return hitbox.getPosition();
-}
 
 void Insect::move(float dt, Graph* g) {
   float len = g->getBranch(path.getBranchID(currentBranch))->getLength();
@@ -43,7 +40,11 @@ void Insect::move(float dt, Graph* g) {
     }
   }
 }
-  */ // Code d’Adrien fin
+  */
+
+sf::Vector2f Insect::getPosition() const {
+    return hitbox.getPosition();
+} // Code d’Adrien fin
 
 // Code d’Antonin
 void Insect::draw(sf::RenderTarget& target, Graph const&g, sf::Sprite sprite) {

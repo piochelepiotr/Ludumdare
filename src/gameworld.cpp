@@ -91,13 +91,13 @@ void GameWorld::update(sf::Time dt)
     ldb.setBusyTime(ldb.getBusyTime() + dt);
     if (ldb.getBusyTime() > sf::seconds(3))
     {
-        ldb->setBusy(false);
-        ldb->setBusyTime(sf::seconds(0));
+        ldb.setBusy(false);
+        ldb.setBusyTime(sf::seconds(0));
     }
     for (unsigned int i=0; i<mAphids.size(); ++i)
     {
-        Aphid &apd = *mAphids[i];
-        if (ldb->getBranch() == apd.getBranch())
+        Aphid &apd = mAphids[i];
+        if (ldb.getBranch() == apd.getBranch())
         {
             if (ldb.getPos(getGraph()) < apd.getPos(getGraph())+0.1
 				&& ldb.getPos(getGraph()) > apd.getPos(getGraph())-0.1
