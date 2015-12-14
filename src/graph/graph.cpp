@@ -6,9 +6,9 @@
 
 Graph::Graph() : m_branchId(0)
 {
-	addNode(Node::ID(300, 300));
-	addNode(Node::ID(300, 170));
-	forceNewEdge(Node::ID(300, 300), Node::ID(300, 170));
+	addNode(Node::ID(500, 1000));
+	addNode(Node::ID(500, 900));
+	forceNewEdge(Node::ID(500, 1000), Node::ID(500, 900));
 }
 
 Branch const* Graph::getBranch(Branch::ID id) const

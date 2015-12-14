@@ -139,7 +139,8 @@ void EditLevelState::load(std::string name)
     updateAnchors();
 }
 
-void EditLevelState::save(std::__cxx11::string name)
+//void EditLevelState::save(std::__cxx11::string name)
+void EditLevelState::save(std::string name)
 {
     mGraph.save(name);
 }

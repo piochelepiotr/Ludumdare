@@ -14,8 +14,8 @@ Branch::Branch(Node::ID _n1, Node::ID _n2, Graph& graph) :
 			30,
 			n1.getPosition(),
 			n2.getPosition(),
-			graph.getDerivative(n1, 3.f * (n2.getPosition() - n1.getPosition())),
-			graph.getDerivative(n2, 3.f * (n2.getPosition() - n1.getPosition()))
+			graph.getDerivative(n1, n2.getPosition() - n1.getPosition()),
+			graph.getDerivative(n2, n2.getPosition() - n1.getPosition())
 	  )
 {}
 

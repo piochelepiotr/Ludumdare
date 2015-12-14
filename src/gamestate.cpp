@@ -6,17 +6,27 @@ GameState::GameState(StateStack& mystack, Context context)
 {
 	Graph& g = mGraph;
 	g.charge("niveau1");
+	updateAnchors();
 	/*
-	addNode(Node::ID(350, 210));
-	addNode(Node::ID(280, 100));
-	addNode(Node::ID(400, 300));
-	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
+	Node::ID n0(sf::Vector2f(500, 900));
+	Node::ID n1(sf::Vector2f(300, 800));
+	Node::ID n2(600, 700);
+	Node::ID n3(400, 550);
+
+	addNode(n1);
+	addNode(n2);
+	addNode(n3);
+
+	Flower nid(Node::ID(700, 600), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	addNode(nid);
-	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::LadyBugFlower);
+	Flower fleur(Node::ID(200, 740), 5, sf::seconds(60), Texture::ID::LadyBugFlower);
 	addNode(fleur);
-	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(250, 200));
-	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(350, 210));
-	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));*/
+
+	g.newEdge(n0, n2);
+	g.newEdge(n0, n1);
+	g.newEdge(nid, n2);
+	g.newEdge(n1, fleur);
+	*/
 
     context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
     context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
