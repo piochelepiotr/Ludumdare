@@ -25,11 +25,8 @@ class GameState : public State
 
 		void onNodePressed(Node::ID node);
 		void onNodeReleased(Node::ID node);
-	
-	void updateAnchors();
 
-
-
+        void updateAnchors();
 
 
 //		void finDeUnivers();

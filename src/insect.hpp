@@ -2,10 +2,15 @@
 #include "behaviour.hpp"
 #include <cmath>
 
+class Graph;
+
 class Insect {
 public:
+
   enum type {RedLadybug, RedBlackLadybug, BlackLadybug, Aphid};
+
   Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle, Node::ID obj, bool bo);
+
   void move(float dt, Graph *g);
   void draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite);
   type getType();
@@ -13,6 +18,10 @@ public:
   float getPos(Graph*);
   bool getReachedObjective(){return reachedObjective;};
   Node::ID getObjective(){return objective;};
+  sf::Vector2f getPosition() const;
+
+  void setDisplayCircle(bool display);
+
 protected:
   Path path;
   type mType;
@@ -23,6 +32,7 @@ protected:
   float angle;
   Node::ID objective;
   bool reachedObjective;
+  bool mDisplay=false;
 };
 
 class Aphid : public Insect {
@@ -41,6 +51,7 @@ public:
   bool getBusy(){return busy;};
   void setBusyTime(sf::Time dt){busyTime = dt;};
   sf::Time getBusyTime(){return busyTime;};
+
 private:
   Path futurePath;
   bool busy;

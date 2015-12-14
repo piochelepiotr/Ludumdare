@@ -13,7 +13,7 @@ class GameWorld
 		GameWorld()=default; //this shouldnt exist. gameworld needs sprites!
 		GameWorld(GameWorld& world)=default;
 		//Graph& operator= (GameWorld& world);
-		GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g);
+		GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g, AnchorPool& anchor);
 		~GameWorld();
 
 		void
@@ -34,12 +34,12 @@ class GameWorld
 		void setUsedCapacity(int newUsedCapacity){mUsedCapacity = newUsedCapacity;};
 	private:
 		Graph* mGraph;
-		std::vector<LadyBug> mLadyBugs;
-		std::vector<Aphid> mAphids;
+		std::vector<LadyBug*> mLadyBugs;
+		std::vector<Aphid*> mAphids;
 		std::vector<Flower> mFlowers;
 		sf::Sprite mBackGround;
 		sf::Sprite mInsectSprites[4];
 		int mCapacity;
 		int mUsedCapacity;
-		AnchorPool mAnchorPool;
+		AnchorPool* mAnchorPool;
 };

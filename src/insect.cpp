@@ -17,8 +17,15 @@ void Insect::draw(sf::RenderTarget& target, Graph *g, sf::Sprite sprite) {
   sprite.setRotation(angle * 180.0f / 3.14159265f + 90.0f);
   sprite.setPosition(posVect);
   hitbox.setPosition(posVect);
-  target.draw(hitbox);
+  hitbox.setRadius(30.f);
+  hitbox.setOrigin(25.f,25.f);
+  if(mDisplay)
+    target.draw(hitbox);
   target.draw(sprite);
+}
+
+sf::Vector2f Insect::getPosition() const {
+    return hitbox.getPosition();
 }
 
 void Insect::move(float dt, Graph* g) {
@@ -37,6 +44,12 @@ void Insect::move(float dt, Graph* g) {
 
 Insect::type Insect::getType() {
   return mType;
+}
+
+
+void Insect::setDisplayCircle(bool d)
+{
+    mDisplay = d;
 }
 
 Insect::Insect(type mType, float fhitbox
@@ -123,3 +136,4 @@ float Insect::getPos(Graph* g)
     }
     return cpos;
 }
+

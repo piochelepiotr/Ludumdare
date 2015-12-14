@@ -27,12 +27,6 @@ GameState::GameState(StateStack& mystack, Context context)
 	g.newEdge(nid, n2);
 	g.newEdge(n1, fleur);
 	*/
-
-    context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
-    context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
-    context.textures->load(Texture::ID::DefensiveLadyBug, "graphics/ldb2.png");
-    context.textures->load(Texture::ID::Aphid, "graphics/puceron.png");
-    context.textures->load(Texture::ID::BackGround, "graphics/bg.png");
     sf::Sprite redLdb;
     redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
     sf::Sprite redBlackLdb;
@@ -44,7 +38,7 @@ GameState::GameState(StateStack& mystack, Context context)
     sf::Sprite backGround;
     backGround.setTexture(context.textures->get(Texture::ID::BackGround));
 
-	mGameWorld = GameWorld(redLdb, redBlackLdb, blackLdb, aphid, backGround, g);
+	mGameWorld = GameWorld(redLdb, redBlackLdb, blackLdb, aphid, backGround, g, mAnchors);
 }
 
 GameState::~GameState()

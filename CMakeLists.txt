@@ -42,6 +42,7 @@ SET(
 	src/dialogbox.cpp
 	src/graph/flower.cpp
 	src/utils.cpp
+	src/insectanchorlistener.cpp
 )
 
 ADD_EXECUTABLE(

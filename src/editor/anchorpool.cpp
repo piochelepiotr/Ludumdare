@@ -29,16 +29,15 @@ bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
 bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 {
 	// FIXME améliorer en prenant en compte le rayon
-	
+
 	if (mAnchors.size() == 0) return false;
-	std::cout << mAnchors.size() << std::endl;
-	
+
 	auto first = mAnchors[0].second->getPosition();
 	auto offset = first - mouse;
 	float min_distance = offset.x*offset.x + offset.y*offset.y;
 	std::size_t min_index = 0;
-	
-	
+
+
 	for (std::size_t i=1; i < mAnchors.size(); ++i)
 	{
 		auto pos = mAnchors[i].second->getPosition();
@@ -50,18 +49,21 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 				min_index = i;
 		}
 	}
-	
+
 	if (mCurrentAnchor && mAnchors[min_index].second != mCurrentAnchor)
+    {
 		mCurrentAnchor->onMouseLeft();
+    }
 	float radius = mAnchors[min_index].first.getRadius();
 	if (min_distance < radius*radius) {
 		mCurrentAnchor = mAnchors[min_index].second;
 		mCurrentAnchor->onMouseEnter();
 		return true;
-	} else {
+	} else if (mAnchors[min_index].second == mCurrentAnchor) {
+        mCurrentAnchor->onMouseLeft();
 		mCurrentAnchor = nullptr;
 	}
-	
+
 	return false;
 }
 
