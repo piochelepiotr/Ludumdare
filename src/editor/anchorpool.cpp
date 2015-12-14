@@ -31,6 +31,7 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 	// FIXME améliorer en prenant en compte le rayon
 	
 	if (mAnchors.size() == 0) return false;
+	std::cout << mAnchors.size() << std::endl;
 	
 	auto first = mAnchors[0].second->getPosition();
 	auto offset = first - mouse;

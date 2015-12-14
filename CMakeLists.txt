@@ -34,6 +34,7 @@ SET(
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
 	src/editor/nodeanchorlistener.cpp
+	src/gamestateanchorlistener.cpp
 	src/menustate.cpp
 	src/insect.cpp
 	src/behaviour.cpp

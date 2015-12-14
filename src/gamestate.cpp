@@ -4,14 +4,14 @@
 #include <iostream>
 
 GameState::GameState(StateStack& mystack, Context context)
-: State(mystack, context)
+: State(mystack, context), mDraggedNode(0, 0)
 {
 	Graph& g = mGraph;
-	g.addNode(Node::ID(350, 210));
+	addNode(Node::ID(350, 210));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
-	g.addNode(nid);
+	addNode(nid);
 	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::LadyBugFlower);
-	g.addNode(fleur);
+	addNode(fleur);
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(250, 200));
 	g.newEdge(sf::Vector2f(300, 170), sf::Vector2f(350, 210));
 	g.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
@@ -55,8 +55,12 @@ bool GameState::handleEvent(const sf::Event& event)
 			break;
 
 		case sf::Event::MouseButtonPressed:
+			mAnchors.injectEvent(event, getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
+			break;
+
 		case sf::Event::MouseButtonReleased:
-			getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+			mAnchors.injectEvent(event, getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
+			mIsDragged = false;
 			break;
 
         default:
@@ -72,9 +76,10 @@ void GameState::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 bool GameState::update(sf::Time dt)
 {
-  getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
-  mGameWorld.update(dt);
-  return true;
+	bool b = mAnchors.injectMouse(getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
+	getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+	mGameWorld.update(dt);
+	return b;
 }
 
 void GameState::draw()
@@ -82,7 +87,38 @@ void GameState::draw()
     mGameWorld.render(*mContext.window);
 }
 
+
+
+
+void GameState::addNode(Node::ID node)
+{
+	mGraph.addNode(node);
+	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, node);
+}
+
+void GameState::addEdge(Node::ID n1, Node::ID n2)
+{
+	mGraph.newEdge(n1, n2);
+	// TODO ajouter la perte des ressources
+}
+
+
+
+
+void GameState::onNodePressed(Node::ID node)
+{
+	mDraggedNode = node;
+	mIsDragged = true;
+}
+
+void GameState::onNodeReleased(Node::ID node)
+{
+	if (mIsDragged && mDraggedNode != node)
+		addEdge(mDraggedNode, node);
+}
+
 void GameState::finDeUnivers()
 {
 	std::cout << "BOOM" << std::endl;
 }
+
