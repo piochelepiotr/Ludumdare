@@ -15,3 +15,14 @@ int findIndex(std::vector<T> vector, T element) {
     }
     return -1;
 }
+
+template<typename T>
+bool contains(std::vector<T> vect, T element)
+{
+    for(auto x : vect)
+    {
+	if(x == element)
+	    return true;
+    }
+    return false;
+}

@@ -6,9 +6,9 @@
 
 Graph::Graph() : m_branchId(0)
 {
-	addNode(Node::ID(500, 1000));
-	addNode(Node::ID(500, 900));
-	forceNewEdge(Node::ID(500, 1000), Node::ID(500, 900));
+	/*addNode(Node::ID(300, 300));
+	addNode(Node::ID(300, 170));
+	forceNewEdge(Node::ID(300, 300), Node::ID(300, 170));*/
 }
 
 Branch const* Graph::getBranch(Branch::ID id) const
@@ -419,6 +419,41 @@ void Graph::clear()
     m_branchs.clear();
     m_neighbours.clear();
     makePath();
+}
+
+const std::vector< Node::ID > Graph::nodesDependFree(Graph& g)
+{
+    std::vector<Node::ID> nodes = getNodes();
+    std::vector<Node::ID> existantNodes = g.getNodes();
+    for(auto node : nodes)
+    {
+	if(!contains<Node::ID>(existantNodes,node))
+	{
+	    std::vector<Node::ID>neighbours = getNodeNeighbours(node);
+	    for(auto node2 : neighbours)
+	    {
+		nodes[findIndex<Node::ID>(nodes,node2)].type = Texture::ID::None;
+	    }
+	}
+    }
+    std::vector<Node::ID>finalNodes;
+    for(auto node : nodes)
+    {
+	if(node.type != Texture::ID::None)
+	    finalNodes.push_back(node);
+    }
+    return finalNodes;
+}
+
+const std::vector< Node::ID > Graph::getNodeNeighbours(Node::ID node)
+{
+    std::vector<Node::ID>neighbours;
+    for(auto branch : m_branchs)
+    {
+	if(branch.second.getSecondNode() == node)
+	    neighbours.push_back(branch.second.getFirstNode());
+    }
+    return neighbours;
 }
 
 

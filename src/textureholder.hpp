@@ -18,6 +18,7 @@ namespace Texture
 	, LadyBugFlower
 	, SemperFlower
 	, AphidFlower
+	,None
     };
 }
 

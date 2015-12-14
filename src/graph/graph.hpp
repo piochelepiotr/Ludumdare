@@ -46,6 +46,8 @@ class Graph
 	{ return m_nodes.find(n)->second; }
 	int getNbrNodes() const { return m_nodes.size(); }
 	std::vector<Node::ID> const getNodes();
+	std::vector<Node::ID> const getNodeNeighbours(Node::ID);
+	std::vector<Node::ID> const nodesDependFree(Graph &g);
 	std::vector<Branch::ID> const getBranchs();
 
 	NeighbourHood& getNeighbours(Node::ID node)
@@ -67,6 +69,7 @@ class Graph
 	void save(std::string name);
 	void charge(std::string name);
 	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
+	//bool contains(Node::ID node) const { return contains<Node::ID>(getNodes(),node); }
 
 	sf::Vector2f getDerivative(Node::ID n, sf::Vector2f v);
 

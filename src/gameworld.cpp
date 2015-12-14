@@ -79,7 +79,7 @@ void GameWorld::spawnNode(NodeType type, sf::Vector2f position)
 void GameWorld::update(sf::Time dt)
 {
   for (auto &ldb : mLadyBugs)
-    {
+  {
     if (!ldb.getBusy())
         ldb.move(dt.asSeconds(), mGraph);
     ldb.setBusyTime(ldb.getBusyTime() + dt);
