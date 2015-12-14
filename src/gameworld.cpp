@@ -36,6 +36,10 @@ GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite black
       {
           mFlowers.push_back(Flower(node, 5, sf::seconds(60), Texture::ID::Flower));
       }
+      if (g[node].m_t == Texture::ID::LadyBugFlower)
+      {
+          mFlowers.push_back(Flower(node, 5, sf::seconds(3), Texture::ID::LadyBugFlower));
+      }
   }
 }
 

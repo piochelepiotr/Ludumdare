@@ -28,6 +28,9 @@ public:
   void
   spawnNode (NodeType type, sf::Vector2f position);
 
+    int getCapacity(){return mCapacity;};
+    void increaseCapacity(){mCapacity++;};
+    int getUsedCapacity(){return mUsedCapacity;};
 private:
   Graph* mGraph;
   std::vector<LadyBug> mLadyBugs;
@@ -35,4 +38,6 @@ private:
   std::vector<Flower> mFlowers;
   sf::Sprite mBackGround;
   sf::Sprite mInsectSprites[4];
+  int mCapacity;
+  int mUsedCapacity;
 };

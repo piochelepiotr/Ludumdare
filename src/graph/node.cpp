@@ -24,6 +24,8 @@ void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const
         c.setFillColor(sf::Color::Yellow);
     else if (m_t == Texture::ID::Flower)
         c.setFillColor(sf::Color::Magenta);
+        else if (m_t == Texture::ID::LadyBugFlower)
+        c.setFillColor(sf::Color::Black);
     else
         c.setFillColor(sf::Color::Red);
 	sf::Transform movement;
