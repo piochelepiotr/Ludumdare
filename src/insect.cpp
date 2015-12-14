@@ -63,7 +63,9 @@ Aphid::Aphid(AphidBehaviour::ID b, Node spawn, Graph *g) : Insect(Insect::Aphid,
 
 LadyBug::LadyBug(Insect::type type, Node spawn, Graph *g) : Insect(type, 12, 0, 0.0f, 50.f*1.5f, 0.0f, spawn, true)
 {
-    path = AphidBehaviour(AphidBehaviour::Offensive, Node::ID(spawn), *g).getPath();
+    Branch::ID spawnBranch = g->getNeighbours(spawn).begin()->second;
+    path.addBranch(spawn, spawnBranch);
+    path.addBranch((*g)[spawnBranch].getFirstNode(), spawnBranch);
 }
 
 void LadyBug::RedefinePath(Path newPath, Graph &g) {
