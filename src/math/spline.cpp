@@ -7,11 +7,11 @@ CubicCurve::CubicCurve(float cc0, float cc1, float cc2, float cc3) : c0 (cc0)
   
 }
 
-float CubicCurve::evaluate(float val) {
+float CubicCurve::evaluate(float val) const {
   return c0 + c1*val + c2*val*val + c3*val*val*val;
 }
 
-float CubicCurve::deriv(float val) {
+float CubicCurve::deriv(float val) const {
   return c1 + 2.0f * c2 * val + 3.0f * c3 * val * val;
 }
 
@@ -20,11 +20,11 @@ Spline::Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, 
   
 }
 
-sf::Vector2f Spline::evaluatePos(float val) {
+sf::Vector2f Spline::evaluatePos(float val) const {
   return sf::Vector2f(x.evaluate(val), y.evaluate(val));
 }
 
-sf::Vector2f Spline::evaluateSpeed(float val) {
+sf::Vector2f Spline::evaluateSpeed(float val) const {
   return sf::Vector2f(x.deriv(val), y.deriv(val));
 }
 
@@ -39,7 +39,7 @@ float norm(sf::Vector2f v) {
   return sqrt(v.x*v.x + v.y*v.y);
 }
 
-float SplineShape::getLength() {
+float SplineShape::getLength() const {
   return length;
 }
 
@@ -105,8 +105,3 @@ void SplineShape::partialDraw(sf::RenderTarget& target, sf::RenderStates states,
     }
   }
 }
-  
-Spline SplineShape::getSpline() {
-  return spline;
-}
-

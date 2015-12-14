@@ -2,7 +2,7 @@
 #include "graph/graph.hpp"
 #include <iostream>
 
-AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph& graph)
+AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph const& graph)
 : mPath()
 , mID(id)
 , mObjective(0.f,0.f)
@@ -13,7 +13,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
         for (auto& stuff : graph)
         {
             Node::ID node = stuff.first;
-			Node& graph_node = graph[node];
+			Node const& graph_node = graph[node];
             if (graph_node.getType() == Texture::ID::Flower || graph_node.getType() == Texture::ID::LadyBugFlower)
             {
                 Path path = graph.getPath(spawningNode, node);
@@ -59,27 +59,23 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
     }
 }
 
-Path & AphidBehaviour::getPath() {
-  return mPath;
-}
 
-
-Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph& graph)
+Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph const& graph)
 {
     if (id == AphidBehaviour::Coward)
     {
         auto neighbours = graph.getNeighbours(actualNode);
         Branch::ID branchChosen = neighbours.begin()->second;
-        Branch& graph_branchChosen = graph[branchChosen];
+        Branch const* graph_branchChosen = graph.getBranch(branchChosen);
         for (auto& stuff: neighbours)
         {
             Branch::ID branch = stuff.second;
-            Branch& graph_branch = graph[branch];
-            if (!graph.isCulDeSac(branch) && graph_branch.getFirstNode() != previousNode && graph_branch.getSecondNode() != previousNode)
+            Branch const* graph_branch = graph.getBranch(branch);
+            if (!graph.isCulDeSac(branch) && graph_branch->getFirstNode() != previousNode && graph_branch->getSecondNode() != previousNode)
             {
-				if (graph_branch.getNbLadyBug() < graph_branchChosen.getNbLadyBug())
+				if (graph_branch->getNbLadyBug() < graph_branchChosen->getNbLadyBug())
 					branchChosen = branch;
-				if (graph_branch.getNbLadyBug() == graph_branchChosen.getNbLadyBug() && graph_branch.getLength() < graph_branchChosen.getLength())
+				if (graph_branch->getNbLadyBug() == graph_branchChosen->getNbLadyBug() && graph_branch->getLength() < graph_branchChosen->getLength())
 				{
                     branchChosen = branch;
 					graph_branchChosen = graph_branch;
@@ -92,14 +88,14 @@ Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, No
     {
         auto neighbours = graph.getNeighbours(actualNode);
         Branch::ID branchChosen = neighbours.begin()->second;
-        Branch& graph_branchChosen = graph[branchChosen];
+        Branch const* graph_branchChosen = graph.getBranch(branchChosen);
         for (auto& stuff: neighbours)
         {
             Branch::ID branch = stuff.second;
-            Branch& graph_branch = graph[branch];
-            if (!graph.isCulDeSac(branch) && graph_branch.getFirstNode() != previousNode && graph_branch.getSecondNode()!=previousNode)
+            Branch const* graph_branch = graph.getBranch(branch);
+            if (!graph.isCulDeSac(branch) && graph_branch->getFirstNode() != previousNode && graph_branch->getSecondNode()!=previousNode)
             {
-                if (graph_branch.getLength() < graph_branchChosen.getLength())
+                if (graph_branch->getLength() < graph_branchChosen->getLength())
 				{
                     branchChosen = branch;
 					graph_branchChosen = graph_branch;

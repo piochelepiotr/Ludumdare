@@ -31,14 +31,15 @@ class Node
 		inline sf::Vector2f const& getPosition() const { return m_pos; }
 		inline sf::Vector2f& getPosition() { return m_pos; }
 
-		Type getType();
+		Type& getType() { return m_t; }
+		Type const& getType() const { return m_t; }
 		void setType(Type type) { m_t = type; }
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	protected:
 		sf::Vector2f m_pos;
-	public:
         Type m_t;
+	public:
 		sf::Vector2f m_derivative;
 };

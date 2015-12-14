@@ -56,15 +56,19 @@ class Graph
 	{ return m_neighbours.find(node)->second; }
 
 	// Pour itérer sur les std::pair<Node::ID, NeighbourHood>
+	std::map<Node::ID, NeighbourHood>::const_iterator begin() const
+	{ return m_neighbours.begin(); }
 	std::map<Node::ID, NeighbourHood>::iterator begin()
 	{ return m_neighbours.begin(); }
+	std::map<Node::ID, NeighbourHood>::const_iterator end() const
+	{ return m_neighbours.end(); }
 	std::map<Node::ID, NeighbourHood>::iterator end()
 	{ return m_neighbours.end(); }
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	Path getPath(Node::ID n1, Node::ID n2) const;
-	float getDist(Node::ID n1, Node::ID n2);
+	float getDist(Node::ID n1, Node::ID n2) const;
 	
 	void save(std::string name);
 	void charge(std::string name);

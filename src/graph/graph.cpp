@@ -52,7 +52,7 @@ bool Graph::isCulDeSac(Branch::ID b) const
 
 	auto it1 = m_neighbours.find(getBranch(b)->getFirstNode());
 	auto it2 = m_neighbours.find(getBranch(b)->getSecondNode());
-	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2 || (*this)[getBranch(b)->getFirstNode()].m_t != Texture::ID::RegularNode || (*this)[getBranch(b)->getSecondNode()].m_t != Texture::ID::RegularNode);
+	return (it1 == m_neighbours.end() || it2 == m_neighbours.end() || it1->second.size() < 2 || it2->second.size() < 2 || (*this)[getBranch(b)->getFirstNode()].getType() != Texture::ID::RegularNode || (*this)[getBranch(b)->getSecondNode()].getType() != Texture::ID::RegularNode);
 }
 
 /*
@@ -161,8 +161,8 @@ Path Graph::getPath(Node::ID n1, Node::ID n2) const
 	return p;
 }
 
-float Graph::getDist(Node::ID n1, Node::ID n2) {
-  return m_paths[std::make_pair(n1, n2)].first;
+float Graph::getDist(Node::ID n1, Node::ID n2) const {
+  return m_paths.find(std::make_pair(n1, n2))->second.first;
 }
 
 
@@ -245,7 +245,6 @@ Branch::ID Graph::newEdge(Node::ID n1, Node::ID n2)
 	}
 	else
 	{
-		std::cout << 4 << std::endl;
 		return Branch::ID(0);
 	}
 }
@@ -289,6 +288,7 @@ void Graph::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		pair.second.draw(target, states);
 	}
+
 
 	for (auto& pair : m_nodes)
 	{

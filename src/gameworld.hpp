@@ -16,23 +16,21 @@ class GameWorld
 		GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g, AnchorPool& anchor);
 		~GameWorld();
 
-		void
-			render (sf::RenderTarget& target);
+		void render (sf::RenderTarget& target);
 
-		void
-			update (sf::Time dt);
+		void update (sf::Time dt);
 
-		void
-			spawnInsect (Insect::type type, Node node);
+		void spawnInsect (Insect::type type, Node node);
 
-		void
-			spawnNode (NodeType type, sf::Vector2f position);
+		void spawnNode (NodeType type, sf::Vector2f position);
 
 		int getCapacity(){return mCapacity;};
 		void increaseCapacity(){mCapacity++;};
 		int getUsedCapacity(){return mUsedCapacity;};
 		void setUsedCapacity(int newUsedCapacity){mUsedCapacity = newUsedCapacity;};
 	private:
+		inline Graph& getGraph() { return *mGraph; }
+
 		Graph* mGraph;
 		std::vector<LadyBug*> mLadyBugs;
 		std::vector<Aphid*> mAphids;

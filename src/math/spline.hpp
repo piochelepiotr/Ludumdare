@@ -5,8 +5,8 @@
 struct CubicCurve {
 public:
   CubicCurve(float c0, float c1, float c2, float c3);
-  float evaluate(float val);
-  float deriv(float val);
+  float evaluate(float val) const;
+  float deriv(float val) const;
 private:
   float c0, c1, c2, c3; //c0 + c1 X + c2 X^2 + c3 X^3
 };
@@ -14,8 +14,8 @@ private:
 class Spline {
 public:
   Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent);
-  sf::Vector2f evaluatePos(float val);
-  sf::Vector2f evaluateSpeed(float val);
+  sf::Vector2f evaluatePos(float val) const;
+  sf::Vector2f evaluateSpeed(float val) const;
   CubicCurve x;
   CubicCurve y;
 };
@@ -26,8 +26,10 @@ public:
   SplineShape(float thickness, int dots, Spline spline);
   void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   void partialDraw(sf::RenderTarget& target, sf::RenderStates states, float start, float end);
-  float getLength();
-  Spline getSpline();
+  float getLength() const;
+
+  Spline& getSpline() { return spline; }
+  Spline const& getSpline() const { return spline; }
     
 private:
   Spline spline;

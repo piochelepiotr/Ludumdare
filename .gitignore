@@ -38,3 +38,6 @@ cmake_install.cmake
 *.exe
 *.out
 *.app
+
+# Swap for vim
+*.swp

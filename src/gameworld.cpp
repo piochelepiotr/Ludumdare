@@ -28,20 +28,22 @@
 	aphid.setOrigin(50.0f, 75.0f);
 	mInsectSprites[static_cast<int>(Insect::Aphid)] = aphid;
 
-	for (auto& stuff : *mGraph)
+	for (auto& stuff : getGraph())
 	{
 		Node::ID node = stuff.first;
-		if (g[node].m_t == Texture::ID::AphidFlower)
+		switch (g[node].getType())
 		{
-			mFlowers.push_back(Flower(node, 5, sf::seconds(0), Texture::ID::AphidFlower));
-		}
-		if (g[node].m_t == Texture::ID::Flower)
-		{
-			mFlowers.push_back(Flower(node, 5, sf::seconds(60), Texture::ID::Flower));
-		}
-		if (g[node].m_t == Texture::ID::LadyBugFlower)
-		{
-			mFlowers.push_back(Flower(node, 5, sf::seconds(3), Texture::ID::LadyBugFlower));
+			case Texture::ID::AphidFlower:
+				mFlowers.push_back(Flower(node, 5, sf::seconds(0), Texture::ID::AphidFlower));
+				break;
+			case Texture::ID::Flower:
+				mFlowers.push_back(Flower(node, 5, sf::seconds(60), Texture::ID::Flower));
+				break;
+			case Texture::ID::LadyBugFlower:
+				mFlowers.push_back(Flower(node, 5, sf::seconds(3), Texture::ID::LadyBugFlower));
+				break;
+			default:
+				break;
 		}
 	}
 }
@@ -55,22 +57,22 @@ GameWorld::~GameWorld()
 void GameWorld::render(sf::RenderTarget& target)
 {
 	target.draw(mBackGround);
-	mGraph->draw(target, sf::RenderStates::Default);
+	getGraph().draw(target, sf::RenderStates::Default);
 	for (auto &ldb : mLadyBugs) {
-		ldb->draw(target, mGraph, mInsectSprites[static_cast<size_t>(ldb->getType())]);
+		ldb.draw(target, getGraph(), mInsectSprites[static_cast<size_t>(ldb.getType())]);
 	}
 	for (auto &apd : mAphids) {
-		apd->draw(target, mGraph, mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
+		apd.draw(target, getGraph(), mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
 	}
 }
 
 void GameWorld::spawnInsect(Insect::type type, Node node)
 {
 	if (type == Insect::Aphid) {
-		mAphids.push_back(new Aphid(AphidBehaviour::Offensive, node, mGraph));
+		mAphids.emplace_back(AphidBehaviour::Offensive, node, getGraph());
 	} else {
-		mLadyBugs.push_back(new LadyBug(type, node, mGraph));
-		mAnchorPool->addAnchor<InsectAnchorListener>(AnchorItem(20.f), *mLadyBugs.back());
+		mLadyBugs.emplace_back(type, node, getGraph());
+		mAnchorPool->addAnchor<InsectAnchorListener>(AnchorItem(20.f), mLadyBugs.back());
 	}
 }
 
@@ -84,10 +86,10 @@ void GameWorld::update(sf::Time dt)
 {
   for (auto &ldb : mLadyBugs)
   {
-    if (!ldb->getBusy())
-        ldb->move(dt.asSeconds(), mGraph);
-    ldb->setBusyTime(ldb->getBusyTime() + dt);
-    if (ldb->getBusyTime() > sf::seconds(3))
+    if (!ldb.getBusy())
+        ldb.move(dt.asSeconds(), getGraph());
+    ldb.setBusyTime(ldb.getBusyTime() + dt);
+    if (ldb.getBusyTime() > sf::seconds(3))
     {
         ldb->setBusy(false);
         ldb->setBusyTime(sf::seconds(0));
@@ -97,11 +99,11 @@ void GameWorld::update(sf::Time dt)
         Aphid &apd = *mAphids[i];
         if (ldb->getBranch() == apd.getBranch())
         {
-            if (ldb->getPos(mGraph) < apd.getPos(mGraph)+0.1
-                && ldb->getPos(mGraph) > apd.getPos(mGraph)-0.1
-                && !ldb->getBusy()
-            ){
-                ldb->setBusy(true);
+            if (ldb.getPos(getGraph()) < apd.getPos(getGraph())+0.1
+				&& ldb.getPos(getGraph()) > apd.getPos(getGraph())-0.1
+				&& !ldb.getBusy())
+            {
+                ldb.setBusy(true);
                 mAphids.erase(mAphids.begin()+i);
             }
         }
@@ -109,8 +111,8 @@ void GameWorld::update(sf::Time dt)
   }
   for (unsigned int i=0; i<mAphids.size(); ++i)
   {
-    Aphid &apd = *mAphids[i];
-    apd.move(dt.asSeconds(), mGraph);
+    Aphid &apd = mAphids[i];
+    apd.move(dt.asSeconds(), getGraph());
     if (apd.getReachedObjective())
     {
         Node::ID node = apd.getObjective();

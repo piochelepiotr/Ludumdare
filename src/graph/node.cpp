@@ -10,12 +10,6 @@ bool Node::ID::operator==(Node::ID const& other) const
 	return id == other.id;
 }
 
-Node::Type Node::getType()
-{
-	return m_t;
-}
-
-
 void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::CircleShape c(10);

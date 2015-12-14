@@ -33,7 +33,3 @@ void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	ss.draw(target, states);
 }
-
-Spline Branch::getSpline() {
-	return ss.getSpline();
-}
