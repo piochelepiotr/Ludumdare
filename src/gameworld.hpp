@@ -5,6 +5,8 @@
 #include "graph/flower.hpp"
 #include "editor/anchorpool.hpp"
 
+#include <memory>
+
 enum NodeType{};
 
 class GameWorld
@@ -20,7 +22,7 @@ class GameWorld
 
 		void update (sf::Time dt);
 
-		void spawnInsect (Insect::type type, Node node);
+		void spawnInsect (Insect::type type, Node::ID node);
 
 		void spawnNode (NodeType type, sf::Vector2f position);
 
@@ -32,9 +34,9 @@ class GameWorld
 		inline Graph& getGraph() { return *mGraph; }
 
 		Graph* mGraph;
-		std::vector<LadyBug> mLadyBugs;
-		std::vector<Aphid> mAphids;
-		std::vector<Flower> mFlowers;
+		std::vector<LadyBug*> mLadyBugs;
+		std::vector<Aphid*> mAphids;
+		std::vector<Flower*> mFlowers;
 		sf::Sprite mBackGround;
 		sf::Sprite mInsectSprites[4];
 		int mCapacity;
