@@ -108,7 +108,6 @@ void GameWorld::update(sf::Time dt)
     if (apd.getReachedObjective())
     {
         Node::ID node = apd.getObjective();
-        Node graph_node = (*mGraph)[node];
         for (unsigned int j=0; j<mFlowers.size(); ++j)
         {
             Flower &flower = mFlowers[j];

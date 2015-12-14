@@ -68,6 +68,8 @@ class Graph
 	void charge(std::string name);
 	Branch::ID forceNewEdge(Node::ID n1, Node::ID n2);
 
+	sf::Vector2f getDerivative(Node::ID n, sf::Vector2f v);
+
 	private:
 
 	void makePath();

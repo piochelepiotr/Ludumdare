@@ -30,6 +30,8 @@ class Branch
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+
+
 	static Branch noneBranch;
 	private:
 

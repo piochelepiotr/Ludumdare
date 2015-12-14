@@ -6,7 +6,10 @@ GameState::GameState(StateStack& mystack, Context context)
 {
 	Graph& g = mGraph;
 	g.charge("niveau1");
-	/*addNode(Node::ID(350, 210));
+	/*
+	addNode(Node::ID(350, 210));
+	addNode(Node::ID(280, 100));
+	addNode(Node::ID(400, 300));
 	Flower nid(Node::ID(450, 150), 5, sf::seconds(1), Texture::ID::AphidFlower);
 	addNode(nid);
 	Flower fleur(Node::ID(250, 200), 5, sf::seconds(60), Texture::ID::LadyBugFlower);

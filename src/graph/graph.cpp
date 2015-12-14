@@ -422,11 +422,10 @@ void Graph::clear()
 }
 
 
-
-
-
-
-
-
-
-
+sf::Vector2f Graph::getDerivative(Node::ID n, sf::Vector2f v)
+{
+	Node& node = (*this)[n];
+	if (node.m_derivative == sf::Vector2f(0, 0))
+		node.m_derivative = v;
+	return node.m_derivative;
+}

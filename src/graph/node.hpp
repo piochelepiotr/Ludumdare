@@ -35,8 +35,10 @@ class Node
 		void setType(Type type) { m_t = type; }
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	protected:
 		sf::Vector2f m_pos;
 	public:
         Type m_t;
+		sf::Vector2f m_derivative;
 };
