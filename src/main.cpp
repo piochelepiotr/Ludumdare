@@ -18,7 +18,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « Rose Bud », mais on n'est pas sur");
 
 	Graph g;
-	
+
 	/*g.addNode(Node::ID(250, 200));
 	g.addNode(Node::ID(350, 210));
 	g.addNode(Node::ID(450,150));
@@ -57,6 +57,11 @@ int main()
 
     Player player;
     struct State::Context context(window, textures, fonts, player);
+    context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
+    context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
+    context.textures->load(Texture::ID::DefensiveLadyBug, "graphics/ldb2.png");
+    context.textures->load(Texture::ID::Aphid, "graphics/puceron.png");
+    context.textures->load(Texture::ID::BackGround, "graphics/bg.png");
     Application app(context);
     int truc = app.run();
 
