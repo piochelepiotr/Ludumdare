@@ -3,7 +3,7 @@
 #include <graph/graph.hpp>
 #include "insect.hpp"
 #include "graph/flower.hpp"
-
+#include "editor/anchorpool.hpp"
 
 enum NodeType{};
 
@@ -31,7 +31,7 @@ class GameWorld
 		int getCapacity(){return mCapacity;};
 		void increaseCapacity(){mCapacity++;};
 		int getUsedCapacity(){return mUsedCapacity;};
-		void increaseUsedCapacity(){mUsedCapacity++;};
+		void setUsedCapacity(int newUsedCapacity){mUsedCapacity = newUsedCapacity;};
 	private:
 		Graph* mGraph;
 		std::vector<LadyBug> mLadyBugs;
@@ -41,4 +41,5 @@ class GameWorld
 		sf::Sprite mInsectSprites[4];
 		int mCapacity;
 		int mUsedCapacity;
+		AnchorPool mAnchorPool;
 };

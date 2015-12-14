@@ -22,6 +22,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
                 {
                     mPath = path;
                     mObjective = node;
+                    minLength = length;
                 }
             }
         }

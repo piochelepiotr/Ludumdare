@@ -14,7 +14,9 @@
 	, mAphids()
 	, mFlowers()
 	, mBackGround(backGround)
-	  , mInsectSprites()
+    , mInsectSprites()
+    , mCapacity(3)
+    , mUsedCapacity(0)
 {
 	redLdb.setOrigin(50.0f, 70.0f);
 	mInsectSprites[static_cast<int>(Insect::RedLadybug)] = redLdb;

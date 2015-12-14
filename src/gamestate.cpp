@@ -113,7 +113,7 @@ void GameState::addEdge(Node::ID n1, Node::ID n2)
 	if (mGameWorld.getCapacity() - mGameWorld.getUsedCapacity())
 	{
 		mGraph.newEdge(n1, n2);
-		mGameWorld.increaseUsedCapacity();
+		mGameWorld.setUsedCapacity(mGameWorld.getUsedCapacity()+1);
 	}
 }
 
