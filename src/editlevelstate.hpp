@@ -18,9 +18,16 @@ class EditLevelState : public State
 	void onNodeReleased(Node::ID node);
 	void addNode(Node::ID node);
 	void addEdge(Node::ID n1, Node::ID);
+	
+	void updateAnchors();
+	void save(std::string name);
+	void load(std::string name);
+	
 
 	std::pair<bool, Node::ID> getNodeDragged()
 	{ return std::make_pair(m_isNodeDragged, mFirstNode); }
+	
+	Texture::ID nextType(Texture::ID type);
 
     private:
 	void mousePressed(sf::Event event, sf::Vector2f pos);
@@ -31,4 +38,5 @@ class EditLevelState : public State
 
 	bool m_isNodeDragged;
 	Node::ID mFirstNode;
+	std::vector<Texture::ID>mTypes;
 };

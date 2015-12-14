@@ -396,7 +396,7 @@ void Graph::matrixFromGraph()
     }
     for(int i = 0; i < n; i++)
     {
-	mMatrix[i][i] = std::to_string(nodes[i].id.x)+"/"+std::to_string(nodes[i].id.y)+"/"+std::to_string((int)(nodes[i].type));
+	mMatrix[i][i] = std::to_string(nodes[i].id.x)+"/"+std::to_string(nodes[i].id.y)+"/"+std::to_string((int)((*this)[nodes[i]].getType()));
     }
     std::vector<Branch::ID>branchs = getBranchs();
     int l = branchs.size();

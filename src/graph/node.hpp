@@ -32,6 +32,7 @@ class Node
 		inline sf::Vector2f& getPosition() { return m_pos; }
 
 		Type getType();
+		void setType(Type type) { m_t = type; }
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	protected:

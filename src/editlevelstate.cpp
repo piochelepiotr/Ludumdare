@@ -6,6 +6,11 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
 : State(mystack, context)
 , mFirstNode(0.f,0.f)
 {
+    mTypes.push_back(Texture::ID::RegularNode);
+    mTypes.push_back(Texture::ID::LadyBugFlower);
+    mTypes.push_back(Texture::ID::AphidFlower);
+    mTypes.push_back(Texture::ID::Flower);
+    mTypes.push_back(Texture::ID::SemperFlower);
     addNode(Node::ID(250, 200));
     addNode(Node::ID(350, 210));
     addNode(Node::ID(450, 150));
@@ -13,12 +18,13 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
     mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
     mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
+    load("niveau1");
     //mAnchors.addAnchor(AnchorItem(10.f), )
 }
 
 EditLevelState::~EditLevelState()
 {
-
+    save("niveau1");
 }
 
 bool EditLevelState::handleEvent(const sf::Event& event)
@@ -101,9 +107,16 @@ void EditLevelState::onNodePressed(Node::ID node)
 void EditLevelState::onNodeReleased(Node::ID node)
 {
 	std::cout << node.id.x << "  " << mFirstNode.id.x << std::endl;
-    if(m_isNodeDragged && mFirstNode != node)
+    if(m_isNodeDragged)
     {
-		mGraph.newEdge(mFirstNode,node);
+	if(mFirstNode != node)
+	{
+		mGraph.forceNewEdge(mFirstNode,node);
+	}
+	else
+	{
+	    mGraph[node].setType(nextType(mGraph[node].getType()));
+	}
     }
 	m_isNodeDragged = false;
 }
@@ -114,3 +127,48 @@ void EditLevelState::addNode(Node::ID node)
     mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
 	m_isNodeDragged = false;
 }
+
+void EditLevelState::addEdge(Node::ID n1, Node::ID)
+{
+
+}
+
+void EditLevelState::load(std::string name)
+{
+    mGraph.charge(name);
+    updateAnchors();
+}
+
+void EditLevelState::save(std::__cxx11::string name)
+{
+    mGraph.save(name);
+}
+
+void EditLevelState::updateAnchors()
+{
+    //mAnchors.clear()
+    std::vector<Node::ID> nodes = mGraph.getNodes();
+    for(auto node : nodes)
+    {
+	mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
+    }
+    m_isNodeDragged = false;
+}
+
+Texture::ID EditLevelState::nextType(Texture::ID type)
+{
+    int l = mTypes.size();
+    for(int i = 0; i < l; i++)
+    {
+	if(type == mTypes[i])
+	{
+	    if(i == l-1)
+		return mTypes[0];
+	    else
+		return mTypes[i+1];
+	}
+    }
+    return mTypes[0];
+}
+
+
