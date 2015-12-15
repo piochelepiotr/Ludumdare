@@ -9,29 +9,28 @@ public:
 
   enum type {RedLadybug, RedBlackLadybug, BlackLadybug, Aphid};
 
-  Insect(type mType, float hitbox, int currentBranch, float pos, float speed, float angle, Node::ID obj, bool bo);
-  void move(float dt, Graph const&g);
+  Insect(type mType, Node::ID node, float fhitbox, float speed, float angle);
+  void move(float dt, Graph const&g); // C’est très casse-gueule, parce qu’il y a aussi une méthode move pour les coccinelles…
   void draw(sf::RenderTarget& target, Graph const&g, sf::Sprite sprite);
 
   type getType();
-  Branch::ID getBranch(){return path.getBranchID(currentBranch);};
-  float getPos(Graph const&);
-  bool getReachedObjective(){return reachedObjective;};
-  Node::ID getObjective(){return objective;};
+  Branch::ID getBranch() const { return path.frontBranch(); }
+  float getPos(Graph const&) const;
+  bool isObjectiveReached() const { return path.isEmpty(); }
+  Node::ID getPrevNode() const { return path.getPrevNode(); }
+//  Node::ID getObjective() { return objective; }
   sf::Vector2f getPosition() const;
 
   void setDisplayCircle(bool display);
 
 protected:
-  Path path;
   type mType;
+  Path path;
   sf::CircleShape hitbox;
-  int currentBranch;
   float pos;
   float speed;
   float angle;
-  Node::ID objective;
-  bool reachedObjective;
+//  Node::ID objective;
   bool mDisplay=false;
 };
 
@@ -45,7 +44,7 @@ private:
 class LadyBug : public Insect {
 public:
   LadyBug(Insect::type type, Node::ID spawn, Graph const& g);
-  void RedefinePath(Path newPath, Graph const& g);
+  void redefinePath(Path newPath, Graph const& g);
   void move(float dt, Graph const& g);
   void setBusy(bool bo){busy = bo;};
   bool getBusy(){return busy;};
@@ -53,7 +52,7 @@ public:
   sf::Time getBusyTime(){return busyTime;};
 
 private:
-  Path futurePath;
+  Path dutyPath;
   bool busy;
   sf::Time busyTime = sf::seconds(0);
 };

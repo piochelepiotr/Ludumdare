@@ -66,19 +66,23 @@ void GameWorld::render(sf::RenderTarget& target)
 	}
 }
 
-void GameWorld::spawnInsect(Insect::type type, Node::ID node)
+Insect* GameWorld::spawnInsect(Insect::type type, Node::ID node)
 {
-	if (type == Insect::Aphid) {
+	if (type == Insect::Aphid)
+	{
 		mAphids.push_back(new Aphid(AphidBehaviour::Offensive, node, getGraph()));
+		return *mAphids.end();
 	} else {
 		mLadyBugs.push_back(new LadyBug(type, node, getGraph()));
 		mAnchorPool->addAnchor<InsectAnchorListener>(AnchorItem(20.f), *mLadyBugs.back());
+		return * --mLadyBugs.end();
 	}
 }
 
-void GameWorld::spawnNode(NodeType type, sf::Vector2f position)
+Node::ID GameWorld::spawnNode(NodeType type, sf::Vector2f position)
 {
-
+	// TODO FIXME
+	return Node::ID(position);
 }
 
 
@@ -113,9 +117,9 @@ void GameWorld::update(sf::Time dt)
   {
     Aphid *apd = mAphids[i];
     apd->move(dt.asSeconds(), getGraph());
-    if (apd->getReachedObjective())
+    if (apd->isObjectiveReached())
     {
-        Node::ID node = apd->getObjective();
+        Node::ID node = apd->getPrevNode();
         for (unsigned int j=0; j<mFlowers.size(); ++j)
         {
             Flower *flower = mFlowers[j];
@@ -145,7 +149,22 @@ void GameWorld::update(sf::Time dt)
         }
         if (type == Texture::ID::LadyBugFlower)
         {
-            spawnInsect(Insect::BlackLadybug, Node::ID(*flower));
+			Node::ID node = *flower;
+            LadyBug* ladybug = static_cast<LadyBug*>(spawnInsect(Insect::BlackLadybug, node));
+
+			// TODO Doit-on donner un chemin par défaut aux LadyBug ?
+			// TODO Peut-être attendre un clic ici pour que LadyBug apparaîsse…
+			// Pour l’instant, on va lui donner un chemin par défaut :
+			//		Elle va jusqu’à un nœud voisin de la fleur et elle revient;
+			//		Si il n’y a pas de voisin, elle reste là…
+			auto& nh = mGraph->getNeighbours(node);
+			if (nh.size() > 0)
+			{
+				Path p(node);
+				p.addBranch(nh.begin()->second);
+				ladybug->redefinePath(p, *mGraph);
+			}
+
             flower->becameNode();
         }
     }

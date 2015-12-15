@@ -1,58 +1,65 @@
 #include "path.hpp"
 #include "graph/graph.hpp"
 
-Path::Path()
-: mPath()
+Path::Path(Node::ID node) : mBranchs(), mPrevNode(node)
 {
 }
 
 void Path::insertBranch(Node::ID node, Branch::ID branch) {
-  mPath.insert(mPath.begin(), std::make_pair(node, branch));
+	mPrevNode = node;
+	mBranchs.push_front(branch);
 }
 
-void Path::addBranch(Node::ID node, Branch::ID branch)
+void Path::addBranch(Branch::ID branch) {
+	mBranchs.push_back(branch);
+}
+
+Branch::ID Path::popBranch(Graph const& g)
 {
-    mPath.push_back(std::make_pair(node, branch));
+	Branch::ID tempBranch = mBranchs.front();
+	mPrevNode = g[tempBranch].getOtherNode(mPrevNode);
+	mBranchs.pop_front();
+	return tempBranch;
 }
 
-
-int Path::size() {
-  return mPath.size();;
-}
 
 std::set<Node::ID> Path::getNodes(Graph const& g) const {
-  std::set<Node::ID> result;
-  result.insert(getLastNodeID(g));
-  for (auto &i : mPath) {
-    result.insert(i.first);
-  }
-  return result;
+	std::set<Node::ID> result;
+	Node::ID prev = mPrevNode;
+	for (Branch::ID b : mBranchs) {
+		result.insert(prev);
+		prev = g[b].getOtherNode(prev);
+	}
+	result.insert(prev);
+	return result;
 }
 
-Node::ID Path::getLastNodeID(Graph const&g) const{
-  std::pair<Node::ID, Branch::ID> lastPair = mPath[mPath.size() - 1];
-  Branch const& lastBranch = g[lastPair.second];
-  return lastBranch.getOtherNode(lastPair.first);
-}
+/*Node::ID Path::getLastNodeID(Graph const&g) const{
+	Node::ID prev = mPrevNode;
+	for (Branch::ID b : mBranchs)
+		prev = g[b].getOtherNode(prev);
+	return prev;
+}*/
 
 bool Path::isCyclic(Graph const&g) const {
-  return mPath[0].first == getLastNodeID(g);
+	Node::ID prev = mPrevNode;
+	for (Branch::ID b : mBranchs)
+		prev = g[b].getOtherNode(prev);
+	return mPrevNode == prev;
 }
 
-void Path::makeCyclic(Graph const&g) {
-  int size = mPath.size();
-  mPath.push_back(std::pair<Node::ID, Branch::ID>(getLastNodeID(g), mPath[size - 1].second));
-  for (int i = 1; i < size; i++) {
-    mPath.push_back(std::pair<Node::ID, Branch::ID>(mPath[size - i].first, mPath[size - 1 - i].second));
-  }
+void Path::makeCyclic() {
+	std::deque<Branch::ID> result;
+	for (auto it = mBranchs.rbegin() ; it != mBranchs.rend() ; it++)
+		result.push_front(*it), result.push_back(*it);
+	mBranchs = std::move(result);
 }
 
 float Path::length(Graph const& graph) const
 {
-    float mLength = 0;
-    for (auto& stuff : mPath)
-    {
-        mLength += graph[stuff.second].getLength();
-    }
-    return mLength;
+	float length = 0;
+	for (Branch::ID b : mBranchs)
+		length += graph[b].getLength();
+
+	return length;
 }

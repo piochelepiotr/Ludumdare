@@ -144,20 +144,20 @@ void Graph::makePath()
 
 Path Graph::getPath(Node::ID n1, Node::ID n2) const
 {
-	Path p;
+	Path p(n1);
 	auto it = m_paths.find(std::make_pair(n1, n2));
 	Node::ID node = n1;
 	Branch::ID branch = it->second.second;
 	Branch const* graph_branch = &(*this)[branch];
 	while (it != m_paths.end() && graph_branch->getOtherNode(node) != n2)
 	{
-		p.addBranch(node, branch);
+		p.addBranch(branch);
 		it = m_paths.find(std::make_pair(graph_branch->getOtherNode(node), n2));
 		node = graph_branch->getOtherNode(node);
 		branch = it->second.second;
 		graph_branch = &(*this)[branch];
 	}
-	p.addBranch(node, branch);
+	p.addBranch(branch);
 	return p;
 }
 

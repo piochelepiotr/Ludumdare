@@ -29,7 +29,28 @@ Branch::Branch() :
 {}
 
 
+sf::Vector2f Branch::operator()(float pos, Node::ID n) const
+{
+	float f = isFirstNode(n) ? pos : 1.f - pos;
+	return getSpline().evaluatePos(f);
+}
+
+sf::Vector2f Branch::derivative(float pos, Node::ID n) const
+{
+	if (isFirstNode(n))
+		return getSpline().evaluateSpeed(pos);
+	else
+		return - getSpline().evaluateSpeed(1.f - pos);
+}
+
+
+
+
+
+
 void Branch::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	ss.draw(target, states);
 }
+
+

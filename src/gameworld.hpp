@@ -22,9 +22,9 @@ class GameWorld
 
 		void update (sf::Time dt);
 
-		void spawnInsect (Insect::type type, Node::ID node);
+		Insect* spawnInsect (Insect::type type, Node::ID node);
 
-		void spawnNode (NodeType type, sf::Vector2f position);
+		Node::ID spawnNode (NodeType type, sf::Vector2f position);
 
 		int getCapacity(){return mCapacity;};
 		void increaseCapacity(){mCapacity++;};

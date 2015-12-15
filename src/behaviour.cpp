@@ -3,7 +3,7 @@
 #include <iostream>
 
 AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph const& graph)
-: mPath()
+: mPath(spawningNode)
 , mID(id)
 , mObjective(0.f,0.f)
 {
@@ -31,7 +31,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
     {
         Branch::ID spawningBranch = graph.getNeighbours(spawningNode).begin()->second; // FIXME s’il n’y a pas de voisins, c’est pas très bon…
         Branch graph_spawningBranch = graph[spawningBranch];
-        mPath.addBranch(spawningNode, spawningBranch);
+        mPath.addBranch(spawningBranch);
         Node::ID newNode(0.f, 0.f);
         if (!(graph_spawningBranch.getFirstNode() == spawningNode))
             newNode = graph_spawningBranch.getFirstNode();
@@ -44,7 +44,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
         while (graph[newNode].getType() == Texture::ID::RegularNode && j<5)
         {
             Branch::ID newBranch = choice(id, newNode, previousNode, graph);
-            mPath.addBranch(newNode, newBranch); // FIXME assurer l'identifiant, WARNING copie de branche // TODO C’est réglé, non ?
+            mPath.addBranch(newBranch); // FIXME assurer l'identifiant, WARNING copie de branche // TODO C’est réglé, non ?
             previousNode = newNode;
             if (!(graph[newBranch].getFirstNode() == newNode))
 			{

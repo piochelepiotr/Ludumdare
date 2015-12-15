@@ -20,12 +20,17 @@ class Branch
 		Branch();
 
 		float getLength() const { return ss.getLength(); }
+
 		Node::ID getFirstNode() const { return n1; }
 		Node::ID getSecondNode() const { return n2; }
-		Node::ID getOtherNode(Node::ID node) const
-		{ return n1 == node ? n2 : n1; }
+		bool isFirstNode(Node::ID node) const { return n1 == node; }
+		Node::ID getOtherNode(Node::ID node) const {
+			return isFirstNode(node) ? n2 : n1; }
 
 		int getNbLadyBug() const { return nbLadyBug; }
+
+		sf::Vector2f operator()(float pos, Node::ID n) const;
+		sf::Vector2f derivative(float pos, Node::ID n) const;
 
 		//this is a Spline, not a SplineShape!
 		Spline &getSpline() { return ss.getSpline(); }
