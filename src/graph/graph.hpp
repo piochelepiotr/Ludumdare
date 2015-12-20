@@ -9,8 +9,6 @@
 #include <fstream>
 
 
-float constexpr leafLimit = 0.3f;
-
 class Graph
 {
 	struct NeighbourHood : public std::multimap<Node::ID, Branch::ID>
@@ -23,11 +21,14 @@ class Graph
 
 	public:
 	Graph(); // TODO: Pour l’instant, cette fonction est un peu bidon
-	//float distance(Node::ID n1, Node::ID n2);
-	Node::ID addNode(Node n);
+
+	//Node::ID addNode(Node n);
 	void addNode(Node::ID n);
+	void removeNode(Node::ID n);
+
 	Branch::ID newEdge(Node::ID n1, Node::ID n2);
-	// static bool isItLeaf(Node::ID n1, Node::ID n2);
+	void removeEdge(Branch::ID b);
+
 	bool hasDownEdge(Node::ID n) const;
 	bool isCulDeSac(Branch::ID b) const;
 
@@ -81,7 +82,7 @@ class Graph
 
 	void makePath();
 
-	std::map<Node::ID, NeighbourHood> m_neighbours;
+	std::map<Node::ID, NeighbourHood> m_neighbours; // TODO Modifier ça pour que ce soit mieux
 
 	std::map<Node::ID, Node> m_nodes;
 
@@ -92,7 +93,7 @@ class Graph
 	
 	void matrixFromGraph();
 	void graphFromMatrix();
-	std::vector<std::vector<std::string>>mMatrix;
+	std::vector<std::vector<std::string>> mMatrix;
 	void addLineToMatrix(std::vector<std::string>line);
 	void clear();
 };

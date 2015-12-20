@@ -6,6 +6,7 @@ class Node
 {
 	public:
 		typedef Texture::ID Type;
+		static const Type types[];
 		struct ID
 		{
 			ID(sf::Vector2f v) : id(v), type(Node::Type::RegularNode) {};
@@ -34,6 +35,7 @@ class Node
 		Type& getType() { return m_t; }
 		Type const& getType() const { return m_t; }
 		void setType(Type type) { m_t = type; }
+		Node::Type nextType();
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

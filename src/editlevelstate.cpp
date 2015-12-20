@@ -6,11 +6,6 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
 	: State(mystack, context)
 	  , mFirstNode(0.f,0.f)
 {
-	mTypes.push_back(Texture::ID::RegularNode);
-	mTypes.push_back(Texture::ID::LadyBugFlower);
-	mTypes.push_back(Texture::ID::AphidFlower);
-	mTypes.push_back(Texture::ID::Flower);
-	mTypes.push_back(Texture::ID::SemperFlower);
 	addNode(Node::ID(250, 200));
 	addNode(Node::ID(350, 210));
 	addNode(Node::ID(450, 150));
@@ -73,59 +68,61 @@ void EditLevelState::draw()
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 {
 	if (!mAnchors.injectEvent(event, pos))
-	{
 		addNode(Node::ID(pos));
-	}
 	//mFirstNode = mGraph.nodeAt(pos);
 }
 
 void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 {
 	mAnchors.injectEvent(event, pos);
-	if (m_isNodeDragged)
-	{
-	}
 	m_isNodeDragged = false;
-	//Node::ID secondNode = mGraph.nodeAt(pos);
-	//if(mFirstNode.id.x >= 0 && secondNode.id.x >= 0 && !(mFirstNode.id == secondNode.id))
-	//{
-	//mGraph.newEdge(mFirstNode,secondNode);
-	//}
-	//else
-	//{
-	//mGraph.addNode(Node::ID(pos.x,pos.y));
-	//}
 }
 
-void EditLevelState::onNodePressed(Node::ID node)
+void EditLevelState::onNodePressed(Node::ID node, sf::Mouse::Button button)
 {
 	mFirstNode = node;
 	m_isNodeDragged = true;
 }
 
 
-void EditLevelState::onNodeReleased(Node::ID node)
+void EditLevelState::onNodeReleased(Node::ID node, sf::Mouse::Button button)
 {
-	//	std::cout << node.id.x << "  " << mFirstNode.id.x << std::endl;
 	if(m_isNodeDragged)
 	{
 		if(mFirstNode != node)
-		{
 			mGraph.forceNewEdge(mFirstNode,node);
-		}
 		else
 		{
-			mGraph[node].setType(nextType(mGraph[node].getType()));
+			switch (button)
+			{
+				case sf::Mouse::Right:
+					removeNode(node);
+					break;
+				case sf::Mouse::Left:
+					// FIXME
+					mGraph[node].nextType();
+					break;
+				default:
+					break;
+			}
 		}
 	}
-	m_isNodeDragged = false;
 }
 
 void EditLevelState::addNode(Node::ID node)
 {
 	mGraph.addNode(node);
-	mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
-	m_isNodeDragged = false;
+	auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
+	mNodeToAnchors[node] = ptr;
+	//m_isNodeDragged = false;
+}
+
+void EditLevelState::removeNode(Node::ID node)
+{
+	mGraph.removeNode(node);
+	auto it = mNodeToAnchors.find(node);
+	mAnchors.removeAnchor<NodeAnchorListener>(it->second);
+	mNodeToAnchors.erase(it);
 }
 
 void EditLevelState::addEdge(Node::ID n1, Node::ID)
@@ -147,29 +144,12 @@ void EditLevelState::save(std::string name)
 
 void EditLevelState::updateAnchors()
 {
-	//mAnchors.clear()
+	//mAnchors.clear();
 	std::vector<Node::ID> nodes = mGraph.getNodes();
 	for(auto node : nodes)
 	{
-		mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
+		auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
+		mNodeToAnchors[node] = ptr;
 	}
 	m_isNodeDragged = false;
 }
-
-Texture::ID EditLevelState::nextType(Texture::ID type)
-{
-	int l = mTypes.size();
-	for(int i = 0; i < l; i++)
-	{
-		if(type == mTypes[i])
-		{
-			if(i == l-1)
-				return mTypes[0];
-			else
-				return mTypes[i+1];
-		}
-	}
-	return mTypes[0];
-}
-
-

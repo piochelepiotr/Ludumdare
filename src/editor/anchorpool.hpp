@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
+#include <map>
 #include <utility>
+#include <algorithm>
 #include <memory>
 #include <cpp_std_11.hpp>
 
@@ -21,8 +22,11 @@ class AnchorPool
 	public:
 		~AnchorPool();
 		
-		template<typename T, typename... Args> Anchor::ID
+		template<typename T, typename... Args> T*
 		addAnchor (AnchorItem anchor, Args&... args);
+	
+		template<typename T> void
+		removeAnchor (T* ptr);
 		
 		bool
 		injectEvent (sf::Event event, sf::Vector2f mouse);
@@ -31,15 +35,30 @@ class AnchorPool
 		injectMouse (sf::Vector2f mouse);
 		
 	private:
-		std::vector<std::pair<AnchorItem, AnchorActionListener*> > mAnchors;
-		std::vector<AnchorActionListener* > mAnchorPtrs;
+		std::map<AnchorActionListener*, AnchorItem> mAnchors;
+		//std::set<std::pair<AnchorItem, AnchorActionListener*> > mAnchors;
+		//std::set<AnchorActionListener* > mAnchorPtrs;
 		AnchorActionListener* mCurrentAnchor=nullptr;
 };
 
-template<typename T, typename... Args> Anchor::ID 
+template<typename T, typename... Args> T*
 AnchorPool::addAnchor ( AnchorItem anchor, Args&... args )
 {
-    mAnchorPtrs.push_back(new T(args...));
-    mAnchors.push_back(std::pair<AnchorItem, AnchorActionListener*>(anchor, mAnchorPtrs.back()));
-    return mAnchors.size();
+	auto ptr = new T(args...);
+    //mAnchorPtrs.insert(ptr);
+    mAnchors.insert(std::pair<AnchorActionListener*, AnchorItem>(ptr, anchor));
+    return static_cast<T*>(ptr);
+}
+
+template<typename T> void
+AnchorPool::removeAnchor(T* ptr)
+{
+	auto it = mAnchors.find(ptr);
+	if (it != mAnchors.end())
+	{
+		if (mCurrentAnchor == it->first)
+			mCurrentAnchor = nullptr;
+		delete it->first;
+		mAnchors.erase(it);
+	}
 }

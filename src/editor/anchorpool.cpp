@@ -3,11 +3,17 @@
 #include <SFML/Window/Event.hpp>
 #include <utility>
 #include <iostream>
+#include <limits>
+#include "utils.hpp"
 
 AnchorPool::~AnchorPool()
 {
+	/*
     for (auto ptr : mAnchorPtrs)
 	delete ptr;
+	*/
+	for (auto& pair : mAnchors)
+		delete pair.first;
 }
 
 bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
@@ -30,41 +36,37 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 {
 	// FIXME améliorer en prenant en compte le rayon
 
-	if (mAnchors.size() == 0) return false;
+	float min_distance = std::numeric_limits<float>::infinity();
+	auto min_it = mAnchors.end();
 
-	auto first = mAnchors[0].second->getPosition();
-	auto offset = first - mouse;
-	float min_distance = offset.x*offset.x + offset.y*offset.y;
-	std::size_t min_index = 0;
-
-
-	for (std::size_t i=1; i < mAnchors.size(); ++i)
+	for (auto it = mAnchors.begin() ; it != mAnchors.end() ; it++)
 	{
-		auto pos = mAnchors[i].second->getPosition();
-		auto offset = pos - mouse;
-		float distance = offset.x*offset.x + offset.y*offset.y;
+		float distance = squareNorm(mouse - it->first->getPosition());
 		if (distance < min_distance)
 		{
-				min_distance = distance;
-				min_index = i;
+			min_distance = distance;
+			min_it = it;
 		}
 	}
 
-	if (mCurrentAnchor && mAnchors[min_index].second != mCurrentAnchor)
-    {
+	if (min_it == mAnchors.end())
+		return false;
+
+	bool isOnAnchor = min_distance < min_it->second.getSquareRadius();
+	if (mCurrentAnchor && (min_it->first != mCurrentAnchor || !isOnAnchor))
+	{
 		mCurrentAnchor->onMouseLeft();
-    }
-	float radius = mAnchors[min_index].first.getRadius();
-	if (min_distance < radius*radius) {
-		mCurrentAnchor = mAnchors[min_index].second;
-		mCurrentAnchor->onMouseEnter();
-		return true;
-	} else if (mAnchors[min_index].second == mCurrentAnchor) {
-        mCurrentAnchor->onMouseLeft();
 		mCurrentAnchor = nullptr;
 	}
 
-	return false;
+	if (isOnAnchor)
+	{
+		mCurrentAnchor = min_it->first;
+		mCurrentAnchor->onMouseEnter();
+		return true;
+	}
+	else
+		return false;
 }
 
 

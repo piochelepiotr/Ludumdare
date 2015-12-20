@@ -1,6 +1,7 @@
 #pragma once
-#include <iostream>
+#include <string>
 #include <vector>
+#include <SFML/System.hpp>
 
 std::vector<std::string>stringSplit(std::string str,char c);
 std::string concatenate(std::vector<std::string>elements,char c);
@@ -25,4 +26,14 @@ bool contains(std::vector<T> vect, T element)
 	    return true;
     }
     return false;
+}
+
+inline float squareNorm(sf::Vector2f u)
+{
+	return u.x * u.x + u.y * u.y;
+}
+
+inline float norm(sf::Vector2f u)
+{
+	return std::sqrt(squareNorm(u));
 }

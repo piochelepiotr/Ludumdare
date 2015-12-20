@@ -14,12 +14,12 @@ class EditLevelState : public State
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
-	void onNodePressed(Node::ID node);
-	void onNodeReleased(Node::ID node);
+	void onNodePressed(Node::ID node, sf::Mouse::Button button);
+	void onNodeReleased(Node::ID node, sf::Mouse::Button button);
 	void addNode(Node::ID node);
+	void removeNode(Node::ID node);
 	void addEdge(Node::ID n1, Node::ID);
 	
-	void updateAnchors();
 	void save(std::string name);
 	void load(std::string name);
 	
@@ -32,11 +32,12 @@ class EditLevelState : public State
     private:
 	void mousePressed(sf::Event event, sf::Vector2f pos);
 	void mouseReleased(sf::Event event, sf::Vector2f pos);
+	void updateAnchors();
 	
 	Graph mGraph;
 	AnchorPool mAnchors;
+	std::map<Node::ID, NodeAnchorListener*> mNodeToAnchors;
 
 	bool m_isNodeDragged;
 	Node::ID mFirstNode;
-	std::vector<Texture::ID>mTypes;
 };
