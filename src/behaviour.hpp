@@ -1,21 +1,25 @@
 #pragma once
-#include <graph/node.hpp>
-#include "path.hpp"
+//#include <graph/node.hpp>
+//#include "path.hpp"
+#include "id.hpp"
+#include "rosetree/rosetree.hpp"
+#include "rosetree/path.hpp"
 
-class Graph;
+class Flower;
+class Branch;
 
 class AphidBehaviour
 {
     public:
-        enum ID {Offensive, Dumb, Coward};
-        AphidBehaviour(AphidBehaviour::ID, Node::ID, Graph const&);
-        Path const& getPath() const { return mPath; }
-        Path & getPath() { return mPath; }
-        Node::ID getObjective(){return mObjective;};
+        enum Type {Offensive, Dumb, Coward};
+        AphidBehaviour(AphidBehaviour::Type, ID<Flower>, RoseTree const&);
+        Path<Flower> const& getPath() const { return mPath; }
+        Path<Flower> & getPath() { return mPath; }
+        //ID<Flower> getObjective(){ return mObjective; }
     private:
-        Branch::ID choice(AphidBehaviour::ID, Node::ID, Node::ID, Graph const&);
-        Path mPath;
-        AphidBehaviour::ID mID;
-        Node::ID mObjective;
+        //ID<Branch> choice(AphidBehaviour::Type, ID<Flower>, ID<Flower>, Graph<Flower, Branch> const&);
+        Path<Flower> mPath;
+        AphidBehaviour::Type mType;
+//        ID<Flower> mObjective;
 };
 

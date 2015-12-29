@@ -1,11 +1,15 @@
 #include "gamestate.hpp"
-#include "graph/flower.hpp"
+#include "rosetree/flower.hpp"
+#include <fstream>
 
-GameState::GameState(StateStack& mystack, Context context)
-: State(mystack, context), mDraggedNode(0, 0)
+GameState::GameState(StateStack& mystack, Context context) :
+	State(mystack, context),
+	mGameWorld(mRoseTree, mAnchors, context),
+	mDraggedFlower(noID)
 {
-	Graph& g = mGraph;
-	g.charge("niveau1");
+	std::ifstream file("niveau1.txt");
+	mRoseTree.load(file);
+	file.close();
 	updateAnchors();
 	/*
 	Node::ID n0(sf::Vector2f(500, 900));
@@ -28,17 +32,12 @@ GameState::GameState(StateStack& mystack, Context context)
 	g.newEdge(n1, fleur);
 	*/
     sf::Sprite redLdb;
-    redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
     sf::Sprite redBlackLdb;
-    redBlackLdb.setTexture(context.textures->get(Texture::ID::DefensiveLadyBug));
     sf::Sprite blackLdb;
-    blackLdb.setTexture(context.textures->get(Texture::ID::OffensiveLadyBug));
     sf::Sprite aphid;
-    aphid.setTexture(context.textures->get(Texture::ID::Aphid));
     sf::Sprite backGround;
-    backGround.setTexture(context.textures->get(Texture::ID::BackGround));
 
-	mGameWorld = GameWorld(redLdb, redBlackLdb, blackLdb, aphid, backGround, g, mAnchors);
+	//mGameWorld = GameWorld(redLdb, redBlackLdb, blackLdb, aphid, backGround, mRoseTree, mAnchors);
 }
 
 GameState::~GameState()
@@ -96,48 +95,41 @@ void GameState::draw()
 
 
 
-void GameState::addNode(Node::ID node)
+void GameState::addFlower(sf::Vector2f position, Flower::Type type)
 {
-	mGraph.addNode(node);
-	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, node);
+	ID<Flower> id = mRoseTree.addFlower(position, type);
+	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, id, position);
 }
 
-void GameState::addEdge(Node::ID n1, Node::ID n2)
+void GameState::addBranch(ID<Flower> f1, ID<Flower> f2)
 {
 	if (mGameWorld.getCapacity() - mGameWorld.getUsedCapacity())
 	{
-		mGraph.newEdge(n1, n2);
+		mRoseTree.addBranch(f1, f2);
 		mGameWorld.setUsedCapacity(mGameWorld.getUsedCapacity()+1);
 	}
 }
 
 
 
-void GameState::onNodePressed(Node::ID node)
+void GameState::onFlowerPressed(ID<Flower> flower)
 {
-	mDraggedNode = node;
+	mDraggedFlower = flower;
 	mIsDragged = true;
 }
 
-void GameState::onNodeReleased(Node::ID node)
+void GameState::onFlowerReleased(ID<Flower> flower)
 {
-	if (mIsDragged && mDraggedNode != node)
-		addEdge(mDraggedNode, node);
+	if (mIsDragged && mDraggedFlower != flower)
+		addBranch(mDraggedFlower, flower);
 }
 
 void GameState::updateAnchors()
 {
-    std::vector<Node::ID> nodes = mGraph.getNodes();
-    for(auto node : nodes)
+    auto flowers = mRoseTree.getFlowers();
+    for(auto id_flower : flowers)
     {
-	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, node);
+		mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this,
+				id_flower.first, id_flower.second.getPosition());
     }
 }
-
-
-/*
-void GameState::finDeUnivers()
-{
-	std::cout << "BOOM" << std::endl;
-}
-*/

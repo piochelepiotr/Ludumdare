@@ -2,7 +2,7 @@
 #include "state.hpp"
 #include "gameworld.hpp"
 #include "dialogbox.hpp"
-#include "graph/graph.hpp"
+//#include "graph/graph.hpp"
 #include <IHM/dialogbutton.hpp>
 
 
@@ -20,22 +20,20 @@ class GameState : public State
         virtual bool handleEvent(const sf::Event& event);
         void handlePlayerInput(sf::Keyboard::Key , bool);
 
-		void addNode(Node::ID node);
-		void addEdge(Node::ID n1, Node::ID n2);
+		void addFlower(sf::Vector2f position, Flower::Type type);
+		void addBranch(ID<Flower> f1, ID<Flower> f2);
 
-		void onNodePressed(Node::ID node);
-		void onNodeReleased(Node::ID node);
+		void onFlowerPressed(ID<Flower> flower);
+		void onFlowerReleased(ID<Flower> flower);
 
         void updateAnchors();
 
-
-//		void finDeUnivers();
 	private:
 		GameWorld mGameWorld;
-		Graph mGraph;
+		RoseTree mRoseTree;
 
 		AnchorPool mAnchors;
-		Node::ID mDraggedNode;
+		ID<Flower> mDraggedFlower;
 		bool mIsDragged;
 
 };

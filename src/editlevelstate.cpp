@@ -1,18 +1,20 @@
 #include "editlevelstate.hpp"
-#include <iostream>
+#include <fstream>
 
 
 EditLevelState::EditLevelState(StateStack& mystack, Context context)
 	: State(mystack, context)
-	  , mFirstNode(0.f,0.f)
+	  , mFirstFlower(noID)
 {
-	addNode(Node::ID(250, 200));
-	addNode(Node::ID(350, 210));
-	addNode(Node::ID(450, 150));
+	/*
+	ID<Flower> f1 = addFlower(sf::Vector2f(250, 200), Flower::Type::RegularFlower);
+	ID<Flower> f2 = addFlower(sf::Vector2f(350, 210), Flower::Type::RegularFlower);
+	ID<Flower> f3 = addFlower(sf::Vector2f(450, 150), Flower::Type::RegularFlower);
 
-	mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
+	addBranch(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
 	mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
 	mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
+	*/
 	load("niveau1");
 	//mAnchors.addAnchor(AnchorItem(10.f), )
 }
@@ -62,45 +64,45 @@ bool EditLevelState::update(sf::Time dt)
 
 void EditLevelState::draw()
 {
-	mGraph.draw(*getContext().window,sf::RenderStates::Default);
+//	mRoseTree.draw(*getContext().window,sf::RenderStates::Default);
 }
 
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 {
 	if (!mAnchors.injectEvent(event, pos))
-		addNode(Node::ID(pos));
-	//mFirstNode = mGraph.nodeAt(pos);
+		addFlower(pos, Flower::Type::RegularFlower);
+	//mFirstFlower = mGraph.flowerAt(pos);
 }
 
 void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
 {
 	mAnchors.injectEvent(event, pos);
-	m_isNodeDragged = false;
+	m_isFlowerDragged = false;
 }
 
-void EditLevelState::onNodePressed(Node::ID node, sf::Mouse::Button button)
+void EditLevelState::onFlowerPressed(ID<Flower> flower, sf::Mouse::Button button)
 {
-	mFirstNode = node;
-	m_isNodeDragged = true;
+	mFirstFlower = flower;
+	m_isFlowerDragged = true;
 }
 
 
-void EditLevelState::onNodeReleased(Node::ID node, sf::Mouse::Button button)
+void EditLevelState::onFlowerReleased(ID<Flower> flower, sf::Mouse::Button button)
 {
-	if(m_isNodeDragged)
+	if(m_isFlowerDragged)
 	{
-		if(mFirstNode != node)
-			mGraph.forceNewEdge(mFirstNode,node);
+		if(mFirstFlower != flower)
+			mRoseTree.addBranch(mFirstFlower,flower);
 		else
 		{
 			switch (button)
 			{
 				case sf::Mouse::Right:
-					removeNode(node);
+					removeFlower(flower);
 					break;
 				case sf::Mouse::Left:
 					// FIXME
-					mGraph[node].nextType();
+					mRoseTree[flower].changeType();
 					break;
 				default:
 					break;
@@ -109,47 +111,52 @@ void EditLevelState::onNodeReleased(Node::ID node, sf::Mouse::Button button)
 	}
 }
 
-void EditLevelState::addNode(Node::ID node)
+ID<Flower> EditLevelState::addFlower(sf::Vector2f v, Flower::Type type)
 {
-	mGraph.addNode(node);
-	auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
-	mNodeToAnchors[node] = ptr;
-	//m_isNodeDragged = false;
+	ID<Flower> id = mRoseTree.addFlower(v, type);
+	auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, id, v);
+	mFlowerToAnchors[id] = ptr;
+	//m_isFlowerDragged = false;
+	return id;
 }
 
-void EditLevelState::removeNode(Node::ID node)
+void EditLevelState::removeFlower(ID<Flower> flower)
 {
-	mGraph.removeNode(node);
-	auto it = mNodeToAnchors.find(node);
+	mRoseTree.removeFlower(flower);
+	auto it = mFlowerToAnchors.find(flower);
 	mAnchors.removeAnchor<NodeAnchorListener>(it->second);
-	mNodeToAnchors.erase(it);
+	mFlowerToAnchors.erase(it);
 }
 
-void EditLevelState::addEdge(Node::ID n1, Node::ID)
+void EditLevelState::addEdge(ID<Flower> n1, ID<Flower>)
 {
 
 }
 
 void EditLevelState::load(std::string name)
 {
-	mGraph.charge(name);
+	std::ifstream file(name);
+	mRoseTree.load(file);
+	file.close();
 	updateAnchors();
 }
 
 //void EditLevelState::save(std::__cxx11::string name)
 void EditLevelState::save(std::string name)
 {
-	mGraph.save(name);
+	std::ofstream file(name);
+	mRoseTree.save(file);
+	file.close();
 }
 
 void EditLevelState::updateAnchors()
 {
 	//mAnchors.clear();
-	std::vector<Node::ID> nodes = mGraph.getNodes();
-	for(auto node : nodes)
+	auto flowers = mRoseTree.getFlowers();
+	for(auto id_flower : flowers)
 	{
-		auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, node);
-		mNodeToAnchors[node] = ptr;
+		auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, id_flower.first, id_flower.second.getPosition());
+		mFlowerToAnchors[id_flower.first] = ptr;
 	}
-	m_isNodeDragged = false;
+	m_isFlowerDragged = false;
 }

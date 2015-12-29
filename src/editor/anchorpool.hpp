@@ -23,7 +23,7 @@ class AnchorPool
 		~AnchorPool();
 		
 		template<typename T, typename... Args> T*
-		addAnchor (AnchorItem anchor, Args&... args);
+		addAnchor (AnchorItem anchor, Args&&... args);
 	
 		template<typename T> void
 		removeAnchor (T* ptr);
@@ -42,7 +42,7 @@ class AnchorPool
 };
 
 template<typename T, typename... Args> T*
-AnchorPool::addAnchor ( AnchorItem anchor, Args&... args )
+AnchorPool::addAnchor ( AnchorItem anchor, Args&&... args )
 {
 	auto ptr = new T(args...);
     //mAnchorPtrs.insert(ptr);

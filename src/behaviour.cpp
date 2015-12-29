@@ -1,35 +1,109 @@
 #include "behaviour.hpp"
-#include "graph/graph.hpp"
+//#include "graph/graph.hpp"
 #include <iostream>
+#include <limits>
+#include "rosetree/flower.hpp"
+#include "rosetree/branch.hpp"
 
-AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Graph const& graph)
-: mPath(spawningNode)
-, mID(id)
-, mObjective(0.f,0.f)
+// Predicat pour la fonction getPathToCloserIf,
+// qui renvoie true si ça peut être la cible d’un puceron
+class IsAphidTarget
 {
-    if (id == AphidBehaviour::Offensive)
+	public:
+	bool operator () (Flower& f)
+	{
+		return f.getType() == Flower::Type::RegularFlower
+			|| f.getType() == Flower::Type::LadybugFlower;
+	}
+};
+
+
+// Prédicat de comparaison pour trouver le chemin des Dumbs
+class DumbCompare
+{
+	public:
+	DumbCompare(RoseTree const& rt, ID<Flower> currentFlower, ID<Flower> previousFlower) :
+		mRt(rt), mCurrentFlower(currentFlower), mPreviousFlower(previousFlower) {}
+	bool operator () (ID<Flower> f1, ID<Flower> f2)
+	{
+		if (f1 == mPreviousFlower)
+			return false;
+		if (f2 == mPreviousFlower)
+			return true;
+		Branch const& b1 = mRt.getBranch(mCurrentFlower, f1);
+		Branch const& b2 = mRt.getBranch(mCurrentFlower, f2);
+		return b1.getLength() < b2.getLength();
+	}
+
+	RoseTree const& mRt;
+	ID<Flower> mCurrentFlower;
+	ID<Flower> mPreviousFlower;
+};
+
+
+// Prédicat de comparaison pour trouver le chemin des Cowards
+class CowardCompare
+{
+	public:
+	CowardCompare(RoseTree const& rt, ID<Flower> currentFlower, ID<Flower> previousFlower) :
+		mRt(rt), mCurrentFlower(currentFlower), mPreviousFlower(previousFlower) {}
+	bool operator () (ID<Flower> f1, ID<Flower> f2)
+	{
+		if (f1 == mPreviousFlower)
+			return false;
+		if (f2 == mPreviousFlower)
+			return true;
+		Branch const& b1 = mRt.getBranch(mCurrentFlower, f1);
+		Branch const& b2 = mRt.getBranch(mCurrentFlower, f2);
+		return std::make_pair(b1.getLadybugNumber(), b1.getLength())
+			< std::make_pair(b2.getLadybugNumber(), b2.getLength());
+	}
+
+	RoseTree const& mRt;
+	ID<Flower> mCurrentFlower;
+	ID<Flower> mPreviousFlower;
+};
+
+
+
+
+AphidBehaviour::AphidBehaviour(AphidBehaviour::Type type, ID<Flower> spawningFlower, RoseTree const& rt)
+: mPath(spawningFlower)
+, mType(type)
+//, mObjective(0.f,0.f)
+{
+    if (type == AphidBehaviour::Offensive) // On va jusqu’à la fleur à détruire la plus proche
     {
-        float minLength = 100000000;
-        for (auto& stuff : graph)
+		/*
+        float minLength = std::numeric_limits<float>::infinity();
+		ID<Flower> min_flowerID = noID;
+        for (ID<Flower> flowerID : rt.getFlowers())
         {
-            Node::ID node = stuff.first;
-			Node const& graph_node = graph[node];
-            if (graph_node.getType() == Texture::ID::Flower || graph_node.getType() == Texture::ID::LadyBugFlower)
+			Flower const& flower = rt[flowerID];
+            if (flower.getType() == Flower::Type::RegularFlower || flower.getType() == Flower::Type::LadybugFlower)
             {
-                Path path = graph.getPath(spawningNode, node);
-                float length = path.length(graph);
+                float length = rt.getDistance(spawningFlower, flowerID);
                 if (length < minLength)
                 {
-                    mPath = path;
-                    mObjective = node;
+                    //mObjective = node;
                     minLength = length;
+					min_flowerID = flowerID;
                 }
             }
         }
+		if (min_flowerID != noID)
+			rt.getPath(spwaningFlower, min_flowerID, mPath);
+		*/
+
+		rt.getPathToCloserWith(spawningFlower, mPath, IsAphidTarget());
     }
+	// Si le puceron est Dumb, on va au nœud le plus proche
+	// Si le puceron est Coward, on va au nœud avec le moins de coccinelle
     else
     {
-        Branch::ID spawningBranch = graph.getNeighbours(spawningNode).begin()->second; // FIXME s’il n’y a pas de voisins, c’est pas très bon…
+		// TODO What the fuck R we doin' here ?
+		/*
+        ID<Branch> spawningBranch = graph.getNeighbours(spawningNode).begin()->second;
         Branch graph_spawningBranch = graph[spawningBranch];
         mPath.addBranch(spawningBranch);
         Node::ID newNode(0.f, 0.f);
@@ -56,52 +130,62 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::ID id, Node::ID spawningNode, Gra
 			}
 			j++;
         }
+		*/
+		ID<Flower> previousFlower = noID;
+		int j = 0;
+		do
+		for (int j = 0 ; j < 6  ; j++)
+		{
+			ID<Flower> temp = spawningFlower;
+			auto neighbours = rt.getNeighbours(spawningFlower);
+			switch (type)
+			{
+				case AphidBehaviour::Dumb:
+					spawningFlower = *min_element(neighbours.begin(), neighbours.end(), DumbCompare(rt, spawningFlower, previousFlower));
+					break;
+				case AphidBehaviour::Coward:
+					spawningFlower = *min_element(neighbours.begin(), neighbours.end(), CowardCompare(rt, spawningFlower, previousFlower));
+					break;
+				default:
+					break;
+			}
+			previousFlower = temp;
+			mPath.addNode(spawningFlower);
+			j++;
+		}
+		while (j < 6 && rt[spawningFlower].getType() == Flower::Type::RegularFlower);
+
     }
 }
 
 
-Branch::ID AphidBehaviour::choice(AphidBehaviour::ID id, Node::ID actualNode, Node::ID previousNode, Graph const& graph)
+/*
+ID<Flower> AphidBehaviour::choice(AphidBehaviour::Type type, ID<Flower> actualFlower, ID<Flower> previousFlower, RoseTree const& rt)
 {
-    if (id == AphidBehaviour::Coward)
-    {
-        auto neighbours = graph.getNeighbours(actualNode);
-        Branch::ID branchChosen = neighbours.begin()->second;
-        Branch const* graph_branchChosen = graph.getBranch(branchChosen);
-        for (auto& stuff: neighbours)
-        {
-            Branch::ID branch = stuff.second;
-            Branch const* graph_branch = graph.getBranch(branch);
-            if (!graph.isCulDeSac(branch) && graph_branch->getFirstNode() != previousNode && graph_branch->getSecondNode() != previousNode)
-            {
-				if (graph_branch->getNbLadyBug() < graph_branchChosen->getNbLadyBug())
-					branchChosen = branch;
-				if (graph_branch->getNbLadyBug() == graph_branchChosen->getNbLadyBug() && graph_branch->getLength() < graph_branchChosen->getLength())
-				{
-                    branchChosen = branch;
-					graph_branchChosen = graph_branch;
-				}
-            }
-        }
-        return branchChosen;
-    }
-    else
-    {
-        auto neighbours = graph.getNeighbours(actualNode);
-        Branch::ID branchChosen = neighbours.begin()->second;
-        Branch const* graph_branchChosen = graph.getBranch(branchChosen);
-        for (auto& stuff: neighbours)
-        {
-            Branch::ID branch = stuff.second;
-            Branch const* graph_branch = graph.getBranch(branch);
-            if (!graph.isCulDeSac(branch) && graph_branch->getFirstNode() != previousNode && graph_branch->getSecondNode()!=previousNode)
-            {
-                if (graph_branch->getLength() < graph_branchChosen->getLength())
-				{
-                    branchChosen = branch;
-					graph_branchChosen = graph_branch;
-				}
-            }
-        }
-        return branchChosen;
-    }
+	auto neighbours = graph.getNeighbours(actualNode);
+	Branch::ID branchChosen = neighbours.begin()->second;
+	Branch const* graph_branchChosen = graph.getBranch(branchChosen);
+
+	for (auto& stuff: neighbours)
+	{
+		Branch::ID branch = stuff.second;
+		Branch const* graph_branch = graph.getBranch(branch);
+
+		if (!graph.isCulDeSac(branch) && graph_branch->getFirstNode() != previousNode && graph_branch->getSecondNode() != previousNode)
+		{
+
+			if ((type == AphidBehaviour::Coward &&
+						(graph_branch->getNbLadyBug() < graph_branchChosen->getNbLadyBug()
+						 || (graph_branch->getNbLadyBug() == graph_branchChosen->getNbLadyBug()
+							 && graph_branch->getLength() < graph_branchChosen->getLength())))
+					|| (type == AphidBehaviour::Dumb && graph_branch->getLength() < graph_branchChosen->getLength()))
+			{
+				branchChosen = branch;
+				graph_branchChosen = graph_branch;
+			}
+		}
+	}
+
+	return branchChosen;
 }
+*/

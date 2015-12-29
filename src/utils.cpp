@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+/*
 std::vector< std::string > stringSplit(std::string str, char c)
 {
     std::vector<std::string>elements;
@@ -33,3 +34,4 @@ std::string concatenate(std::vector<std::string>elements ,char c)
     }
     return str;
 }
+*/

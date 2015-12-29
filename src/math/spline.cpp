@@ -1,4 +1,5 @@
 #include "spline.hpp"
+#include "utils.hpp"
 
 CubicCurve::CubicCurve(float cc0, float cc1, float cc2, float cc3) : c0 (cc0)
 								   , c1 (cc1)
@@ -15,9 +16,20 @@ float CubicCurve::deriv(float val) const {
   return c1 + 2.0f * c2 * val + 3.0f * c3 * val * val;
 }
 
-Spline::Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :  x (CubicCurve(start.x, startTangent.x, -2.0f*startTangent.x - 3.0f*start.x + 3*end.x - endTangent.x, endTangent.x - 2.0f * end.x + startTangent.x + 2.0f*start.x)),
-													    y (CubicCurve(start.y, startTangent.y, -2.0f*startTangent.y - 3.0f*start.y + 3*end.y - endTangent.y, endTangent.y - 2.0f * end.y + startTangent.y + 2.0f*start.y)) {
-  
+Spline::Spline(sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :
+	x (
+			start.x,
+			startTangent.x,
+			-2.0f*startTangent.x - 3.0f*start.x + 3*end.x - endTangent.x,
+			endTangent.x - 2.0f * end.x + startTangent.x + 2.0f*start.x
+	  ),
+	y (
+			start.y,
+			startTangent.y,
+			-2.0f*startTangent.y - 3.0f*start.y + 3*end.y - endTangent.y,
+			endTangent.y - 2.0f * end.y + startTangent.y + 2.0f*start.y
+	  )
+{
 }
 
 sf::Vector2f Spline::evaluatePos(float val) const {
@@ -28,16 +40,20 @@ sf::Vector2f Spline::evaluateSpeed(float val) const {
   return sf::Vector2f(x.deriv(val), y.deriv(val));
 }
 
+/*
 sf::Vector2f normalize(sf::Vector2f v) {
   float norm = sqrt(v.x*v.x + v.y*v.y);
   if (norm == 0)
 	  return sf::Vector2f(0, 0);
   return sf::Vector2f(v.x/norm, v.y/norm);
 }
+*/
 
+/*
 float norm(sf::Vector2f v) {
   return sqrt(v.x*v.x + v.y*v.y);
 }
+*/
 
 float SplineShape::getLength() const {
   return length;
@@ -46,22 +62,21 @@ float SplineShape::getLength() const {
 SplineShape::SplineShape(float thickness, int dots, sf::Vector2f start, sf::Vector2f end, sf::Vector2f startTangent, sf::Vector2f endTangent) :
   SplineShape(thickness, dots, Spline(start, end, startTangent, endTangent))
 {
-
 }
 
 SplineShape::SplineShape(float thickness, int dotNb, Spline spline) :
   spline(spline)
   , dots(std::max(dotNb, 2))
   , thickness(thickness)
-  , approx(dots, sf::Vector2f(0.f, 0.f))
+  , approx(dots)
   , shape(sf::TrianglesStrip, 2*dots)
   , length(0.f)
 {
   float step = 1.0f / static_cast<float>(dots - 1);
-  for (int i = 0; i < dots; i++) {
-    approx[i] = sf::Vector2f(spline.x.evaluate(i * step), spline.y.evaluate(i * step));
-    if (i > 0)
-      length += norm(approx[i] - approx[i - 1]);
+  approx[0] = getSpline().evaluatePos(0.f);
+  for (int i = 1 ; i < dots; i++) {
+    approx[i] = getSpline().evaluatePos(i * step);
+    length += norm(approx[i] - approx[i - 1]);
   }
   
   sf::Vector2f ns = normalize(sf::Vector2f(approx[1].y - approx[0].y, approx[0].x - approx[1].x));

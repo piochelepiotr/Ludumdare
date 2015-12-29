@@ -37,9 +37,9 @@ private:
   float thickness;
   std::vector<sf::Vector2f> approx;
   sf::VertexArray shape;
-  float length;
+  float length; // TODO peut-être length devrait être un attribut des splines, plutôt… Mais il y a le problème du nombre de points…
 };
 
 //util. maybe i should put it in a class or something but idc
-sf::Vector2f normalize(sf::Vector2f v);
-float norm(sf::Vector2f v);
+//sf::Vector2f normalize(sf::Vector2f v);
+//float norm(sf::Vector2f v);

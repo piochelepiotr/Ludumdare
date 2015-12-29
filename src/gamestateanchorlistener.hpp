@@ -1,13 +1,15 @@
 #pragma once
 #include "editor/anchoractionlistener.hpp"
-#include "graph/node.hpp"
+//#include "graph/node.hpp"
+#include "id.hpp"
+#include "rosetree/flower.hpp"
 
 class GameState;
 
 class NodeAnchor : public AnchorActionListener
 {
 	public:
-	NodeAnchor(GameState& gamestate, Node::ID node);
+	NodeAnchor(GameState& gamestate, ID<Flower> node, sf::Vector2f position);
 	
 	void onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) override;
 	void onMouseDragged(sf::Mouse::Button button, const sf::Vector2f& position) override;
@@ -19,5 +21,6 @@ class NodeAnchor : public AnchorActionListener
 
 	private:
 	GameState& m_gameState;
-	Node::ID m_node;
+	ID<Flower> m_flower;
+	sf::Vector2f m_position;
 };

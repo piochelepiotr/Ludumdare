@@ -1,45 +1,49 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include <graph/graph.hpp>
+//#include <graph/graph.hpp>
 #include "insect.hpp"
-#include "graph/flower.hpp"
+//#include "graph/flower.hpp"
 #include "editor/anchorpool.hpp"
+#include "state.hpp" // TODO À enlever au plus vite
+#include "rosetree/flower.hpp"
 
 #include <memory>
 
-enum NodeType{};
+//class Node;
+
+//enum NodeType{};
 
 class GameWorld
 {
 	public:
-		GameWorld()=default; //this shouldnt exist. gameworld needs sprites!
-		GameWorld(GameWorld& world)=default;
-		//Graph& operator= (GameWorld& world);
-		GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, Graph& g, AnchorPool& anchor);
+		GameWorld(RoseTree &rt, AnchorPool &ap, State::Context& context);// : mRoseTree(rt), mAnchorPool(ap) {} //this shouldnt exist. gameworld needs sprites! // TODO À modifier au plus vite…
+		//GameWorld(GameWorld& world)=default;
+		GameWorld& operator= (GameWorld& world);
+		//GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite BlackLdb, sf::Sprite aphid,sf::Sprite backGround, RoseTree& g, AnchorPool& anchor);
 		~GameWorld();
 
 		void render (sf::RenderTarget& target);
 
 		void update (sf::Time dt);
 
-		Insect* spawnInsect (Insect::type type, Node::ID node);
+		Insect* spawnInsect (Insect::Type type, ID<Flower> flower);
 
-		Node::ID spawnNode (NodeType type, sf::Vector2f position);
+		ID<Flower> spawnNode (sf::Vector2f position, Flower::Type type);
 
 		int getCapacity(){return mCapacity;};
 		void increaseCapacity(){mCapacity++;};
 		int getUsedCapacity(){return mUsedCapacity;};
 		void setUsedCapacity(int newUsedCapacity){mUsedCapacity = newUsedCapacity;};
 	private:
-		inline Graph& getGraph() { return *mGraph; }
+		//inline RoseTree& getGraph() { return mRoseTree; }
 
-		Graph* mGraph;
+		RoseTree& mRoseTree;
 		std::vector<LadyBug*> mLadyBugs;
 		std::vector<Aphid*> mAphids;
-		std::vector<Flower*> mFlowers;
-		sf::Sprite mBackGround;
+		//std::vector<Flower*> mFlowers;
+		sf::Sprite mBackGround; // TODO Ces deux lignes devraient pas être là
 		sf::Sprite mInsectSprites[4];
 		int mCapacity;
 		int mUsedCapacity;
-		AnchorPool* mAnchorPool;
+		AnchorPool& mAnchorPool;
 };

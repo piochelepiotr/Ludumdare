@@ -1,16 +1,18 @@
 #include "insect.hpp"
-#include "graph/graph.hpp"
+//#include "graph/graph.hpp"
 #include <iostream>
+#include "rosetree/flower.hpp"
+#include "rosetree/branch.hpp"
 
 sf::Vector2f Insect::getPosition() const {
     return hitbox.getPosition();
 }
 
-void Insect::draw(sf::RenderTarget& target, Graph const&g, sf::Sprite sprite) {
+void Insect::draw(sf::RenderTarget& target, RoseTree const& rt, sf::Sprite sprite) {
 	if (isObjectiveReached())
 	{
-		// TODO Pour l’instant ça ne fait pas quelque chose d’interressant…
-		auto posVect = g[getPrevNode()].getPosition();
+		// TODO Pour l’instant ça ne fait pas quelque chose d’intéressant…
+		auto posVect = rt[getPrevFlower()].getPosition();
 		sprite.setPosition(posVect);
 		hitbox.setPosition(posVect);
 		target.draw(hitbox);
@@ -19,10 +21,10 @@ void Insect::draw(sf::RenderTarget& target, Graph const&g, sf::Sprite sprite) {
 	}
 	else
 	{
-		Branch const& b = g[getBranch()];
+		Branch const& b = getBranch();
 
-		sf::Vector2f posVect = b(pos, getPrevNode());
-		sf::Vector2f speedVect = b.derivative(pos, getPrevNode());
+		sf::Vector2f posVect = b.eval(pos, getPrevFlower());
+		sf::Vector2f speedVect = b.evalDerivative(pos, getPrevFlower());
 		angle = atan2(speedVect.y, speedVect.x);
 
 		sprite.setRotation(angle * 180.0f / 3.14159265f + 90.0f);
@@ -33,19 +35,19 @@ void Insect::draw(sf::RenderTarget& target, Graph const&g, sf::Sprite sprite) {
 	}
 }
 
-void Insect::move(float dt, Graph const& g) {
+void Insect::move(float dt, RoseTree const& rt) {
 	if (isObjectiveReached())
 		return;
 
-	float len = g[getBranch()].getLength();
+	float len = getBranch().getLength();
 	pos += speed * dt / len;
 	if (pos > 1.0f) {
 		pos = 0.0f;
-		path.popBranch(g);
+		path.pop();
 	}
 }
 
-Insect::type Insect::getType() {
+Insect::Type Insect::getType() {
 	return mType;
 }
 
@@ -55,72 +57,79 @@ void Insect::setDisplayCircle(bool d)
     mDisplay = d;
 }
 
-Insect::Insect(type mType, Node::ID node, float fhitbox,
+Insect::Insect(Type mType, ID<Flower> flower, float fhitbox,
 		float speed, float angle) :
-	mType(mType), path(node), hitbox(fhitbox),
+	mType(mType), path(flower), hitbox(fhitbox),
 	pos(0) , speed(speed) , angle(angle)
 {
 	hitbox.setOrigin(fhitbox, fhitbox);
 }
 
 
-Aphid::Aphid(AphidBehaviour::ID b, Node::ID spawn, Graph const& g) :
+Aphid::Aphid(AphidBehaviour::Type b, ID<Flower> spawn, RoseTree const& rt) :
 	Insect(Insect::Aphid, spawn, 10.f, 50.0f, 0.0f),
-	behaviour(b, spawn, g)
+	behaviour(b, spawn, rt)
 {
-	move(0.f, g);
+	move(0.f, rt);
 	path = behaviour.getPath();
 }
 
 
-LadyBug::LadyBug(Insect::type type, Node::ID spawn, Graph const& g) :
+LadyBug::LadyBug(Insect::Type type, ID<Flower> spawn, RoseTree const& rt) :
 	Insect(type, spawn, 12.f, 50.f*1.5f, 0.0f), dutyPath(spawn)
 {
-	move(0.f, g);
+	move(0.f, rt);
 //	path.addBranch(spawn, spawnBranch);
 //	path.addBranch(g[spawnBranch].getFirstNode(), spawnBranch);
 //	path = AphidBehaviour(AphidBehaviour::Offensive, spawn, g).getPath();
 }
 
-void LadyBug::redefinePath(Path newPath, Graph const &g)
+void LadyBug::redefinePath(Path<Flower> newPath, RoseTree const& rt)
 {
 	dutyPath = newPath;
-	if (!dutyPath.isCyclic(g))
-		dutyPath.makeCyclic();
+	if (!dutyPath.isCyclic())
+		rt.makeCyclic(dutyPath);
 
-	Node::ID nextNode = isObjectiveReached() ? getPrevNode() : g[getBranch()].getOtherNode(getPrevNode());
+	ID<Flower> nextFlower = isObjectiveReached() ? getPrevFlower() : getNextFlower();
 
-	Node::ID objective = nextNode;
+	rt.getPathToCloserOf(newPath.getNodes().begin(), newPath.getNodes().end(), nextFlower, path);
+
+	// Trouver le chemin le plus court jusqu’à l’un de ces nœuds
+	
+	/*
+	ID<Flower> objective = nextFlower;
 	float shortestDist = std::numeric_limits<float>::infinity();
-	std::set<Node::ID> nodes = newPath.getNodes(g);
-	for (auto id : nodes) {
-		if (g.getDist(nextNode, id) < shortestDist) {
-			shortestDist = g.getDist(nextNode, id);
+	auto flowers = newPath.getNodes();
+	for (auto id : flowers) {
+		if (rt.getDist(nextFlower, id) < shortestDist) {
+			shortestDist = rt.getDist(nextFlower, id);
 			objective = id;
 		}
 	}
+	rt.getPath(nextFlower, objective, path);
+	*/
+	path.insertNode(getPrevFlower());
 
-	path = g.getPath(nextNode, objective);
-	path.insertBranch(getPrevNode(), getBranch());
+
 }
 
 
-void LadyBug::move(float dt, Graph const& g)
+void LadyBug::move(float dt, RoseTree const& rt)
 {
-	Insect::move(dt, g);
+	Insect::move(dt, rt);
 
 	if (isObjectiveReached())
 	{
-		Node::ID position = getPrevNode();
+		ID<Flower> position = getPrevFlower();
 		path = dutyPath;
-		path.popUntil(position, g);
+		path.popUntil(position);
 	}
 }
 
-float Insect::getPos(Graph const& g) const
+float Insect::getPos(RoseTree const& rt) const
 {
 	if (isObjectiveReached())
 		return 0.f;
 
-	return g[getBranch()].isFirstNode(path.getPrevNode()) ? pos : 1.f - pos;
+	return getBranch().getPos(pos, getPrevFlower());
 }

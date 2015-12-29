@@ -7,9 +7,9 @@
 #include "state.hpp"
 #include "application.hpp"
 
-#include "graph/graph.hpp"
-#include "graph/flower.hpp"
-#include "path.hpp"
+//#include "rosetree/graph.hpp"
+//#include "rosetree/flower.hpp"
+//#include "path.hpp"
 
 
 int main()
@@ -17,7 +17,7 @@ int main()
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « RoseBud », mais on n'est pas sur");
 
-	Graph g;
+	//Graph g;
 
 	/*g.addNode(Node::ID(250, 200));
 	g.addNode(Node::ID(350, 210));

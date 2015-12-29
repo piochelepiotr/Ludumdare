@@ -1,6 +1,7 @@
 #include "gameworld.hpp"
 #include <iostream>
 #include <insectanchorlistener.hpp>
+#include "rosetree/flower.hpp"
 //GameWorld::GameWorld()
 //{
 
@@ -8,44 +9,59 @@
 
 //GameWord
 
-	GameWorld::GameWorld(sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite blackLdb, sf::Sprite aphid, sf::Sprite backGround, Graph& g, AnchorPool& anchor)
-	: mGraph(&g)
+GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite blackLdb, sf::Sprite aphid, sf::Sprite backGround, */RoseTree& rt, AnchorPool& anchor, State::Context& context)
+	: mRoseTree(rt)
 	, mLadyBugs()
 	, mAphids()
-	, mFlowers()
-	, mBackGround(backGround)
+//	, mFlowers()
+	, mBackGround(/*backGround*/)
     , mInsectSprites()
     , mCapacity(3)
     , mUsedCapacity(0)
-    , mAnchorPool(&anchor)
+    , mAnchorPool(anchor)
 {
+	sf::Sprite redLdb;
+	redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
 	redLdb.setOrigin(50.0f, 70.0f);
 	mInsectSprites[static_cast<int>(Insect::RedLadybug)] = redLdb;
+
+	sf::Sprite redBlackLdb;
+	redBlackLdb.setTexture(context.textures->get(Texture::ID::DefensiveLadyBug));
 	redBlackLdb.setOrigin(50.0f, 70.0f);
 	mInsectSprites[static_cast<int>(Insect::RedBlackLadybug)] = redBlackLdb;
+
+	sf::Sprite blackLdb;
+	blackLdb.setTexture(context.textures->get(Texture::ID::OffensiveLadyBug));
 	blackLdb.setOrigin(50.0f, 70.0f);
 	mInsectSprites[static_cast<int>(Insect::BlackLadybug)] = blackLdb;
+
+	sf::Sprite aphid;
+	aphid.setTexture(context.textures->get(Texture::ID::Aphid));
 	aphid.setOrigin(50.0f, 75.0f);
 	mInsectSprites[static_cast<int>(Insect::Aphid)] = aphid;
 
-	for (auto& stuff : getGraph())
+	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
+
+	/*
+	for (auto flower : mRoseTree.getFlowers())
 	{
-		Node::ID node = stuff.first;
-		switch (g[node].getType())
+		//ID<Flower> flower = stuff.first;
+		switch (mRoseTree[flower].getType())
 		{
-			case Texture::ID::AphidFlower:
-				mFlowers.push_back(new Flower(node, 5, sf::seconds(0), Texture::ID::AphidFlower));
+			case Flower::Type::RegularFlower:
+				mFlowers.push_back(new Flower(flower, 5, sf::seconds(60), Flower::Type::RegularFlower));
 				break;
-			case Texture::ID::Flower:
-				mFlowers.push_back(new Flower(node, 5, sf::seconds(60), Texture::ID::Flower));
+			case Flower::Type::AphidFlower:
+				mFlowers.push_back(new Flower(flower, 5, sf::seconds(0), Flower::Type::AphidFlower));
 				break;
-			case Texture::ID::LadyBugFlower:
-				mFlowers.push_back(new Flower(node, 5, sf::seconds(3), Texture::ID::LadyBugFlower));
+			case Flower::Type::LadyBugFlower:
+				mFlowers.push_back(new Flower(flower, 5, sf::seconds(3), Flower::Type::LadyBugFlower));
 				break;
 			default:
 				break;
 		}
 	}
+	*/
 }
 
 GameWorld::~GameWorld()
@@ -57,32 +73,32 @@ GameWorld::~GameWorld()
 void GameWorld::render(sf::RenderTarget& target)
 {
 	target.draw(mBackGround);
-	getGraph().draw(target, sf::RenderStates::Default);
+//	mRoseTree.draw(target, sf::RenderStates::Default); // TODO À faire, mais différement
 	for (auto ldb : mLadyBugs) {
-		ldb->draw(target, getGraph(), mInsectSprites[static_cast<size_t>(ldb->getType())]);
+		ldb->draw(target, mRoseTree, mInsectSprites[static_cast<size_t>(ldb->getType())]);
 	}
 	for (auto &apd : mAphids) {
-		apd->draw(target, getGraph(), mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
+		apd->draw(target, mRoseTree, mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
 	}
 }
 
-Insect* GameWorld::spawnInsect(Insect::type type, Node::ID node)
+Insect* GameWorld::spawnInsect(Insect::Type type, ID<Flower> flower)
 {
 	if (type == Insect::Aphid)
 	{
-		mAphids.push_back(new Aphid(AphidBehaviour::Offensive, node, getGraph()));
+		mAphids.push_back(new Aphid(AphidBehaviour::Offensive, flower, mRoseTree));
 		return *mAphids.end();
 	} else {
-		mLadyBugs.push_back(new LadyBug(type, node, getGraph()));
-		mAnchorPool->addAnchor<InsectAnchorListener>(AnchorItem(20.f), *mLadyBugs.back());
+		mLadyBugs.push_back(new LadyBug(type, flower, mRoseTree));
+		mAnchorPool.addAnchor<InsectAnchorListener>(AnchorItem(20.f), *mLadyBugs.back());
 		return * --mLadyBugs.end();
 	}
 }
 
-Node::ID GameWorld::spawnNode(NodeType type, sf::Vector2f position)
+ID<Flower> GameWorld::spawnNode(sf::Vector2f position, Flower::Type type)
 {
 	// TODO FIXME
-	return Node::ID(position);
+	return mRoseTree.addFlower(position, type);
 }
 
 
@@ -91,7 +107,7 @@ void GameWorld::update(sf::Time dt)
   for (auto &ldb : mLadyBugs)
   {
     if (!ldb->getBusy())
-        ldb->move(dt.asSeconds(), getGraph());
+        ldb->move(dt.asSeconds(), mRoseTree);
     ldb->setBusyTime(ldb->getBusyTime() + dt);
     if (ldb->getBusyTime() > sf::seconds(3))
     {
@@ -101,10 +117,11 @@ void GameWorld::update(sf::Time dt)
     for (unsigned int i=0; i<mAphids.size(); ++i)
     {
         Aphid *apd = mAphids[i];
-        if (ldb->getBranch() == apd->getBranch())
+        if (ldb->getBranchID() == apd->getBranchID())
         {
-            if (ldb->getPos(getGraph()) < apd->getPos(getGraph())+0.1
-				&& ldb->getPos(getGraph()) > apd->getPos(getGraph())-0.1
+			// TODO Faudrait changer ça…
+            if (ldb->getPos(mRoseTree) < apd->getPos(mRoseTree)+0.1
+				&& ldb->getPos(mRoseTree) > apd->getPos(mRoseTree)-0.1
 				&& !ldb->getBusy())
             {
                 ldb->setBusy(true);
@@ -116,11 +133,14 @@ void GameWorld::update(sf::Time dt)
   for (unsigned int i=0; i<mAphids.size(); ++i)
   {
     Aphid *apd = mAphids[i];
-    apd->move(dt.asSeconds(), getGraph());
+    apd->move(dt.asSeconds(), mRoseTree);
     if (apd->isObjectiveReached())
     {
-        Node::ID node = apd->getPrevNode();
-        for (unsigned int j=0; j<mFlowers.size(); ++j)
+        ID<Flower> flower = apd->getPrevFlower();
+		if (mRoseTree[flower].loseOnePoint())
+			mRoseTree.removeFlower(flower);
+		/*
+        for (unsigned int j=0; j<mRoseTree.getFlowerNumber(); ++j)
         {
             Flower *flower = mFlowers[j];
             if (Node::ID(*flower) == node)
@@ -131,25 +151,28 @@ void GameWorld::update(sf::Time dt)
                 }
             }
         }
+		*/
         mAphids.erase(mAphids.begin()+i);
     }
   }
-  for (auto flower : mFlowers) {
-    bool isReady = flower->update(dt);
+  /* FIXME Il faut y faire quelque chose, pour l’instant on fait rien…
+  for (auto flowerID : mRoseTree.getFlowers()) {
+	Flower& flower = mRoseTree[flowerID];
+    bool isReady = flower.update(dt);
     if (isReady)
     {
-        Node::Type type = flower->getType();
-        if (type == Texture::ID::AphidFlower)
+        Flower::Type type = flower.getType();
+        if (type == Flower::AphidFlower)
         {
-            if (flower->getCurrentTime() > sf::seconds(4))
+            if (flower.getCurrentTime() > sf::seconds(4))
             {
                 spawnInsect(Insect::Aphid, Node::ID(*flower));
-                flower->setCurrentTime(sf::seconds(0));
+                flower.setCurrentTime(sf::seconds(0));
             }
         }
         if (type == Texture::ID::LadyBugFlower)
         {
-			Node::ID node = *flower;
+			ID<Flower> flower = *flower;
             LadyBug* ladybug = static_cast<LadyBug*>(spawnInsect(Insect::BlackLadybug, node));
 
 			// TODO Doit-on donner un chemin par défaut aux LadyBug ?
@@ -169,6 +192,7 @@ void GameWorld::update(sf::Time dt)
         }
     }
   }
+  */
 }
 
 

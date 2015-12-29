@@ -1,12 +1,14 @@
 #pragma once
 #include "editor/anchoractionlistener.hpp"
-#include "graph/node.hpp"
+//#include "graph/node.hpp"
+#include "id.hpp"
+#include "rosetree/flower.hpp"
 
 class EditLevelState;
 
 class NodeAnchorListener : public AnchorActionListener {
     public:
-	NodeAnchorListener(EditLevelState& editLevelState, Node::ID node);
+	NodeAnchorListener(EditLevelState& editLevelState, ID<Flower> flower, sf::Vector2f position);
 	
 	void 
 	onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) override;
@@ -29,5 +31,6 @@ class NodeAnchorListener : public AnchorActionListener {
 
 	private:
 	EditLevelState& m_editLevelState;
-	Node::ID m_node;
+	ID<Flower> m_flower;
+	sf::Vector2f m_position;
 };
