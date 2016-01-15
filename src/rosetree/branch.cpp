@@ -57,3 +57,8 @@ sf::Vector2f Branch::evalDerivative(float pos, ID<Flower> firstFlower) const
 	else
 		return - mSplineShape.getSpline().evaluateSpeed(1.f - pos);
 }
+
+void Branch::draw(sf::RenderTarget& target) const
+{
+	target.draw(mSplineShape);
+}

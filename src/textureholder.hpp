@@ -13,12 +13,10 @@ namespace Texture
 	, NormalLadyBug
 	, Aphid
 	, BackGround
-	, RegularNode
-	, Flower
-	, LadyBugFlower
-	, SemperFlower
+	, RegularFlower
 	, AphidFlower
-	,None
+	, LadybugFlower
+	, None
     };
 }
 

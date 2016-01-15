@@ -44,6 +44,8 @@ class Branch
 	// en considérant firstFlower comme le point de départ
 	sf::Vector2f evalDerivative(float pos, ID<Flower> firstFlower) const;
 
+	void draw(sf::RenderTarget& target) const;
+
 	private:
 	// Crée la SplineShape pour les fleurs f1 et f2
 	static SplineShape createSplineShape(Flower& f1, Flower& f2);

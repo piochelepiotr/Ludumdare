@@ -15,13 +15,25 @@ EditLevelState::EditLevelState(StateStack& mystack, Context context)
 	mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
 	mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
 	*/
-	load("niveau1");
+	load("niveau1.txt");
 	//mAnchors.addAnchor(AnchorItem(10.f), )
+	auto it = mFlowerSprites.insert(std::make_pair(Flower::RegularFlower,
+				sf::Sprite(context.textures->get(Texture::ID::RegularFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it = mFlowerSprites.insert(std::make_pair(Flower::AphidFlower,
+				sf::Sprite(context.textures->get(Texture::ID::AphidFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it.first->second.setColor(sf::Color::Green);
+	it = mFlowerSprites.insert(std::make_pair(Flower::LadybugFlower,
+				sf::Sprite(context.textures->get(Texture::ID::LadybugFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it.first->second.setColor(sf::Color::Red);
+
 }
 
 EditLevelState::~EditLevelState()
 {
-	save("niveau1");
+	save("niveau1.txt");
 }
 
 bool EditLevelState::handleEvent(const sf::Event& event)
@@ -64,7 +76,12 @@ bool EditLevelState::update(sf::Time dt)
 
 void EditLevelState::draw()
 {
-//	mRoseTree.draw(*getContext().window,sf::RenderStates::Default);
+	getContext().window->clear();
+	for (auto& id_branch : mRoseTree.getBranchs())
+		id_branch.second.draw(*getContext().window);
+	for (auto& id_flower : mRoseTree.getFlowers())
+		drawFlower(*getContext().window, id_flower.second);
+	// mRoseTree.draw(*getContext().window,sf::RenderStates::Default);
 }
 
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
@@ -122,6 +139,7 @@ ID<Flower> EditLevelState::addFlower(sf::Vector2f v, Flower::Type type)
 
 void EditLevelState::removeFlower(ID<Flower> flower)
 {
+	std::cout << "EditLevelState::removeFlower" << std::endl;
 	mRoseTree.removeFlower(flower);
 	auto it = mFlowerToAnchors.find(flower);
 	mAnchors.removeAnchor<NodeAnchorListener>(it->second);
@@ -153,10 +171,20 @@ void EditLevelState::updateAnchors()
 {
 	//mAnchors.clear();
 	auto flowers = mRoseTree.getFlowers();
-	for(auto id_flower : flowers)
+	for(auto& id_flower : flowers)
 	{
 		auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, id_flower.first, id_flower.second.getPosition());
 		mFlowerToAnchors[id_flower.first] = ptr;
 	}
 	m_isFlowerDragged = false;
+}
+
+
+void EditLevelState::drawFlower(sf::RenderTarget& target, Flower const& flower) const
+{
+	if (flower.getType() == Flower::Type::None)
+		return;
+	sf::Transform transform;
+	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);
+	target.draw(mFlowerSprites.find(flower.getType())->second, transform);
 }

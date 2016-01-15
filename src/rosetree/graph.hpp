@@ -364,12 +364,14 @@ ID<Node> PonderateGraph<Node, Edge, Dist>::addNode(ID<Node> n)
 template <typename Node, typename Edge, typename Dist>
 std::set<ID<Edge> > PonderateGraph<Node, Edge, Dist>::removeNode(ID<Node> n)
 {
-	auto set = Graph<Node, Edge>::removeNode(n);
-	// On enlève aussi toutes les distances à n
+	// On enlève toutes les distances à n
 	auto distancesToN = mBasicDistances.find(n);
 	for (auto n2_d : distancesToN->second)
 		mBasicDistances.find(n2_d.first)->second.erase(n);
 	mBasicDistances.erase(distancesToN);
+	// Puis on laisse papa terminer le bouleau
+	auto set = Graph<Node, Edge>::removeNode(n);
+
 	rebuildDistances(); // TODO Besoin d’être aussi brutal ?
 	return set;
 }

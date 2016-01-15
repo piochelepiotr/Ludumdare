@@ -35,6 +35,7 @@ class RoseTree
 		Branch& getBranch(std::pair<ID<Flower>, ID<Flower> > pair);
 		ID<Branch> getBranchID(ID<Flower> f1, ID<Flower> f2) const;
 		ID<Branch> getBranchID(std::pair<ID<Flower>, ID<Flower> > pair) const;
+		IDstaticmap<Branch> const& getBranchs() const;
 
 		// Paths
 		// Renvoie la longueur entre f1 et f2
@@ -61,6 +62,9 @@ class RoseTree
 //		void draw (sf::RenderTarget& ,sf::RenderStates) const;
 
 	private:
+		// Supprime une branche qui est déja supprimée dans le graphe
+		void softRemoveBranch(ID<Branch> b);
+
 		PonderateGraph<Flower, Branch, float> mGraph;
 		IDstaticmap<Flower> mFlowers;
 		IDstaticmap<Branch> mBranchs;

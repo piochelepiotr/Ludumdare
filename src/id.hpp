@@ -61,6 +61,7 @@ class IDstaticmap
 	}
 	void removeObj(ID<T> id) { map.erase(id); }
 	void clear() { idgen.reset(); map.clear(); }
+	std::size_t size() const { return map.size(); }
 	T const& operator [] (ID<T> id) const { return map.find(id)->second; }
 	T& operator [] (ID<T> id) { return map.find(id)->second; }
 	typename std::map<ID<T>, T>::iterator begin() { return map.begin(); }

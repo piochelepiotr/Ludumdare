@@ -36,13 +36,15 @@ class GameWorld
 		void setUsedCapacity(int newUsedCapacity){mUsedCapacity = newUsedCapacity;};
 	private:
 		//inline RoseTree& getGraph() { return mRoseTree; }
+		void drawFlower(sf::RenderTarget& target, Flower const& flower) const; // TODO Should not be here
 
 		RoseTree& mRoseTree;
 		std::vector<LadyBug*> mLadyBugs;
 		std::vector<Aphid*> mAphids;
 		//std::vector<Flower*> mFlowers;
-		sf::Sprite mBackGround; // TODO Ces deux lignes devraient pas être là
+		sf::Sprite mBackGround; // TODO Ces trois lignes ne devraient pas être là
 		sf::Sprite mInsectSprites[4];
+		std::map<Flower::Type, sf::Sprite> mFlowerSprites;
 		int mCapacity;
 		int mUsedCapacity;
 		AnchorPool& mAnchorPool;

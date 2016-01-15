@@ -6,10 +6,11 @@
 
 void RoseTree::removeFlower(ID<Flower> f)
 {
+	std::cout << "RoseTree::removeFlower" << std::endl;
 	mFlowers.removeObj(f);
-	auto branchs = mGraph.removeNode(f);
-	for (ID<Branch> b : branchs)
-		removeBranch(b);
+	auto branchsToRemove = mGraph.removeNode(f);
+	for (ID<Branch> b : branchsToRemove)
+		softRemoveBranch(b);
 }
 
 // TODO These four should be inlined
@@ -28,9 +29,7 @@ std::set<ID<Flower> > const RoseTree::getFlowers() const
 { return mGraph.getNodes(); }
 */
 IDstaticmap<Flower> const& RoseTree::getFlowers() const
-{
-	return mFlowers;
-}
+{ return mFlowers; }
 
 std::set<ID<Flower> > const RoseTree::getNeighbours(ID<Flower> f) const
 { return mGraph.getNeighbours(f); }
@@ -46,13 +45,18 @@ ID<Branch> RoseTree::addBranch(ID<Flower> f1, ID<Flower> f2)
 
 void RoseTree::removeBranch(ID<Branch> b)
 {
+	std::cout << "RoseTree::removeBranch" << std::endl;
 	mBranchs.removeObj(b);
 	mGraph.removeEdge(b);
 }
-
 // TODO May be inlined
 void RoseTree::removeBranch(ID<Flower> f1, ID<Flower> f2)
 { removeBranch(mGraph.getEdge(f1, f2)); }
+void RoseTree::softRemoveBranch(ID<Branch> b)
+{ 
+	std::cout << "RoseTree::softRemoveBranch" << std::endl;
+	mBranchs.removeObj(b);
+}
 
 // TODO To be inlined (maybe some of them)
 Branch const& RoseTree::getBranch(ID<Branch> b) const
@@ -73,6 +77,9 @@ ID<Branch> RoseTree::getBranchID(ID<Flower> f1, ID<Flower> f2) const
 { return mGraph.getEdge(f1, f2); }
 ID<Branch> RoseTree::getBranchID(std::pair<ID<Flower>, ID<Flower> > pair) const
 { return mGraph.getEdge(pair.first, pair.second); }
+
+IDstaticmap<Branch> const& RoseTree::getBranchs() const
+{ return mBranchs; }
 
 
 // Paths FIXME TODO
@@ -116,6 +123,7 @@ void RoseTree::load(std::istream& is)
 	std::cout << "In RoseTree::load(istream&): currentID = " << currentID << std::endl;
 
 	// Puis on ajoute les branches
+		std::cout << "In RoseTree::load(istream&): I loooooop! " << mFlowers.size() << ' ' << mBranchs.size() << ' ' << mGraph.getNodeNumber() << ' ' << mGraph.getEdgeNumber() << std::endl;
 	if (str != "branchs")
 		is.setstate(is.failbit);
 	std::cout << "In RoseTree::load(istream&): Here i am" << std::endl;
@@ -124,8 +132,10 @@ void RoseTree::load(std::istream& is)
 		unsigned int f1, f2;
 		is >> f1 >> f2;
 		addBranch(temporaryIDs.find(f1)->second, temporaryIDs.find(f2)->second);
+		std::cout << "In RoseTree::load(istream&): I loooooop! " << mFlowers.size() << ' ' << mBranchs.size() << ' ' << mGraph.getNodeNumber() << ' ' << mGraph.getEdgeNumber() << std::endl;
 	}
-	std::cout << "In RoseTree::load(istream&): There i am" << std::endl;
+
+	std::cout << "In RoseTree::load(istream&):" << std::endl;
 }
 
 void RoseTree::save(std::ostream& os) const
@@ -139,14 +149,15 @@ void RoseTree::save(std::ostream& os) const
 		temporaryIDs.insert(temporaryIDs.end(),
 				std::make_pair(id_flower.first, currentID));
 		currentID++;
-		os << '\t' << id_flower.second.getPosition().x;
-		os << id_flower.second.getPosition().y << '\n';
+		os << '\t' << id_flower.second.getPosition().x << ' ';
+		os << id_flower.second.getPosition().y << ' ';
+		os << id_flower.second.getType() << std::endl;
 	}
 
 	os << "branchs\n";
 	for (auto& id_branch : mBranchs)
 	{
-		os << '\t' << temporaryIDs[id_branch.second.getFirstFlower()];
+		os << '\t' << temporaryIDs[id_branch.second.getFirstFlower()] << ' ';
 		os << temporaryIDs[id_branch.second.getSecondFlower()] << '\n';
 	}
 }

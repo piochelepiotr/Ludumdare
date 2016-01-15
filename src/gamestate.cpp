@@ -127,7 +127,7 @@ void GameState::onFlowerReleased(ID<Flower> flower)
 void GameState::updateAnchors()
 {
     auto flowers = mRoseTree.getFlowers();
-    for(auto id_flower : flowers)
+    for(auto& id_flower : flowers)
     {
 		mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this,
 				id_flower.first, id_flower.second.getPosition());

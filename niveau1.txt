@@ -1,5 +1,2 @@
 flowers
-	500 500 RegularFlower
-	200 200 RegularFlower
 branchs
-	0 1

@@ -20,6 +20,7 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
     , mUsedCapacity(0)
     , mAnchorPool(anchor)
 {
+	// TODO Tout ça, ça ne devrait pas être fait ici…
 	sf::Sprite redLdb;
 	redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
 	redLdb.setOrigin(50.0f, 70.0f);
@@ -42,6 +43,18 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
 
 	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
 
+	// TODO Mauvaise idée, si on modifie les Flowers…
+	auto it = mFlowerSprites.insert(std::make_pair(Flower::RegularFlower,
+				sf::Sprite(context.textures->get(Texture::ID::RegularFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it = mFlowerSprites.insert(std::make_pair(Flower::AphidFlower,
+				sf::Sprite(context.textures->get(Texture::ID::AphidFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it.first->second.setColor(sf::Color::Green);
+	it = mFlowerSprites.insert(std::make_pair(Flower::LadybugFlower,
+				sf::Sprite(context.textures->get(Texture::ID::LadybugFlower))));
+	it.first->second.setOrigin(100.f, 100.f);
+	it.first->second.setColor(sf::Color::Red);
 	/*
 	for (auto flower : mRoseTree.getFlowers())
 	{
@@ -72,8 +85,17 @@ GameWorld::~GameWorld()
 
 void GameWorld::render(sf::RenderTarget& target)
 {
+	// On commence par le fond d’écran
 	target.draw(mBackGround);
-//	mRoseTree.draw(target, sf::RenderStates::Default); // TODO À faire, mais différement
+
+	// Puis on dessine le rosier
+	for (auto& id_branch : mRoseTree.getBranchs())
+		id_branch.second.draw(target);
+	for (auto& id_flower : mRoseTree.getFlowers())
+		drawFlower(target, id_flower.second);
+		
+
+	// Ensuite viennent les insectes
 	for (auto ldb : mLadyBugs) {
 		ldb->draw(target, mRoseTree, mInsectSprites[static_cast<size_t>(ldb->getType())]);
 	}
@@ -196,3 +218,11 @@ void GameWorld::update(sf::Time dt)
 }
 
 
+void GameWorld::drawFlower(sf::RenderTarget& target, Flower const& flower) const
+{
+	if (flower.getType() == Flower::Type::None)
+		return;
+	sf::Transform transform;
+	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);
+	target.draw(mFlowerSprites.find(flower.getType())->second, transform);
+}

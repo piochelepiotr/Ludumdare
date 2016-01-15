@@ -6,6 +6,7 @@
 #include "editor/nodeanchorlistener.hpp"
 #include "rosetree/rosetree.hpp"
 
+// TODO Il y a quelques redondances avec GameWorld…
 class EditLevelState : public State
 {
 	public:
@@ -31,6 +32,9 @@ class EditLevelState : public State
 	Texture::ID nextType(Texture::ID type);
 
 	private:
+	void drawFlower(sf::RenderTarget& target, Flower const& flower) const; // TODO Should not be here
+
+
 	void mousePressed(sf::Event event, sf::Vector2f pos);
 	void mouseReleased(sf::Event event, sf::Vector2f pos);
 	void updateAnchors();
@@ -41,4 +45,8 @@ class EditLevelState : public State
 
 	bool m_isFlowerDragged;
 	ID<Flower> mFirstFlower;
+
+
+	// TODO Should not be here
+	std::map<Flower::Type, sf::Sprite> mFlowerSprites;
 };

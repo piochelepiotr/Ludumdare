@@ -62,6 +62,9 @@ int main()
     context.textures->load(Texture::ID::DefensiveLadyBug, "graphics/ldb2.png");
     context.textures->load(Texture::ID::Aphid, "graphics/puceron.png");
     context.textures->load(Texture::ID::BackGround, "graphics/bg.png");
+	context.textures->load(Texture::ID::RegularFlower, "graphics/bigflower.png");
+	context.textures->load(Texture::ID::AphidFlower, "graphics/bigflower.png");
+	context.textures->load(Texture::ID::LadybugFlower, "graphics/bigflower.png");
     Application app(context);
     int truc = app.run();
 
