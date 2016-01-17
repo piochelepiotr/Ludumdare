@@ -1,64 +1,63 @@
 #pragma once
 #include "behaviour.hpp"
-//#include <cmath>
 #include "rosetree/rosetree.hpp"
 #include "rosetree/path.hpp"
 #include <SFML/Graphics.hpp>
 
 class Insect {
-public:
+	public:
 
-  enum Type {RedLadybug, RedBlackLadybug, BlackLadybug, Aphid};
+		// TODO : Il faudrait en fait faire des types pour les Ladybugs, pas pour les insects.
+	enum Type {RedLadybug, RedBlackLadybug, BlackLadybug, RegularAphid};
 
-  Insect(Type mType, ID<Flower> node, float fhitbox, float speed, float angle);
-  void move(float dt, RoseTree const& rt); // C’est très casse-gueule, parce qu’il y a aussi une méthode move pour les coccinelles…
-  void draw(sf::RenderTarget& target, RoseTree const& rt, sf::Sprite sprite);
+	Insect(Type mType, ID<Flower> node, RoseTree const& rt, float fhitbox, float speed, float angle);
+	void move(sf::Time dt); // TODO C’est très casse-gueule, parce qu’il y a aussi une méthode move pour les coccinelles…
+	void draw(sf::RenderTarget& target, sf::Sprite sprite);
 
-  Type getType();
-  Branch const& getBranch() const { return roseTree.getBranch(path.getTwoFirstNodes()); }
-  ID<Branch> getBranchID() const { return roseTree.getBranchID(path.getTwoFirstNodes()); }
-  float getPos(RoseTree const& rt) const;
-  bool isObjectiveReached() const { return path.isEmpty(); }
-  ID<Flower> getPrevFlower() const { return path.getFirstNode(); }
-  ID<Flower> getNextFlower() const { return path.getTwoFirstNodes().second; }
-//  ID<Flower> getObjective() { return objective; }
-  sf::Vector2f getPosition() const;
+	Type getType();
+	Branch const& getBranch() const { return mRoseTree.getBranch(mPath.getTwoFirstNodes()); }
+	ID<Branch> getBranchID() const { return mRoseTree.getBranchID(mPath.getTwoFirstNodes()); }
+	float getPos() const;
+	bool isObjectiveReached() const { return mPath.isEmpty(); }
+	ID<Flower> getPrevFlower() const { return mPath.getFirstNode(); }
+	ID<Flower> getNextFlower() const { return mPath.getTwoFirstNodes().second; }
+	//  ID<Flower> getObjective() { return objective; }
+	sf::Vector2f getPosition() const;
 
-  void setDisplayCircle(bool display);
+	void setDisplayCircle(bool display);
 
-protected:
-  Type mType;
-  Path<Flower> path;
-  RoseTree const roseTree;
-  sf::CircleShape hitbox;
-  float pos;
-  float speed;
-  float angle;
-//  ID<Flower> objective;
-  bool mDisplay=false;
+	protected:
+	Type mType;
+	Path<Flower> mPath;
+	RoseTree const& mRoseTree;
+	sf::CircleShape mHitbox;
+	float mPos;
+	float mSpeed;
+	float mAngle;
+	//  ID<Flower> objective;
+	bool mDisplay=false; // TODO We must remove this, just for debugging
 };
 
 class Aphid : public Insect {
-public:
-  Aphid(AphidBehaviour::Type b, ID<Flower> spawn, RoseTree const& rt);
-private:
-  AphidBehaviour behaviour;
+	public:
+	Aphid(AphidBehaviour::Type b, ID<Flower> spawn, RoseTree const& rt);
+	private:
+	AphidBehaviour mBehaviour;
 };
 
 class LadyBug : public Insect {
-public:
-  LadyBug(Insect::Type type, ID<Flower> spawn, RoseTree const& rt);
-  void redefinePath(Path<Flower> newPath, RoseTree const& rt);
-  void move(float dt, RoseTree const& rt);
-  void setBusy(bool bo){busy = bo;};
-  bool getBusy(){return busy;};
-  void setBusyTime(sf::Time dt){busyTime = dt;};
-  sf::Time getBusyTime(){return busyTime;};
+	public:
+	LadyBug(Insect::Type type, ID<Flower> spawn, RoseTree const& rt);
+	void redefinePath(Path<Flower> newPath);
+	void move(sf::Time dt);
+	// void setBusy(bool bo) {busy = bo;};
+	//sf::Time getBusyTime() { return busyTime; };
+	void eatAnAphid(Aphid& aphid) { mEatingTime = sf::seconds(1); }
+	bool isEating() { return mEatingTime > sf::seconds(0); }
+	void decreaseEatingTime(sf::Time dt) { mEatingTime -= dt; }
 
-private:
-  Path<Flower> dutyPath;
-  bool busy;
-  sf::Time busyTime = sf::seconds(0);
+	private:
+	Path<Flower> mDutyPath;
+	sf::Time mEatingTime = sf::seconds(0);
 };
-
 

@@ -36,8 +36,6 @@ class Graph
 		// Renvoie l’ensemble de tous les voisins de n1
 		std::set<ID<Node> > getNeighbours(ID<Node> n1) const;
 		// Renvoie une table associative qui a un nœud n2 donne l’arête entre n1 et n2
-		std::map<ID<Node>, ID<Edge> > const& getNeighboursMap(ID<Node> n1) const;
-		std::map<ID<Node>, ID<Edge> >& getNeighboursMap(ID<Node> n1);
 		std::map<ID<Node>, ID<Edge> > const& operator [] (ID<Node> n1) const;
 		std::map<ID<Node>, ID<Edge> >& operator [] (ID<Node> n1);
 		// Renvoie l’arête qui relie n1 et n2 (ou noID s’il n’y en a pas)
@@ -153,14 +151,14 @@ ID<Node> Graph<Node, Edge>::addNode(ID<Node> n)
 template <typename Node, typename Edge>
 std::set<ID<Edge> > Graph<Node, Edge>::removeNode(ID<Node> n)
 {
-	auto const& neighbours = getNeighboursMap(n);
+	auto const& neighbours = mNodesToEdge.at(n);
 	std::set<ID<Edge> > deletedEdges;
 	// Pour voisin n2 de n :
 	// On supprime l’entrée de n parmi les voisins de n2,
 	// et on supprime aussi l’entrée de la branche qui relie n1 et n2.
 	for (auto neighbour_edge : neighbours)
 	{
-		getNeighboursMap(neighbour_edge.first).erase(n);
+		mNodesToEdge.at(neighbour_edge.first).erase(n);
 		mEdgeToNodes.erase(neighbour_edge.second);
 		deletedEdges.insert(neighbour_edge.second);
 	}
@@ -186,8 +184,8 @@ ID<Edge> Graph<Node, Edge>::addEdge(ID<Node> n1, ID<Node> n2)
 template <typename Node, typename Edge>
 ID<Edge> Graph<Node, Edge>::addEdge(ID<Node> n1, ID<Node> n2, ID<Edge> e)
 {
-	getNeighboursMap(n1).insert(std::make_pair(n2, e));
-	getNeighboursMap(n2).insert(std::make_pair(n1, e));
+	mNodesToEdge.at(n1).insert(std::make_pair(n2, e));
+	mNodesToEdge.at(n2).insert(std::make_pair(n1, e));
 	return mEdgeToNodes.insert(mEdgeToNodes.end(), std::make_pair(e, std::make_pair(n1, n2)))->first;
 }
 
@@ -196,12 +194,12 @@ void Graph<Node, Edge>::removeEdge(ID<Node> n1, ID<Node> n2)
 {
 	// On trouve un exemplaire de l’arête entre n1 et n2,
 	// en gardant les résulats intermédiaires pour ne pas les recalculer
-	auto& n1Neighbours = getNeighboursMap(n1);
+	auto& n1Neighbours = mNodesToEdge.at(n1);
 	auto it_n2_edge = n1Neighbours.find(n2);
 	// Puis on supprime tout
 	mEdgeToNodes.erase(it_n2_edge->second);
 	n1Neighbours.erase(it_n2_edge);
-	getNeighboursMap(n2).erase(n2);
+	mNodesToEdge.at(n2).erase(n1);
 }
 
 template <typename Node, typename Edge>
@@ -213,8 +211,8 @@ void Graph<Node, Edge>::removeEdge(ID<Edge> e)
 	auto twoNodes = it_e_nodes->second;
 	// Puis on supprime tout
 	mEdgeToNodes.erase(it_e_nodes);
-	getNeighboursMap(twoNodes.first).erase(twoNodes.second);
-	getNeighboursMap(twoNodes.second).erase(twoNodes.first);
+	mNodesToEdge.at(twoNodes.first).erase(twoNodes.second);
+	mNodesToEdge.at(twoNodes.second).erase(twoNodes.first);
 }
 
 
@@ -231,32 +229,26 @@ template <typename Node, typename Edge>
 std::set<ID<Node> > Graph<Node, Edge>::getNeighbours(ID<Node> n1) const
 {
 	std::set<ID<Node> > neighboursSet;
-	for (auto& neighbour_edge : getNeighboursMap(n1))
+	for (auto& neighbour_edge : mNodesToEdge.at(n1))
 		neighboursSet.insert(neighboursSet.end(), neighbour_edge.first);
 	return neighboursSet;
 }
 
 template <typename Node, typename Edge>
-std::map<ID<Node>, ID<Edge> > const& Graph<Node, Edge>::getNeighboursMap(ID<Node> n1) const
-{ return mNodesToEdge.find(n1)->second; }
-template <typename Node, typename Edge>
-std::map<ID<Node>, ID<Edge> >& Graph<Node, Edge>::getNeighboursMap(ID<Node> n1)
-{ return mNodesToEdge.find(n1)->second; }
-template <typename Node, typename Edge>
 std::map<ID<Node>, ID<Edge> > const& Graph<Node, Edge>::operator [] (ID<Node> n1) const
-{ return getNeighboursMap(n1); }
+{ return mNodesToEdge.at(n1); }
 template <typename Node, typename Edge>
 std::map<ID<Node>, ID<Edge> >& Graph<Node, Edge>::operator [] (ID<Node> n1)
-{ return getNeighboursMap(n1); }
+{ return mNodesToEdge.at(n1); }
 
 
 template <typename Node, typename Edge>
 ID<Edge> Graph<Node, Edge>::getEdge(ID<Node> n1, ID<Node> n2) const
-{ return getNeighboursMap(n1).find(n2)->second; }
+{ return mNodesToEdge.at(n1).at(n2); }
 
 template <typename Node, typename Edge>
 std::pair<ID<Node>, ID<Node>> Graph<Node, Edge>::getNodes(ID<Edge> e) const
-{ return mEdgeToNodes.find(e)->second; }
+{ return mEdgeToNodes.at(e); }
 
 
 
@@ -274,7 +266,7 @@ void PonderateGraph<Node, Edge, Dist>::clear()
 
 template <typename Node, typename Edge, typename Dist>
 std::pair<Dist, ID<Node> > const& PonderateGraph<Node, Edge, Dist>::getDistance(ID<Node> n1, ID<Node> n2) const
-{ return mDistances.find(n1)->second.find(n2)->second; }
+{ return mDistances.at(n1).at(n2); }
 
 template <typename Node, typename Edge, typename Dist>
 Dist PonderateGraph<Node, Edge, Dist>::getDist(ID<Node> n1, ID<Node>n2) const
@@ -284,13 +276,12 @@ Dist PonderateGraph<Node, Edge, Dist>::getDist(ID<Node> n1, ID<Node>n2) const
 template <typename Node, typename Edge, typename Dist>
 void PonderateGraph<Node, Edge, Dist>::completePath(Path<Node>& path, ID<Node> n2) const
 {
-	ID<Node> newNode(path.getNodes().back());
+	ID<Node> newNode = path.getNodes().back();
 	while (newNode != n2)
 	{
 		newNode = getDistance(newNode, n2).second;
 		path.addNode(newNode);
 	}
-	path.addNode(n2);
 }
 	
 template <typename Node, typename Edge, typename Dist>
@@ -305,12 +296,12 @@ template <typename Iterator>
 void PonderateGraph<Node, Edge, Dist>::getPathToCloserOf(Iterator begin,
 		Iterator end, ID<Node> n1, Path<Node>& path) const
 {
-	auto& distancesToN1 = *mDistances.find(n1);
+	auto& distancesToN1 = mDistances.at(n1);
 	Iterator itMin = end;
 	Dist distMin = std::numeric_limits<Dist>::infinity();
 	for (Iterator it = begin ; it != end ; it++)
 	{
-		auto& pair = distancesToN1.find(*it)->second;
+		auto& pair = distancesToN1.at(*it);
 		if (pair.first < distMin)
 		{
 			distMin = pair.first;
@@ -318,7 +309,7 @@ void PonderateGraph<Node, Edge, Dist>::getPathToCloserOf(Iterator begin,
 		}
 	}
 
-	getPath(path, n1, itMin->second.second);
+	getPath(path, n1, *itMin);
 }
 
 template <typename Node, typename Edge, typename Dist>
@@ -326,11 +317,10 @@ template <typename Pred>
 void PonderateGraph<Node, Edge, Dist>::getPathToCloserWith(ID<Node> n1,
 		Path<Node>& path, Pred p) const
 {
-	auto& distancesToN1 = *mDistances.find(n1);
+	auto& distancesToN1 = mDistances.at(n1);
 	auto itMin = distancesToN1.end();
 	Dist distMin = std::numeric_limits<Dist>::infinity();
-	for (auto it = distancesToN1.begin()
-			; it != distancesToN1.end() ; it++)
+	for (auto it = distancesToN1.begin() ; it != distancesToN1.end() ; it++)
 	{
 		if (p(it->first))
 		{
@@ -357,6 +347,7 @@ template <typename Node, typename Edge, typename Dist>
 ID<Node> PonderateGraph<Node, Edge, Dist>::addNode(ID<Node> n)
 {
 	auto id = Graph<Node, Edge>::addNode(n);
+	mBasicDistances.insert(mBasicDistances.end(), std::make_pair(n, std::map<ID<Node>, Dist>()));
 	rebuildDistances(); // TODO Pas besoin d’être aussi brutal…
 	return id;
 }
@@ -365,14 +356,21 @@ template <typename Node, typename Edge, typename Dist>
 std::set<ID<Edge> > PonderateGraph<Node, Edge, Dist>::removeNode(ID<Node> n)
 {
 	// On enlève toutes les distances à n
+	std::cerr << "I'm in PonderateGraph::removeNode with n = " << n.id << std::endl;
 	auto distancesToN = mBasicDistances.find(n);
 	for (auto n2_d : distancesToN->second)
-		mBasicDistances.find(n2_d.first)->second.erase(n);
+	{
+		std::cerr << "Looooooping, yeah" << std::endl;
+		mBasicDistances.at(n2_d.first).erase(n);
+	}
 	mBasicDistances.erase(distancesToN);
 	// Puis on laisse papa terminer le bouleau
+	std::cerr << "Now dady will continue!" << std::endl;
 	auto set = Graph<Node, Edge>::removeNode(n);
+	std::cerr << "Now rebuilding!" << std::endl;
 
 	rebuildDistances(); // TODO Besoin d’être aussi brutal ?
+	std::cerr << "Now quitting!" << std::endl;
 	return set;
 }
 
@@ -391,8 +389,8 @@ template <typename Node, typename Edge, typename Dist>
 void PonderateGraph<Node, Edge, Dist>::removeEdge(ID<Node> n1, ID<Node> n2)
 {
 	Graph<Node, Edge>::removeEdge(n1, n2);
-	mBasicDistances.find(n1)->second.erase(n2);
-	mBasicDistances.find(n2)->second.erase(n1);
+	mBasicDistances.at(n1).erase(n2);
+	mBasicDistances.at(n2).erase(n1);
 	rebuildDistances(); // TODO Idem
 }
 
@@ -421,10 +419,9 @@ void PonderateGraph<Node, Edge, Dist>::rebuildDistances()
 	//   On ajoute les valeurs déjà présentes de mBasicDistances
 	for (auto& n1_n2_d : mBasicDistances)
 	{
-		auto& n1_map = mDistances.find(n1_n2_d.first)->second;
+		auto& n1_map = mDistances.at(n1_n2_d.first);
 		for (auto& n2_d : n1_n2_d.second)
-			n1_map.find(n2_d.first)->second =
-			std::make_pair(n2_d.second, n2_d.first);
+			n1_map.at(n2_d.first) = std::make_pair(n2_d.second, n2_d.first);
 	}
 
 	// Maintenant, un petit coup de Floyd-Warshall
@@ -433,11 +430,11 @@ void PonderateGraph<Node, Edge, Dist>::rebuildDistances()
 	{
 		for (auto& nodeI_map : mDistances)
 		{
-			auto const& value_I_K = nodeI_map.second.find(nodeK_map.first)->second;
+			auto const& value_I_K = nodeI_map.second.at(nodeK_map.first);
 			for (auto& nodeJ_val : nodeI_map.second)
 			{
 				auto& currentValue_I_J = nodeJ_val.second;
-				auto const& value_K_J = nodeK_map.second.find(nodeJ_val.first)->second;
+				auto const& value_K_J = nodeK_map.second.at(nodeJ_val.first);
 				float d = value_I_K.first + value_K_J.first;
 				if (currentValue_I_J.first > d)
 					currentValue_I_J = std::make_pair(d, value_I_K.second);

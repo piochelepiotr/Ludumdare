@@ -6,6 +6,7 @@
 #include "editor/nodeanchorlistener.hpp"
 #include "rosetree/rosetree.hpp"
 
+// TODO: Dans l’éditeur, les fleurs None devrait être affichée
 // TODO Il y a quelques redondances avec GameWorld…
 class EditLevelState : public State
 {

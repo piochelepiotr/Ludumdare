@@ -1,14 +1,29 @@
 #include "rosetree/flower.hpp"
+#include <iostream>
 #include <map>
 
+sf::Time getTimeFromType(Flower::Type type)
+{
+	switch (type)
+	{
+		case Flower::AphidFlower:
+			return sf::seconds(2.f);
+		case Flower::LadybugFlower:
+			return sf::seconds(5.f);
+		default:
+			return sf::seconds(1.f);
+	}
+}
+
 Flower::Flower(sf::Vector2f position, Type type) :
-	mPosition(position), mDerivative(), mType(type), mLife(50)
-{}
+	mPosition(position), mDerivative(), mType(type), mLife(10), mTimeLeft(getTimeFromType(type))
+{
+}
 
 
 Flower::Type Flower::typeFromString(std::string str)
 {
-	// FIXME Very bad ID: What if we add new types?
+	// FIXME Very bad idea: What if we add new types?
 	static std::map<std::string, Type> typeMap = {
 		std::make_pair("RegularFlower", RegularFlower),
 		std::make_pair("AphidFlower", AphidFlower),
@@ -36,6 +51,7 @@ Flower::Type Flower::changeType()
 bool Flower::loseOnePoint()
 {
 	mLife--;
+	std::cerr << "Hi, I have been attacked and my life is now : " << mLife << std::endl;
 	return mLife > 0;
 }
 
@@ -52,8 +68,17 @@ sf::Vector2f Flower::initDerivative(sf::Vector2f deriv)
 	return mDerivative;
 }
 
+
+void Flower::setTimeLeft(sf::Time t)
+{ mTimeLeft = t; }
+
 bool Flower::update(sf::Time dt)
 {
-	mLeftTime -= dt;
-	return mLeftTime <= sf::seconds(0);
+	mTimeLeft -= dt;
+	return mTimeLeft <= sf::seconds(0);
+}
+void Flower::becomeNode()
+{
+	mType = RegularFlower;
+	mTimeLeft = sf::seconds(1);
 }

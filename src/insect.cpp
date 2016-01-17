@@ -5,45 +5,45 @@
 #include "rosetree/branch.hpp"
 
 sf::Vector2f Insect::getPosition() const {
-    return hitbox.getPosition();
+    return mHitbox.getPosition();
 }
 
-void Insect::draw(sf::RenderTarget& target, RoseTree const& rt, sf::Sprite sprite) {
+void Insect::draw(sf::RenderTarget& target, sf::Sprite sprite) {
 	if (isObjectiveReached())
 	{
 		// TODO Pour l’instant ça ne fait pas quelque chose d’intéressant…
-		auto posVect = rt[getPrevFlower()].getPosition();
+		auto posVect = mRoseTree[getPrevFlower()].getPosition();
 		sprite.setPosition(posVect);
-		hitbox.setPosition(posVect);
-		target.draw(hitbox);
+		mHitbox.setPosition(posVect);
+		target.draw(mHitbox);
 		target.draw(sprite);
-		std::cout << "holaalal" << std::endl;
 	}
 	else
 	{
 		Branch const& b = getBranch();
 
-		sf::Vector2f posVect = b.eval(pos, getPrevFlower());
-		sf::Vector2f speedVect = b.evalDerivative(pos, getPrevFlower());
-		angle = atan2(speedVect.y, speedVect.x);
+		sf::Vector2f posVect = b.eval(mPos, getPrevFlower());
+		sf::Vector2f speedVect = b.evalDerivative(mPos, getPrevFlower());
+		mAngle = atan2(speedVect.y, speedVect.x);
 
-		sprite.setRotation(angle * 180.0f / 3.14159265f + 90.0f);
+		sprite.setRotation(mAngle * 180.0f / 3.14159265f + 90.0f);
 		sprite.setPosition(posVect);
-		hitbox.setPosition(posVect);
-		target.draw(hitbox);
+		mHitbox.setPosition(posVect);
+		target.draw(mHitbox);
 		target.draw(sprite);
 	}
 }
 
-void Insect::move(float dt, RoseTree const& rt) {
+void Insect::move(sf::Time dt) {
+
 	if (isObjectiveReached())
 		return;
 
 	float len = getBranch().getLength();
-	pos += speed * dt / len;
-	if (pos > 1.0f) {
-		pos = 0.0f;
-		path.pop();
+	mPos += mSpeed * dt.asSeconds() / len;
+	if (mPos > 1.0f) {
+		mPos = 0.0f;
+		mPath.pop();
 	}
 }
 
@@ -57,79 +57,73 @@ void Insect::setDisplayCircle(bool d)
     mDisplay = d;
 }
 
-Insect::Insect(Type mType, ID<Flower> flower, float fhitbox,
+Insect::Insect(Type mType, ID<Flower> flower, RoseTree const& rt, float fhitbox,
 		float speed, float angle) :
-	mType(mType), path(flower), hitbox(fhitbox),
-	pos(0) , speed(speed) , angle(angle)
+	mType(mType), mPath(flower), mRoseTree(rt), mHitbox(fhitbox),
+	mPos(0), mSpeed(speed), mAngle(angle)
 {
-	hitbox.setOrigin(fhitbox, fhitbox);
+	mHitbox.setOrigin(fhitbox, fhitbox);
 }
 
 
 Aphid::Aphid(AphidBehaviour::Type b, ID<Flower> spawn, RoseTree const& rt) :
-	Insect(Insect::Aphid, spawn, 10.f, 50.0f, 0.0f),
-	behaviour(b, spawn, rt)
+	Insect(Insect::RegularAphid, spawn, rt, 10.f, 50.0f, 0.0f),
+	mBehaviour(b, spawn, rt)
 {
-	move(0.f, rt);
-	path = behaviour.getPath();
+	move(sf::seconds(0.f));
+	mPath = mBehaviour.getPath();
 }
 
 
 LadyBug::LadyBug(Insect::Type type, ID<Flower> spawn, RoseTree const& rt) :
-	Insect(type, spawn, 12.f, 50.f*1.5f, 0.0f), dutyPath(spawn)
+	Insect(type, spawn, rt, 12.f, 50.f*1.5f, 0.0f), mDutyPath(spawn)
 {
-	move(0.f, rt);
+	// Juste pour faire la mise au point du path
+	move(sf::seconds(0.f));
 //	path.addBranch(spawn, spawnBranch);
 //	path.addBranch(g[spawnBranch].getFirstNode(), spawnBranch);
 //	path = AphidBehaviour(AphidBehaviour::Offensive, spawn, g).getPath();
 }
 
-void LadyBug::redefinePath(Path<Flower> newPath, RoseTree const& rt)
+void LadyBug::redefinePath(Path<Flower> newPath)
 {
-	dutyPath = newPath;
-	if (!dutyPath.isCyclic())
-		rt.makeCyclic(dutyPath);
+	mDutyPath = newPath;
+	if (!mDutyPath.isCyclic())
+		mRoseTree.makeCyclic(mDutyPath);
 
-	ID<Flower> nextFlower = isObjectiveReached() ? getPrevFlower() : getNextFlower();
-
-	rt.getPathToCloserOf(newPath.getNodes().begin(), newPath.getNodes().end(), nextFlower, path);
-
+	std::cerr << "I'm here" << std::endl;
 	// Trouver le chemin le plus court jusqu’à l’un de ces nœuds
-	
-	/*
-	ID<Flower> objective = nextFlower;
-	float shortestDist = std::numeric_limits<float>::infinity();
-	auto flowers = newPath.getNodes();
-	for (auto id : flowers) {
-		if (rt.getDist(nextFlower, id) < shortestDist) {
-			shortestDist = rt.getDist(nextFlower, id);
-			objective = id;
-		}
+	if (isObjectiveReached())
+	{
+		mRoseTree.getPathToCloserOf(newPath.getNodes().begin(), newPath.getNodes().end(), getPrevFlower(), mPath);
 	}
-	rt.getPath(nextFlower, objective, path);
-	*/
-	path.insertNode(getPrevFlower());
-
-
+	else
+	{
+		ID<Flower> prevFlower = getPrevFlower();
+		mRoseTree.getPathToCloserOf(newPath.getNodes().begin(), newPath.getNodes().end(), getNextFlower(), mPath);
+		mPath.insertNode(prevFlower);
+	}
 }
 
 
-void LadyBug::move(float dt, RoseTree const& rt)
+void LadyBug::move(sf::Time dt)
 {
-	Insect::move(dt, rt);
+	Insect::move(dt);
+	std::cerr << "I have to move" << std::endl;
 
 	if (isObjectiveReached())
 	{
+		std::cerr << "My objective is reached (just like my tailor)." << std::endl;
 		ID<Flower> position = getPrevFlower();
-		path = dutyPath;
-		path.popUntil(position);
+		mPath = mDutyPath;
+		mPath.popUntil(position);
 	}
 }
 
-float Insect::getPos(RoseTree const& rt) const
+float Insect::getPos() const
 {
 	if (isObjectiveReached())
 		return 0.f;
 
-	return getBranch().getPos(pos, getPrevFlower());
+	return getBranch().getPos(mPos, getPrevFlower());
 }

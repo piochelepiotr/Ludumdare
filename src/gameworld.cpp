@@ -39,7 +39,7 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
 	sf::Sprite aphid;
 	aphid.setTexture(context.textures->get(Texture::ID::Aphid));
 	aphid.setOrigin(50.0f, 75.0f);
-	mInsectSprites[static_cast<int>(Insect::Aphid)] = aphid;
+	mInsectSprites[static_cast<int>(Insect::RegularAphid)] = aphid;
 
 	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
 
@@ -79,7 +79,7 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
 
 GameWorld::~GameWorld()
 {
-
+	// FIXME
 }
 
 
@@ -97,124 +97,129 @@ void GameWorld::render(sf::RenderTarget& target)
 
 	// Ensuite viennent les insectes
 	for (auto ldb : mLadyBugs) {
-		ldb->draw(target, mRoseTree, mInsectSprites[static_cast<size_t>(ldb->getType())]);
+		ldb->draw(target, mInsectSprites[static_cast<size_t>(ldb->getType())]);
 	}
 	for (auto &apd : mAphids) {
-		apd->draw(target, mRoseTree, mInsectSprites[static_cast<size_t>(Insect::Aphid)]);
+		apd->draw(target, mInsectSprites[static_cast<size_t>(Insect::RegularAphid)]);
 	}
 }
 
-Insect* GameWorld::spawnInsect(Insect::Type type, ID<Flower> flower)
+Aphid& GameWorld::spawnAphid(ID<Flower> flower)
 {
-	if (type == Insect::Aphid)
+	mAphids.push_back(new Aphid(AphidBehaviour::Offensive, flower, mRoseTree));
+	return *mAphids.back();
+}
+
+LadyBug& GameWorld::spawnLadyBug(ID<Flower> flower, LadyBug::Type type)
+{
+	LadyBug& ladybug = *(new LadyBug(type, flower, mRoseTree));
+	mLadyBugs.push_back(&ladybug);
+	// TODO Doit-on donner un chemin par défaut aux LadyBug ?
+	// TODO Cela dépend du type de LadyBug, non ?
+	// TODO Peut-être attendre un clic ici pour que LadyBug apparaîsse…
+	// Pour l’instant, on va lui donner un chemin par défaut :
+	//		Elle va jusqu’à un nœud voisin de la fleur et elle revient;
+	//		Si il n’y a pas de voisin, elle reste là…
+	auto& neighbours = mRoseTree.getNeighbours(flower);
+	if (!neighbours.empty())
 	{
-		mAphids.push_back(new Aphid(AphidBehaviour::Offensive, flower, mRoseTree));
-		return *mAphids.end();
-	} else {
-		mLadyBugs.push_back(new LadyBug(type, flower, mRoseTree));
-		mAnchorPool.addAnchor<InsectAnchorListener>(AnchorItem(20.f), *mLadyBugs.back());
-		return * --mLadyBugs.end();
+		Path<Flower> p(flower);
+		p.addNode(*neighbours.begin());
+		ladybug.redefinePath(p);
 	}
+	mAnchorPool.addAnchor<InsectAnchorListener>(AnchorItem(20.f), ladybug);
+	return ladybug;
 }
 
 ID<Flower> GameWorld::spawnNode(sf::Vector2f position, Flower::Type type)
 {
-	// TODO FIXME
+	// TODO: Peut-être qu’il n’y a pas que ça à faire
 	return mRoseTree.addFlower(position, type);
 }
 
 
 void GameWorld::update(sf::Time dt)
 {
-  for (auto &ldb : mLadyBugs)
-  {
-    if (!ldb->getBusy())
-        ldb->move(dt.asSeconds(), mRoseTree);
-    ldb->setBusyTime(ldb->getBusyTime() + dt);
-    if (ldb->getBusyTime() > sf::seconds(3))
-    {
-        ldb->setBusy(false);
-        ldb->setBusyTime(sf::seconds(0));
-    }
-    for (unsigned int i=0; i<mAphids.size(); ++i)
-    {
-        Aphid *apd = mAphids[i];
-        if (ldb->getBranchID() == apd->getBranchID())
-        {
-			// TODO Faudrait changer ça…
-            if (ldb->getPos(mRoseTree) < apd->getPos(mRoseTree)+0.1
-				&& ldb->getPos(mRoseTree) > apd->getPos(mRoseTree)-0.1
-				&& !ldb->getBusy())
-            {
-                ldb->setBusy(true);
-                mAphids.erase(mAphids.begin()+i);
-            }
-        }
-    }
-  }
-  for (unsigned int i=0; i<mAphids.size(); ++i)
-  {
-    Aphid *apd = mAphids[i];
-    apd->move(dt.asSeconds(), mRoseTree);
-    if (apd->isObjectiveReached())
-    {
-        ID<Flower> flower = apd->getPrevFlower();
-		if (mRoseTree[flower].loseOnePoint())
-			mRoseTree.removeFlower(flower);
-		/*
-        for (unsigned int j=0; j<mRoseTree.getFlowerNumber(); ++j)
-        {
-            Flower *flower = mFlowers[j];
-            if (Node::ID(*flower) == node)
-            {
-                if (flower->loseOnePoint())
-                {
-                    mFlowers.erase(mFlowers.begin()+i);
-                }
-            }
-        }
-		*/
-        mAphids.erase(mAphids.begin()+i);
-    }
-  }
-  /* FIXME Il faut y faire quelque chose, pour l’instant on fait rien…
-  for (auto flowerID : mRoseTree.getFlowers()) {
-	Flower& flower = mRoseTree[flowerID];
-    bool isReady = flower.update(dt);
-    if (isReady)
-    {
-        Flower::Type type = flower.getType();
-        if (type == Flower::AphidFlower)
-        {
-            if (flower.getCurrentTime() > sf::seconds(4))
-            {
-                spawnInsect(Insect::Aphid, Node::ID(*flower));
-                flower.setCurrentTime(sf::seconds(0));
-            }
-        }
-        if (type == Texture::ID::LadyBugFlower)
-        {
-			ID<Flower> flower = *flower;
-            LadyBug* ladybug = static_cast<LadyBug*>(spawnInsect(Insect::BlackLadybug, node));
+	// Commençons par mettre à jour les LadyBugs
+	for (auto ladybug : mLadyBugs)
+	{
+		std::cerr << "This is a good meal, don't you think ?\n";
+		// Si ladybug n’est pas déjà en train de manger,
+		// elle mange un Aphid assez proche sur sa branche
+		if (ladybug->isEating())
+		{
+			std::cerr << "This is a good meal, don't you think ?\n";
+			ladybug->decreaseEatingTime(dt);
+		}
+		else
+		{
+			ladybug->move(dt);
 
-			// TODO Doit-on donner un chemin par défaut aux LadyBug ?
-			// TODO Peut-être attendre un clic ici pour que LadyBug apparaîsse…
-			// Pour l’instant, on va lui donner un chemin par défaut :
-			//		Elle va jusqu’à un nœud voisin de la fleur et elle revient;
-			//		Si il n’y a pas de voisin, elle reste là…
-			auto& nh = mGraph->getNeighbours(node);
-			if (nh.size() > 0)
+			ID<Branch> currentBranch = ladybug->getBranchID();
+			float currentPos = ladybug->getPos();
+
+			for (auto it = mAphids.begin() ; it != mAphids.end() ; ++it)
 			{
-				Path p(node);
-				p.addBranch(nh.begin()->second);
-				ladybug->redefinePath(p, *mGraph);
+				Aphid& aphid = **it;
+				// TODO Il faudrait changer ces conditions
+				if (aphid.getBranchID() == currentBranch &&
+						abs(currentPos - aphid.getPos()) < 0.1f)
+				{
+					ladybug->eatAnAphid(aphid);
+					delete &aphid;
+					mAphids.erase(it);
+					break;
+				}
 			}
+		}
+	}
 
-            flower->becameNode();
-        }
-    }
-  }
-  */
+	// On s’occupe des Aphids. Si l’un d’entre eux atteint une fleur,
+	// alors il se suicide, et enlève un point à la fleur.
+	// Comme il est plus facile d’ajouter en fin de tableau que de supprimer,
+	// on crée un nouveau tableau auquel on n'ajoute tous ceux qu’on enlève pas
+	// (tordu, n’est-il pas ? c’est pourquoi TODO Changer ça (ou pas))
+	std::vector<Aphid*> newAphids;
+	for (auto aphid : mAphids)
+	{
+		aphid->move(dt);
+		if (aphid->isObjectiveReached())
+		{
+			ID<Flower> flower = aphid->getPrevFlower();
+			// FIXME Heu, ça va buguer si un aphid est sur cette branche…
+			if (!mRoseTree[flower].loseOnePoint())
+				mRoseTree.removeFlower(flower);
+			delete aphid;
+		}
+		else
+		{
+			newAphids.push_back(aphid);
+		}
+	}
+	mAphids = std::move(newAphids);
+
+	// Et maintenant, les fleurs. Il faut juste libérer, délivrer les insectes
+	// qui peuvent l’être.
+	for (auto& ID_n_flower : mRoseTree.getFlowers())
+	{
+		Flower& flower = ID_n_flower.second;
+		if (flower.update(dt))
+		{
+			switch(flower.getType())
+			{
+				case Flower::AphidFlower:
+					spawnAphid(ID_n_flower.first);
+					flower.setTimeLeft(sf::seconds(2)); // TODO Ne pas le fixer à 2
+					break;
+				case Flower::LadybugFlower:
+					spawnLadyBug(ID_n_flower.first, Insect::BlackLadybug);
+					flower.becomeNode(); // Doit-on faire ça ?
+					break;
+				default:
+					break;
+			}
+		}
+	}
 }
 
 

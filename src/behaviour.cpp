@@ -10,11 +10,14 @@
 class IsAphidTarget
 {
 	public:
-	bool operator () (Flower& f)
+	IsAphidTarget(RoseTree const& rt) : mRoseTree(rt) {};
+	bool operator () (ID<Flower> f)
 	{
-		return f.getType() == Flower::Type::RegularFlower
-			|| f.getType() == Flower::Type::LadybugFlower;
+		Flower::Type type = mRoseTree[f].getType();
+		return type == Flower::Type::RegularFlower
+			|| type == Flower::Type::LadybugFlower;
 	}
+	RoseTree const& mRoseTree;
 };
 
 
@@ -95,7 +98,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::Type type, ID<Flower> spawningFlo
 			rt.getPath(spwaningFlower, min_flowerID, mPath);
 		*/
 
-		rt.getPathToCloserWith(spawningFlower, mPath, IsAphidTarget());
+		rt.getPathToCloserWith(spawningFlower, mPath, IsAphidTarget(rt));
     }
 	// Si le puceron est Dumb, on va au nœud le plus proche
 	// Si le puceron est Coward, on va au nœud avec le moins de coccinelle
@@ -118,7 +121,7 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::Type type, ID<Flower> spawningFlo
         while (graph[newNode].getType() == Texture::ID::RegularNode && j<5)
         {
             Branch::ID newBranch = choice(id, newNode, previousNode, graph);
-            mPath.addBranch(newBranch); // FIXME assurer l'identifiant, WARNING copie de branche // TODO C’est réglé, non ?
+            mPath.addBranch(newBranch);
             previousNode = newNode;
             if (!(graph[newBranch].getFirstNode() == newNode))
 			{

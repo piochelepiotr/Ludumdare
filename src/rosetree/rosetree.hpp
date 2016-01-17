@@ -1,11 +1,8 @@
 #pragma once
-#include <iostream> // TODO Do we need this ?
+#include <iostream>
 #include "rosetree/graph.hpp"
-//#include "rosetree/flower.hpp"
-//#include "rosetree/branch.hpp"
 #include "rosetree/path.hpp"
 #include "rosetree/branch.hpp"
-//#include <SFML/Graphics.hpp>
 
 //class Branch;
 class Flower;
@@ -21,6 +18,7 @@ class RoseTree
 		Flower& getFlower(ID<Flower> f);
 		Flower& operator [] (ID<Flower> f);
 		IDstaticmap<Flower> const& getFlowers() const;
+		IDstaticmap<Flower>& getFlowers();
 		std::set<ID<Flower> > const getNeighbours(ID<Flower> f) const;
 
 		// Branchs
@@ -81,8 +79,8 @@ ID<Flower> RoseTree::addFlower(Args&&... args)
 
 template <typename Iterator>
 void RoseTree::getPathToCloserOf(Iterator begin, Iterator end, ID<Flower> f1, Path<Flower>& path) const
-{ getPathToCloserOf(begin, end, f1, path); }
+{ mGraph.getPathToCloserOf(begin, end, f1, path); }
 
 template <typename Pred>
 void RoseTree::getPathToCloserWith(ID<Flower> f1, Path<Flower>& path, Pred p) const
-{ getPathToCloserWith(f1, path, p); }
+{ mGraph.getPathToCloserWith(f1, path, p); }

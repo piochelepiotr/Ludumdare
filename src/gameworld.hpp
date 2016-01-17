@@ -26,7 +26,8 @@ class GameWorld
 
 		void update (sf::Time dt);
 
-		Insect* spawnInsect (Insect::Type type, ID<Flower> flower);
+		Aphid& spawnAphid (ID<Flower> flower);
+		LadyBug& spawnLadyBug (ID<Flower> flower, Insect::Type type);
 
 		ID<Flower> spawnNode (sf::Vector2f position, Flower::Type type);
 

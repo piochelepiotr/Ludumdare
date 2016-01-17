@@ -23,12 +23,15 @@ Flower& RoseTree::getFlower(ID<Flower> f)
 Flower& RoseTree::operator [] (ID<Flower> f)
 { return mFlowers[f]; }
 
-// TODO These two should be inlined
+// TODO These three should be inlined
 /* // TODO not very good, I think
 std::set<ID<Flower> > const RoseTree::getFlowers() const
 { return mGraph.getNodes(); }
 */
 IDstaticmap<Flower> const& RoseTree::getFlowers() const
+{ return mFlowers; }
+
+IDstaticmap<Flower>& RoseTree::getFlowers()
 { return mFlowers; }
 
 std::set<ID<Flower> > const RoseTree::getNeighbours(ID<Flower> f) const
@@ -112,30 +115,25 @@ void RoseTree::load(std::istream& is)
 	while (is && (is >> str, str != "branchs"))
 	{
 		sf::Vector2f v;
-		std::string type;
+		int type;
 
 		v.x = stof(str);
 		is >> v.y >> type;
 		temporaryIDs.insert(std::make_pair(currentID,
-					addFlower(v, Flower::typeFromString(type))));
-		currentID++;
+					addFlower(v, static_cast<Flower::Type>(type))));
+		++currentID;
 	}
-	std::cout << "In RoseTree::load(istream&): currentID = " << currentID << std::endl;
 
 	// Puis on ajoute les branches
-		std::cout << "In RoseTree::load(istream&): I loooooop! " << mFlowers.size() << ' ' << mBranchs.size() << ' ' << mGraph.getNodeNumber() << ' ' << mGraph.getEdgeNumber() << std::endl;
 	if (str != "branchs")
 		is.setstate(is.failbit);
-	std::cout << "In RoseTree::load(istream&): Here i am" << std::endl;
-	while (is)
+	while (is >> str && is)
 	{
 		unsigned int f1, f2;
-		is >> f1 >> f2;
+		f1 = stoul(str);
+		is >> f2;
 		addBranch(temporaryIDs.find(f1)->second, temporaryIDs.find(f2)->second);
-		std::cout << "In RoseTree::load(istream&): I loooooop! " << mFlowers.size() << ' ' << mBranchs.size() << ' ' << mGraph.getNodeNumber() << ' ' << mGraph.getEdgeNumber() << std::endl;
 	}
-
-	std::cout << "In RoseTree::load(istream&):" << std::endl;
 }
 
 void RoseTree::save(std::ostream& os) const
@@ -151,6 +149,7 @@ void RoseTree::save(std::ostream& os) const
 		currentID++;
 		os << '\t' << id_flower.second.getPosition().x << ' ';
 		os << id_flower.second.getPosition().y << ' ';
+		// TODO : Pour l’instant, on passe par les int pour le type, mais ce n’est pas une bonne idée…
 		os << id_flower.second.getType() << std::endl;
 	}
 

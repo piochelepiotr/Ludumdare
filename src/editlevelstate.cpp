@@ -118,7 +118,6 @@ void EditLevelState::onFlowerReleased(ID<Flower> flower, sf::Mouse::Button butto
 					removeFlower(flower);
 					break;
 				case sf::Mouse::Left:
-					// FIXME
 					mRoseTree[flower].changeType();
 					break;
 				default:

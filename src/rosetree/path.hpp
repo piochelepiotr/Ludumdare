@@ -59,7 +59,7 @@ template <typename Node>
 std::pair<ID<Node>, ID<Node> > Path<Node>::getTwoFirstNodes() const
 {
 	auto it = mPath.begin();
-	return std::make_pair(*it, *(++it));
+	return std::make_pair(*it, *(it+1));
 }
 
 template <typename Node>
