@@ -34,7 +34,7 @@ bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
 
 bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 {
-	// FIXME améliorer en prenant en compte le rayon
+	// TODO améliorer en prenant en compte le rayon
 
 	float min_distance = std::numeric_limits<float>::infinity();
 	auto min_it = mAnchors.end();

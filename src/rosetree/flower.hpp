@@ -10,10 +10,9 @@ class Flower
 		RegularFlower,
 		AphidFlower,
 		LadybugFlower,
-		None
-	// Pour la fonction changeType, None doit être en dernier
+		Node,
+		TypeEnumSize // Permet de connaître la taille de cette enum
 	};
-	static Type typeFromString(std::string str);
 
 	//Flower() = delete;
 	Flower(sf::Vector2f position, Type type);
@@ -23,7 +22,7 @@ class Flower
 	// Le type de la fleur devient t
 	void setType(Type t);
 	// Passe au type suivant, et renvoie le nouveau type
-	Type changeType();
+	Type nextType();
 
 	// Fait perdre un point à la fleur, renvoie false si elle n’a plus de vie
 	bool loseOnePoint();
@@ -53,3 +52,7 @@ class Flower
 	int mLife;
 	sf::Time mTimeLeft;
 };
+
+
+std::ostream& operator<<(std::ostream& os, Flower::Type const& type);
+std::istream& operator>>(std::istream& is, Flower::Type& type);

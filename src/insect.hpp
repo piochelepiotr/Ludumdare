@@ -52,7 +52,7 @@ class LadyBug : public Insect {
 	void move(sf::Time dt);
 	// void setBusy(bool bo) {busy = bo;};
 	//sf::Time getBusyTime() { return busyTime; };
-	void eatAnAphid(Aphid& aphid) { mEatingTime = sf::seconds(1); }
+	void eatAnAphid(Aphid& aphid) { mEatingTime = sf::seconds(0.2f); }
 	bool isEating() { return mEatingTime > sf::seconds(0); }
 	void decreaseEatingTime(sf::Time dt) { mEatingTime -= dt; }
 

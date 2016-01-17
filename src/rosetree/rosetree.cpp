@@ -85,8 +85,8 @@ IDstaticmap<Branch> const& RoseTree::getBranchs() const
 { return mBranchs; }
 
 
-// Paths FIXME TODO
-
+// Path
+// TODO Inline it
 float RoseTree::getDist(ID<Flower> f1, ID<Flower> f2) const
 { return mGraph.getDist(f1, f2); }
 void RoseTree::getPath(ID<Flower> f1, ID<Flower> f2, Path<Flower>& path) const
@@ -115,12 +115,12 @@ void RoseTree::load(std::istream& is)
 	while (is && (is >> str, str != "branchs"))
 	{
 		sf::Vector2f v;
-		int type;
+		Flower::Type type;
 
 		v.x = stof(str);
 		is >> v.y >> type;
 		temporaryIDs.insert(std::make_pair(currentID,
-					addFlower(v, static_cast<Flower::Type>(type))));
+					addFlower(v, type)));
 		++currentID;
 	}
 

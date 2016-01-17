@@ -7,7 +7,7 @@ class SelectorWidget : public Widget
 {
 	public:
 		using TriggerFun = std::function<void(int)>;
-		
+
 		SelectorWidget(sf::Font& font, TriggerFun callback=[](int){});
 		
 		void 

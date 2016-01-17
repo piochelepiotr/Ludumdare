@@ -73,6 +73,7 @@ class PonderateGraph : public Graph<Node, Edge>
 		void makeCyclic(Path<Node>& path) const;
 		// Met dans path le plus court chemin entre n1
 		// et le plus proche nœud de [begin, end)
+		// /!\ : il se passe des trucs bizarres s’il n’y a plus rien à atteindre
 		template <typename Iterator>
 		void getPathToCloserOf(Iterator begin, Iterator end,
 				ID<Node> n1, Path<Node>& path) const;

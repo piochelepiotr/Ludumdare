@@ -1,5 +1,6 @@
 #include <IHM/selectorwidget.hpp>
 #include <algorithm>
+#include <iostream>
 
 SelectorWidget::SelectorWidget(sf::Font& font, TriggerFun callback) :
 	mCallback()
@@ -99,7 +100,7 @@ void SelectorWidget::removeEntry ( int id )
 
 void SelectorWidget::render ( sf::RenderTarget& target, sf::RenderStates states ) const
 {
-	//FIXME dessin de l'entry [mCursor]
+	//TODO dessin de l'entry [mCursor]
 	//states.transform.translate(getPosition());
 	target.draw(mText, states);
 }

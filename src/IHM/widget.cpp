@@ -40,7 +40,7 @@ Widget::focus ()
 void
 Widget::setFocusGroup (FocusGroup* group)
 {
-	//FIXME Completer
+	//FIXME? Completer
 	if (mFocusGroup == group) return;
 	
 	if (mFocusGroup)

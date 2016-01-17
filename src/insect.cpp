@@ -109,7 +109,6 @@ void LadyBug::redefinePath(Path<Flower> newPath)
 void LadyBug::move(sf::Time dt)
 {
 	Insect::move(dt);
-	std::cerr << "I have to move" << std::endl;
 
 	if (isObjectiveReached())
 	{

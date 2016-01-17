@@ -118,7 +118,7 @@ void EditLevelState::onFlowerReleased(ID<Flower> flower, sf::Mouse::Button butto
 					removeFlower(flower);
 					break;
 				case sf::Mouse::Left:
-					mRoseTree[flower].changeType();
+					mRoseTree[flower].nextType();
 					break;
 				default:
 					break;
@@ -181,7 +181,7 @@ void EditLevelState::updateAnchors()
 
 void EditLevelState::drawFlower(sf::RenderTarget& target, Flower const& flower) const
 {
-	if (flower.getType() == Flower::Type::None)
+	if (flower.getType() == Flower::Node)
 		return;
 	sf::Transform transform;
 	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);

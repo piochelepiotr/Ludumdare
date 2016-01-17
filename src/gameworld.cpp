@@ -2,6 +2,7 @@
 #include <iostream>
 #include <insectanchorlistener.hpp>
 #include "rosetree/flower.hpp"
+#include <cmath>
 //GameWorld::GameWorld()
 //{
 
@@ -24,21 +25,25 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
 	sf::Sprite redLdb;
 	redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
 	redLdb.setOrigin(50.0f, 70.0f);
+	redLdb.setScale(.9f, .9f);
 	mInsectSprites[static_cast<int>(Insect::RedLadybug)] = redLdb;
 
 	sf::Sprite redBlackLdb;
 	redBlackLdb.setTexture(context.textures->get(Texture::ID::DefensiveLadyBug));
 	redBlackLdb.setOrigin(50.0f, 70.0f);
+	redBlackLdb.setScale(.9f, .9f);
 	mInsectSprites[static_cast<int>(Insect::RedBlackLadybug)] = redBlackLdb;
 
 	sf::Sprite blackLdb;
 	blackLdb.setTexture(context.textures->get(Texture::ID::OffensiveLadyBug));
 	blackLdb.setOrigin(50.0f, 70.0f);
+	blackLdb.setScale(.9f, .9f);
 	mInsectSprites[static_cast<int>(Insect::BlackLadybug)] = blackLdb;
 
 	sf::Sprite aphid;
 	aphid.setTexture(context.textures->get(Texture::ID::Aphid));
 	aphid.setOrigin(50.0f, 75.0f);
+	aphid.setScale(0.6f, 0.6f);
 	mInsectSprites[static_cast<int>(Insect::RegularAphid)] = aphid;
 
 	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
@@ -79,7 +84,12 @@ GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite bla
 
 GameWorld::~GameWorld()
 {
-	// FIXME
+	// TODO Est-ce suffisant ?
+	for (auto ladybug : mLadyBugs)
+		delete ladybug;
+
+	for (auto aphid : mAphids)
+		delete aphid;
 }
 
 
@@ -143,14 +153,10 @@ void GameWorld::update(sf::Time dt)
 	// Commençons par mettre à jour les LadyBugs
 	for (auto ladybug : mLadyBugs)
 	{
-		std::cerr << "This is a good meal, don't you think ?\n";
 		// Si ladybug n’est pas déjà en train de manger,
 		// elle mange un Aphid assez proche sur sa branche
 		if (ladybug->isEating())
-		{
-			std::cerr << "This is a good meal, don't you think ?\n";
 			ladybug->decreaseEatingTime(dt);
-		}
 		else
 		{
 			ladybug->move(dt);
@@ -163,7 +169,7 @@ void GameWorld::update(sf::Time dt)
 				Aphid& aphid = **it;
 				// TODO Il faudrait changer ces conditions
 				if (aphid.getBranchID() == currentBranch &&
-						abs(currentPos - aphid.getPos()) < 0.1f)
+						std::abs(currentPos - aphid.getPos()) < 0.1f)
 				{
 					ladybug->eatAnAphid(aphid);
 					delete &aphid;
@@ -185,10 +191,10 @@ void GameWorld::update(sf::Time dt)
 		aphid->move(dt);
 		if (aphid->isObjectiveReached())
 		{
-			ID<Flower> flower = aphid->getPrevFlower();
-			// FIXME Heu, ça va buguer si un aphid est sur cette branche…
-			if (!mRoseTree[flower].loseOnePoint())
-				mRoseTree.removeFlower(flower);
+			Flower& flower = mRoseTree[aphid->getPrevFlower()];
+			// TODO Est-ce ce qu’il faut faire ?
+			if (!flower.loseOnePoint())
+				flower.becomeNode();
 			delete aphid;
 		}
 		else
@@ -209,7 +215,7 @@ void GameWorld::update(sf::Time dt)
 			{
 				case Flower::AphidFlower:
 					spawnAphid(ID_n_flower.first);
-					flower.setTimeLeft(sf::seconds(2)); // TODO Ne pas le fixer à 2
+					flower.setTimeLeft(sf::seconds(0.9f)); // TODO Ne pas le fixer à 2
 					break;
 				case Flower::LadybugFlower:
 					spawnLadyBug(ID_n_flower.first, Insect::BlackLadybug);
@@ -225,7 +231,7 @@ void GameWorld::update(sf::Time dt)
 
 void GameWorld::drawFlower(sf::RenderTarget& target, Flower const& flower) const
 {
-	if (flower.getType() == Flower::Type::None)
+	if (flower.getType() == Flower::Node)
 		return;
 	sf::Transform transform;
 	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);
