@@ -1,6 +1,5 @@
 #include <IHM/widget.hpp>
 #include <IHM/focusgroup.hpp>
-#include <iostream>
 
 Widget::~Widget()
 {

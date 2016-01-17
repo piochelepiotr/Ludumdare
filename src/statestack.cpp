@@ -1,9 +1,7 @@
 #include "statestack.hpp"
-#include <functional>
-#include <iostream>
-#include <assert.h>
+#include <cassert>
 
-StateStack::StateStack(State::Context context)
+StateStack::StateStack(StateContext context)
 : mStack()
 , mPendingList()
 , mContext(context)

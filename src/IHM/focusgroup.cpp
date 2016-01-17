@@ -1,7 +1,5 @@
 #include <IHM/focusgroup.hpp>
 #include <IHM/widget.hpp>
-#include <algorithm>
-#include <iostream>
 
 FocusGroup* FocusGroup::mCurrentFocusGroup = nullptr;
 

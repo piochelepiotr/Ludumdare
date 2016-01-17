@@ -4,11 +4,12 @@
 
 #include <IHM/textbutton.hpp>
 #include <IHM/verticalmenu.hpp>
+#include <IHM/focusgroup.hpp>
 
 class TitleState : public State
 {
     public:
-        TitleState(StateStack& mystack, Context context);
+        TitleState(StateStack& mystack, StateContext context);
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);

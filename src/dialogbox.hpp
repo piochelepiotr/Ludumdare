@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <IHM/widget.hpp>
 
 namespace Orientation {
 	enum Orientation {

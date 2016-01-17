@@ -1,10 +1,9 @@
 #pragma once
 
-#include<SFML/Graphics.hpp>
+// TODO
 
 class GameOverlay
 {
-
 };
 
 

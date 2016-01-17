@@ -1,10 +1,7 @@
 #pragma once
-#include <iostream>
 #include "rosetree/graph.hpp"
-#include "rosetree/path.hpp"
-#include "rosetree/branch.hpp"
 
-//class Branch;
+class Branch;
 class Flower;
 
 class RoseTree

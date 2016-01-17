@@ -1,19 +1,13 @@
 #pragma once
 #include "state.hpp"
 #include "gameworld.hpp"
-#include "dialogbox.hpp"
-//#include "graph/graph.hpp"
-#include <IHM/dialogbutton.hpp>
-
-
 #include "editor/anchorpool.hpp"
-#include "gamestateanchorlistener.hpp"
 
 
 class GameState : public State
 {
     public:
-        GameState(StateStack& mystack, Context context);
+        GameState(StateStack& mystack, StateContext context);
         virtual ~GameState();
         virtual void draw();
         virtual bool update(sf::Time dt);
@@ -30,8 +24,6 @@ class GameState : public State
 
 	private:
 		GameWorld mGameWorld;
-		RoseTree mRoseTree;
-
 		AnchorPool mAnchors;
 		ID<Flower> mDraggedFlower;
 		bool mIsDragged;

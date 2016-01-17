@@ -1,15 +1,15 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "state.hpp"
 
 #include <IHM/textbutton.hpp>
 #include <IHM/verticalmenu.hpp>
 #include <IHM/selectorwidget.hpp>
+#include <IHM/focusgroup.hpp>
 
 class MenuState : public State
 {
     public:
-        MenuState (StateStack& mystack, Context context);
+        MenuState (StateStack& mystack, StateContext context);
         virtual void draw();
         virtual bool update(sf::Time dt);
         virtual bool handleEvent(const sf::Event& event);

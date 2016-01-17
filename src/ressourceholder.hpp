@@ -1,7 +1,8 @@
 #pragma once
 #include <map>
-#include "cpp_std_11.hpp"
-#include <assert.h>
+//#include "cpp_std_11.hpp"
+#include <cassert>
+#include <memory>
 
 template <typename Resource, typename Identifier>
 class ResourceHolder
@@ -28,6 +29,6 @@ template <typename Resource, typename Identifier>
 Resource& ResourceHolder<Resource, Identifier>::get(Identifier id)
 {
     auto found = mResourceMap.find(id);
-    assert(found != mResourceMap.end());
+	assert(found != mResourceMap.end());
     return *found->second;
 }

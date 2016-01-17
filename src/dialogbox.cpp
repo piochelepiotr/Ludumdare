@@ -1,4 +1,4 @@
-#include <dialogbox.hpp>
+#include "dialogbox.hpp"
 #include <IHM/dialogbutton.hpp>
 
 DialogBox::DialogBox ( const sf::Font& font, const sf::String& text )

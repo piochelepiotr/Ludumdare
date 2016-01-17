@@ -1,10 +1,10 @@
 #include "application.hpp"
 #include "titlestate.hpp"
 #include "gamestate.hpp"
-#include <menustate.hpp>
+#include "menustate.hpp"
 #include "editlevelstate.hpp"
 
-Application::Application(State::Context context)
+Application::Application(StateContext context)
 : mStateStack(context)
 , mWindow(context.window)
 {

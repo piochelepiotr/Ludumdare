@@ -1,5 +1,4 @@
 #include <IHM/textbutton.hpp>
-#include <iostream>
 
 TextButton::TextButton (sf::Font& font, TextButton::TriggerFun callback) : 
 	TextButton("button",font, callback)

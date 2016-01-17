@@ -4,7 +4,7 @@
 class Application
 {
     public:
-        Application(State::Context context);
+        Application(StateContext context);
         void registerStates();
         void processInput();
         void update(sf::Time dt);

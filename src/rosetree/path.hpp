@@ -1,5 +1,6 @@
 #pragma once
 #include <deque>
+#include "id.hpp"
 
 template <typename Node>
 class Path

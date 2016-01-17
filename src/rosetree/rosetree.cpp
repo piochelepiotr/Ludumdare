@@ -1,12 +1,13 @@
 #include "rosetree/rosetree.hpp"
 #include "rosetree/branch.hpp"
 #include "rosetree/flower.hpp"
+#include <istream>
 
 // Flowers
 
 void RoseTree::removeFlower(ID<Flower> f)
 {
-	std::cout << "RoseTree::removeFlower" << std::endl;
+	//std::cout << "RoseTree::removeFlower" << std::endl;
 	mFlowers.removeObj(f);
 	auto branchsToRemove = mGraph.removeNode(f);
 	for (ID<Branch> b : branchsToRemove)
@@ -24,10 +25,6 @@ Flower& RoseTree::operator [] (ID<Flower> f)
 { return mFlowers[f]; }
 
 // TODO These three should be inlined
-/* // TODO not very good, I think
-std::set<ID<Flower> > const RoseTree::getFlowers() const
-{ return mGraph.getNodes(); }
-*/
 IDstaticmap<Flower> const& RoseTree::getFlowers() const
 { return mFlowers; }
 
@@ -48,7 +45,7 @@ ID<Branch> RoseTree::addBranch(ID<Flower> f1, ID<Flower> f2)
 
 void RoseTree::removeBranch(ID<Branch> b)
 {
-	std::cout << "RoseTree::removeBranch" << std::endl;
+	//std::cout << "RoseTree::removeBranch" << std::endl;
 	mBranchs.removeObj(b);
 	mGraph.removeEdge(b);
 }
@@ -57,7 +54,7 @@ void RoseTree::removeBranch(ID<Flower> f1, ID<Flower> f2)
 { removeBranch(mGraph.getEdge(f1, f2)); }
 void RoseTree::softRemoveBranch(ID<Branch> b)
 { 
-	std::cout << "RoseTree::softRemoveBranch" << std::endl;
+	//std::cout << "RoseTree::softRemoveBranch" << std::endl;
 	mBranchs.removeObj(b);
 }
 

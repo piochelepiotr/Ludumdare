@@ -1,17 +1,11 @@
 #include <editor/anchorpool.hpp>
 #include <editor/anchoractionlistener.hpp>
 #include <SFML/Window/Event.hpp>
-#include <utility>
-#include <iostream>
-#include <limits>
 #include "utils.hpp"
+#include <limits>
 
 AnchorPool::~AnchorPool()
 {
-	/*
-    for (auto ptr : mAnchorPtrs)
-	delete ptr;
-	*/
 	for (auto& pair : mAnchors)
 		delete pair.first;
 }

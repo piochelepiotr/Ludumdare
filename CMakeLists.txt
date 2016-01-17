@@ -10,16 +10,12 @@ FIND_PACKAGE(SFML COMPONENTS audio graphics window system REQUIRED)
 SET(
     SRCS
 	src/rosetree/rosetree.cpp
-#	src/rosetree/graph.cpp
 	src/rosetree/branch.cpp
 	src/rosetree/flower.cpp
-	src/id.cpp
 	src/application.cpp
-	src/textureholder.cpp
 	src/titlestate.cpp
 	src/state.cpp
 	src/statestack.cpp
-	src/font.cpp
 	src/gamestate.cpp
 	src/gameworld.cpp
 	src/player.cpp
@@ -30,10 +26,6 @@ SET(
 	src/IHM/focusgroup.cpp
 	src/IHM/selectorwidget.cpp
 	src/IHM/dialogbutton.cpp
-#	src/graph/graph.cpp
-#	src/graph/node.cpp
-#	src/graph/branch.cpp
-#	src/path.cpp
 	src/math/spline.cpp
 	src/editor/anchoritem.cpp
 	src/editor/anchorpool.cpp
@@ -44,8 +36,6 @@ SET(
 	src/behaviour.cpp
 	src/editlevelstate.cpp
 	src/dialogbox.cpp
-#	src/graph/flower.cpp
-	src/utils.cpp
 	src/insectanchorlistener.cpp
     src/main.cpp
 )

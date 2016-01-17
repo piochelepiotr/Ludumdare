@@ -5,13 +5,14 @@
 #include "editor/anchorpool.hpp"
 #include "editor/nodeanchorlistener.hpp"
 #include "rosetree/rosetree.hpp"
+#include "textureholder.hpp"
 
 // TODO: Dans l’éditeur, les fleurs None devrait être affichée
 // TODO Il y a quelques redondances avec GameWorld…
 class EditLevelState : public State
 {
 	public:
-	EditLevelState(StateStack& mystack, Context context);
+	EditLevelState(StateStack& mystack, StateContext context);
 	virtual ~EditLevelState();
 	virtual void draw();
 	virtual bool update(sf::Time dt);

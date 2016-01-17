@@ -1,9 +1,7 @@
 #pragma once
 #include "state.hpp"
-#include <map>
-#include <vector>
-#include "cpp_std_11.hpp"
-#include <SFML/System.hpp>
+//#include "cpp_std_11.hpp"
+
 
 class StateStack : private sf::NonCopyable
 {
@@ -15,7 +13,7 @@ class StateStack : private sf::NonCopyable
             Clear,
         };
     public:
-        StateStack(State::Context context);
+        StateStack(StateContext context);
         template <typename T>
         void registerState(States::ID stateID);
         void update(sf::Time dt);
@@ -38,7 +36,7 @@ class StateStack : private sf::NonCopyable
     private:
         std::vector<State::Ptr> mStack;
         std::vector<PendingChange> mPendingList;
-        State::Context mContext;
+        StateContext mContext;
         std::map<States::ID, std::function<State::Ptr()>> mFactories;
 };
 

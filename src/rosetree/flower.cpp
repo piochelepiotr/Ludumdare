@@ -1,6 +1,4 @@
 #include "rosetree/flower.hpp"
-#include <iostream>
-#include <map>
 #include <cassert>
 
 sf::Time getTimeFromType(Flower::Type type);

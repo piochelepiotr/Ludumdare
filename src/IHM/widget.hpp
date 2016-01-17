@@ -2,10 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <IHM/layout.hpp>
-#include <IHM/focusgroup.hpp>
-
 #include <observable.hpp>
+
+class FocusGroup;
 
 /// @brief : base class for widget with conveniance function for alignment purpose
 class Widget : public sf::Drawable, public Observable<Updatable>

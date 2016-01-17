@@ -1,50 +1,44 @@
 #include "gameworld.hpp"
-#include <iostream>
-#include <insectanchorlistener.hpp>
-#include "rosetree/flower.hpp"
-#include <cmath>
-//GameWorld::GameWorld()
-//{
+#include "textureholder.hpp"
+#include "insectanchorlistener.hpp"
+#include "editor/anchorpool.hpp"
+#include "rosetree/branch.hpp"
+#include "statecontext.hpp"
 
-//}
-
-//GameWord
-
-GameWorld::GameWorld(/*sf::Sprite redLdb, sf::Sprite redBlackLdb, sf::Sprite blackLdb, sf::Sprite aphid, sf::Sprite backGround, */RoseTree& rt, AnchorPool& anchor, State::Context& context)
-	: mRoseTree(rt)
-	, mLadyBugs()
-	, mAphids()
-//	, mFlowers()
-	, mBackGround(/*backGround*/)
-    , mInsectSprites()
-    , mCapacity(3)
-    , mUsedCapacity(0)
-    , mAnchorPool(anchor)
+GameWorld::GameWorld(AnchorPool& anchor, StateContext& context) :
+	mLadyBugs(),
+	mAphids(),
+	mBackGround(/*backGround*/),
+    mInsectSprites(),
+    mCapacity(3),
+    mUsedCapacity(0),
+    mAnchorPool(anchor)
 {
 	// TODO Tout ça, ça ne devrait pas être fait ici…
 	sf::Sprite redLdb;
 	redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
 	redLdb.setOrigin(50.0f, 70.0f);
 	redLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(Insect::RedLadybug)] = redLdb;
+	mInsectSprites[static_cast<int>(LadyBug::RedLadybug)] = redLdb;
 
 	sf::Sprite redBlackLdb;
 	redBlackLdb.setTexture(context.textures->get(Texture::ID::DefensiveLadyBug));
 	redBlackLdb.setOrigin(50.0f, 70.0f);
 	redBlackLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(Insect::RedBlackLadybug)] = redBlackLdb;
+	mInsectSprites[static_cast<int>(LadyBug::RedBlackLadybug)] = redBlackLdb;
 
 	sf::Sprite blackLdb;
 	blackLdb.setTexture(context.textures->get(Texture::ID::OffensiveLadyBug));
 	blackLdb.setOrigin(50.0f, 70.0f);
 	blackLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(Insect::BlackLadybug)] = blackLdb;
+	mInsectSprites[static_cast<int>(LadyBug::BlackLadybug)] = blackLdb;
 
 	sf::Sprite aphid;
 	aphid.setTexture(context.textures->get(Texture::ID::Aphid));
 	aphid.setOrigin(50.0f, 75.0f);
 	aphid.setScale(0.6f, 0.6f);
-	mInsectSprites[static_cast<int>(Insect::RegularAphid)] = aphid;
+	// TODO This is just horrible
+	mInsectSprites[static_cast<int>(LadyBug::BlackLadybug)+1] = aphid;
 
 	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
 
@@ -110,19 +104,20 @@ void GameWorld::render(sf::RenderTarget& target)
 		ldb->draw(target, mInsectSprites[static_cast<size_t>(ldb->getType())]);
 	}
 	for (auto &apd : mAphids) {
-		apd->draw(target, mInsectSprites[static_cast<size_t>(Insect::RegularAphid)]);
+		// TODO Just horrible…
+		apd->draw(target, mInsectSprites[static_cast<size_t>(LadyBug::BlackLadybug)+1]);
 	}
 }
 
 Aphid& GameWorld::spawnAphid(ID<Flower> flower)
 {
-	mAphids.push_back(new Aphid(AphidBehaviour::Offensive, flower, mRoseTree));
+	mAphids.push_back(new Aphid(mRoseTree, flower, AphidBehaviour::Offensive));
 	return *mAphids.back();
 }
 
 LadyBug& GameWorld::spawnLadyBug(ID<Flower> flower, LadyBug::Type type)
 {
-	LadyBug& ladybug = *(new LadyBug(type, flower, mRoseTree));
+	LadyBug& ladybug = *(new LadyBug(mRoseTree, flower, type));
 	mLadyBugs.push_back(&ladybug);
 	// TODO Doit-on donner un chemin par défaut aux LadyBug ?
 	// TODO Cela dépend du type de LadyBug, non ?
@@ -161,14 +156,14 @@ void GameWorld::update(sf::Time dt)
 		{
 			ladybug->move(dt);
 
-			ID<Branch> currentBranch = ladybug->getBranchID();
+			ID<Branch> currentBranch = ladybug->getBranch();
 			float currentPos = ladybug->getPos();
 
 			for (auto it = mAphids.begin() ; it != mAphids.end() ; ++it)
 			{
 				Aphid& aphid = **it;
 				// TODO Il faudrait changer ces conditions
-				if (aphid.getBranchID() == currentBranch &&
+				if (aphid.getBranch() == currentBranch &&
 						std::abs(currentPos - aphid.getPos()) < 0.1f)
 				{
 					ladybug->eatAnAphid(aphid);
@@ -218,7 +213,7 @@ void GameWorld::update(sf::Time dt)
 					flower.setTimeLeft(sf::seconds(0.9f)); // TODO Ne pas le fixer à 2
 					break;
 				case Flower::LadybugFlower:
-					spawnLadyBug(ID_n_flower.first, Insect::BlackLadybug);
+					spawnLadyBug(ID_n_flower.first, LadyBug::BlackLadybug);
 					flower.becomeNode(); // Doit-on faire ça ?
 					break;
 				default:

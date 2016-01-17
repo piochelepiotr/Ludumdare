@@ -1,7 +1,7 @@
 #include "state.hpp"
 #include "statestack.hpp"
 
-State::State(StateStack& mystack, Context context)
+State::State(StateStack& mystack, StateContext context)
 : mStack(&mystack)
 , mContext(context)
 {
@@ -28,7 +28,7 @@ void State::requestStackClear()
     mStack->clearStates();
 }
 
-State::Context State::getContext() const
+StateContext State::getContext() const
 {
     return mContext;
 }

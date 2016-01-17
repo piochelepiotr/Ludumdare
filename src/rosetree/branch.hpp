@@ -1,6 +1,4 @@
 #pragma once
-#include <cstddef>
-#include <SFML/System.hpp>
 #include "id.hpp"
 #include "math/spline.hpp"
 

@@ -1,8 +1,9 @@
 #include "editlevelstate.hpp"
 #include <fstream>
+#include "rosetree/branch.hpp"
 
 
-EditLevelState::EditLevelState(StateStack& mystack, Context context)
+EditLevelState::EditLevelState(StateStack& mystack, StateContext context)
 	: State(mystack, context)
 	  , mFirstFlower(noID)
 {
@@ -138,7 +139,7 @@ ID<Flower> EditLevelState::addFlower(sf::Vector2f v, Flower::Type type)
 
 void EditLevelState::removeFlower(ID<Flower> flower)
 {
-	std::cout << "EditLevelState::removeFlower" << std::endl;
+	//std::cout << "EditLevelState::removeFlower" << std::endl;
 	mRoseTree.removeFlower(flower);
 	auto it = mFlowerToAnchors.find(flower);
 	mAnchors.removeAnchor<NodeAnchorListener>(it->second);

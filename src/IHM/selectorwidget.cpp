@@ -1,6 +1,6 @@
 #include <IHM/selectorwidget.hpp>
-#include <algorithm>
-#include <iostream>
+//#include <algorithm>
+//#include <iostream>
 
 SelectorWidget::SelectorWidget(sf::Font& font, TriggerFun callback) :
 	mCallback()

@@ -1,7 +1,7 @@
 #pragma once
-#include <SFML/System.hpp>
-#include <string>
-
+#include <istream>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Time.hpp>
 
 class Flower
 {
@@ -14,7 +14,6 @@ class Flower
 		TypeEnumSize // Permet de connaître la taille de cette enum
 	};
 
-	//Flower() = delete;
 	Flower(sf::Vector2f position, Type type);
 
 	// Renvoie le type de fleur

@@ -1,7 +1,11 @@
 #pragma once
 
+#include <SFML/System/Vector2.hpp>
 #include <vector>
-#include <SFML/Graphics.hpp>
+
+namespace sf {
+	class Event;
+}
 
 class Widget;
 

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include <IHM/layout.hpp>
-#include <observable.hpp>
 #include <observer.hpp>
 
 class Widget;

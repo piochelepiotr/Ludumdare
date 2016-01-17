@@ -357,21 +357,21 @@ template <typename Node, typename Edge, typename Dist>
 std::set<ID<Edge> > PonderateGraph<Node, Edge, Dist>::removeNode(ID<Node> n)
 {
 	// On enlève toutes les distances à n
-	std::cerr << "I'm in PonderateGraph::removeNode with n = " << n.id << std::endl;
+	//std::cerr << "I'm in PonderateGraph::removeNode with n = " << n.id << std::endl;
 	auto distancesToN = mBasicDistances.find(n);
 	for (auto n2_d : distancesToN->second)
 	{
-		std::cerr << "Looooooping, yeah" << std::endl;
+		//std::cerr << "Looooooping, yeah" << std::endl;
 		mBasicDistances.at(n2_d.first).erase(n);
 	}
 	mBasicDistances.erase(distancesToN);
 	// Puis on laisse papa terminer le bouleau
-	std::cerr << "Now dady will continue!" << std::endl;
+	//std::cerr << "Now dady will continue!" << std::endl;
 	auto set = Graph<Node, Edge>::removeNode(n);
-	std::cerr << "Now rebuilding!" << std::endl;
+	//std::cerr << "Now rebuilding!" << std::endl;
 
 	rebuildDistances(); // TODO Besoin d’être aussi brutal ?
-	std::cerr << "Now quitting!" << std::endl;
+	//std::cerr << "Now quitting!" << std::endl;
 	return set;
 }
 

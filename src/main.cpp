@@ -1,10 +1,6 @@
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include "textureholder.hpp"
 #include "font.hpp"
 #include "player.hpp"
-#include "state.hpp"
 #include "application.hpp"
 
 //#include "rosetree/graph.hpp"
@@ -56,7 +52,7 @@ int main()
 	fonts.load(Font::Standard, "fonts/standard.ttf");
 
     Player player;
-    struct State::Context context(window, textures, fonts, player);
+    struct StateContext context(window, textures, fonts, player);
     context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
     context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
     context.textures->load(Texture::ID::DefensiveLadyBug, "graphics/ldb2.png");

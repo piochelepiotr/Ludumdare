@@ -1,11 +1,10 @@
-#include <menustate.hpp>
-#include <iostream>
-#include <functional>
+#include "menustate.hpp"
+#include "font.hpp"
 
 
 using namespace std::placeholders;
 
-MenuState::MenuState(StateStack& mystack, Context context)
+MenuState::MenuState(StateStack& mystack, StateContext context)
 : State(mystack, context)
 , mVerticalMenu()
 , mFocusGroup()
