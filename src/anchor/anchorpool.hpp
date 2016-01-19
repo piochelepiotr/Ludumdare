@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include <editor/anchoritem.hpp>
+#include <anchor/anchoritem.hpp>
 #include <SFML/System/Vector2.hpp>
 
 namespace sf {

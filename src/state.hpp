@@ -4,12 +4,8 @@
 #include <memory>
 
 class StateStack;
-class Player;
-class TextureHolder;
-class FontHolder;
 
-namespace States
-{
+namespace States {
 	enum ID { Title, Menu, Pause, Game, Speech, Editor };
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "insect.hpp"
+#include "insect/insect.hpp"
 #include "rosetree/flower.hpp"
 
 class StateContext;// TODO À enlever au plus vite: on n’a besoin de ça que pour StateContext, qui ne sert que pour les Sprites

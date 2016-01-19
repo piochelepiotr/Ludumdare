@@ -1,6 +1,6 @@
 #pragma once
 
-#include <editor/anchoractionlistener.hpp>
+#include <anchor/anchoractionlistener.hpp>
 
 // TODO LATER Pour l’instant rien n’est fait, il faudrait
 // - gérer l’appui

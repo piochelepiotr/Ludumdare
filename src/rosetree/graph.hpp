@@ -2,6 +2,7 @@
 #include <set>
 #include "id.hpp"
 #include <limits>
+#include <map>
 
 
 template <typename Node, typename Edge>

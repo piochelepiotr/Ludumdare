@@ -1,5 +1,5 @@
-#include <editor/anchorpool.hpp>
-#include <editor/anchoractionlistener.hpp>
+#include <anchor/anchorpool.hpp>
+#include <anchor/anchoractionlistener.hpp>
 #include <SFML/Window/Event.hpp>
 #include "utils.hpp"
 #include <limits>

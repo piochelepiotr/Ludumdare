@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "state.hpp"
 
 #include <IHM/textbutton.hpp>

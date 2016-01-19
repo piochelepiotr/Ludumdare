@@ -1,7 +1,7 @@
 #include "gameworld.hpp"
-#include "textureholder.hpp"
+#include "textureholder.hpp" // TODO on devrait pouvoir l’enlever si on gère mieux
 #include "insectanchorlistener.hpp"
-#include "editor/anchorpool.hpp"
+#include "anchor/anchorpool.hpp"
 #include "rosetree/branch.hpp"
 #include "statecontext.hpp"
 

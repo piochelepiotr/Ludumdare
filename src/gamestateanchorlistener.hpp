@@ -1,9 +1,11 @@
 #pragma once
-#include "editor/anchoractionlistener.hpp"
-//#include "graph/node.hpp"
+#include "anchor/anchoractionlistener.hpp"
 #include "id.hpp"
-#include "rosetree/flower.hpp"
 
+// TODO Ressemble vraiment beaucoup à NodeAnchorListener (pour l’éditeur)…
+// Il faudrait peut-être les fusionner
+
+class Flower;
 class GameState;
 
 class NodeAnchor : public AnchorActionListener

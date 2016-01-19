@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 
 struct CubicCurve {
 public:
@@ -18,6 +18,9 @@ public:
   CubicCurve x;
   CubicCurve y;
 };
+
+
+#include <SFML/Graphics.hpp>
 
 class SplineShape : public sf::Drawable{
 public:

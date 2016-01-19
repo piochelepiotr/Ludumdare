@@ -1,23 +1,14 @@
-#include "editlevelstate.hpp"
+#include "editor/editlevelstate.hpp"
 #include <fstream>
 #include "rosetree/branch.hpp"
+#include "editor/nodeanchorlistener.hpp"
 
 
 EditLevelState::EditLevelState(StateStack& mystack, StateContext context)
 	: State(mystack, context)
 	  , mFirstFlower(noID)
 {
-	/*
-	ID<Flower> f1 = addFlower(sf::Vector2f(250, 200), Flower::Type::RegularFlower);
-	ID<Flower> f2 = addFlower(sf::Vector2f(350, 210), Flower::Type::RegularFlower);
-	ID<Flower> f3 = addFlower(sf::Vector2f(450, 150), Flower::Type::RegularFlower);
-
-	addBranch(sf::Vector2f(300, 270), sf::Vector2f(250, 200));
-	mGraph.newEdge(sf::Vector2f(300, 270), sf::Vector2f(350, 210));
-	mGraph.newEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
-	*/
 	load("niveau1.txt");
-	//mAnchors.addAnchor(AnchorItem(10.f), )
 	auto it = mFlowerSprites.insert(std::make_pair(Flower::RegularFlower,
 				sf::Sprite(context.textures->get(Texture::ID::RegularFlower))));
 	it.first->second.setOrigin(100.f, 100.f);

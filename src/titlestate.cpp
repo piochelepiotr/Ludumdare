@@ -1,8 +1,5 @@
 #include "titlestate.hpp"
 #include "font.hpp"
-#include <iostream>
-#include <functional>
-#include <cassert>
 
 TitleState::TitleState(StateStack& mystack, StateContext context)
 : State(mystack, context)

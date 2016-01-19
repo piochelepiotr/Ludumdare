@@ -2,6 +2,8 @@
 #include "id.hpp"
 #include "math/spline.hpp"
 
+// FIXME There's a problem in the choice branches'orientation
+
 class Flower;
 class RoseTree;
 

@@ -1,7 +1,6 @@
 #include "gamestateanchorlistener.hpp"
 #include "gamestate.hpp"
 
-#include <iostream>
 // NodeAnchor
 
 NodeAnchor::NodeAnchor(GameState& gameState, ID<Flower> flower, sf::Vector2f position) :

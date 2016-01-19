@@ -9,16 +9,7 @@ FIND_PACKAGE(SFML COMPONENTS audio graphics window system REQUIRED)
 
 SET(
     SRCS
-	src/rosetree/rosetree.cpp
-	src/rosetree/branch.cpp
-	src/rosetree/flower.cpp
-	src/application.cpp
-	src/titlestate.cpp
-	src/state.cpp
-	src/statestack.cpp
-	src/gamestate.cpp
-	src/gameworld.cpp
-	src/player.cpp
+
 	src/IHM/widget.cpp
 	src/IHM/layout.cpp
 	src/IHM/textbutton.cpp
@@ -26,17 +17,36 @@ SET(
 	src/IHM/focusgroup.cpp
 	src/IHM/selectorwidget.cpp
 	src/IHM/dialogbutton.cpp
-	src/math/spline.cpp
-	src/editor/anchoritem.cpp
-	src/editor/anchorpool.cpp
-	src/editor/nodeanchorlistener.cpp
-	src/gamestateanchorlistener.cpp
-	src/menustate.cpp
-	src/insect.cpp
-	src/behaviour.cpp
-	src/editlevelstate.cpp
 	src/dialogbox.cpp
+
+	src/anchor/anchoritem.cpp
+	src/anchor/anchorpool.cpp
+
+	src/state.cpp
+	src/statestack.cpp
+
+	src/math/spline.cpp
+
+	src/rosetree/rosetree.cpp
+	src/rosetree/branch.cpp
+	src/rosetree/flower.cpp
+
+	src/insect/insect.cpp
+	src/insect/behaviour.cpp
+
+	src/gameworld.cpp
+	src/gamestate.cpp
+	src/gamestateanchorlistener.cpp
 	src/insectanchorlistener.cpp
+
+	src/editor/nodeanchorlistener.cpp
+	src/editor/editlevelstate.cpp
+
+	src/titlestate.cpp
+	src/menustate.cpp
+
+	src/player.cpp
+	src/application.cpp
     src/main.cpp
 )
 

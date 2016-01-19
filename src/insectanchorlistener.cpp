@@ -1,7 +1,5 @@
-#include <insectanchorlistener.hpp>
-
-#include <editor/anchoractionlistener.hpp>
-#include <insect.hpp>
+#include "insectanchorlistener.hpp"
+#include "insect/insect.hpp"
 
 InsectAnchorListener::InsectAnchorListener(Insect& insect) : mInsect(insect) {
 }

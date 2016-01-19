@@ -1,5 +1,6 @@
 #pragma once
 #include "rosetree/graph.hpp"
+#include "idmanagement.hpp"
 
 class Branch;
 class Flower;

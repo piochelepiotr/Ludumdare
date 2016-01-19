@@ -1,11 +1,12 @@
 #pragma once
 
 #include "state.hpp"
-//#include "graph/graph.hpp"
-#include "editor/anchorpool.hpp"
-#include "editor/nodeanchorlistener.hpp"
+#include "anchor/anchorpool.hpp"
 #include "rosetree/rosetree.hpp"
 #include "textureholder.hpp"
+#include "rosetree/flower.hpp"
+
+class NodeAnchorListener;
 
 // TODO: Dans l’éditeur, les fleurs None devrait être affichée
 // TODO Il y a quelques redondances avec GameWorld…

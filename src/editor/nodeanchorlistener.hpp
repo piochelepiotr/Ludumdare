@@ -1,9 +1,9 @@
 #pragma once
-#include "editor/anchoractionlistener.hpp"
-//#include "graph/node.hpp"
+#include "anchor/anchoractionlistener.hpp"
 #include "id.hpp"
-#include "rosetree/flower.hpp"
 
+// TODO Il faudrait renommer ça pour que ça ait plus un rapport avec editor…
+class Flower;
 class EditLevelState;
 
 class NodeAnchorListener : public AnchorActionListener {

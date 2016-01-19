@@ -1,7 +1,7 @@
 #pragma once
 #include "behaviour.hpp"
 #include <SFML/Graphics.hpp>
-#include "rosetree/rosetree.hpp"
+#include "rosetree/rosetree.hpp" // Juste besoin pour inliner
 
 class Insect {
 	public:

@@ -3,6 +3,8 @@
 #include <math/spline.hpp>
 #include <memory>
 
+// TODO What is this file ?
+
 struct SplineGraphics
 {
 	std::unique_ptr<SplineShape> spline;

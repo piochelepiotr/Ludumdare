@@ -56,7 +56,7 @@ void Flower::setType(Type t)
 Flower::Type Flower::nextType()
 {
 	int newType = static_cast<int>(mType) + 1;
-	if (newType > static_cast<int>(TypeEnumSize))
+	if (newType >= static_cast<int>(TypeEnumSize))
 		newType = 0;
 	return mType = Type(newType);
 }
