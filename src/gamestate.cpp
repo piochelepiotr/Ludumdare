@@ -1,6 +1,9 @@
 #include "gamestate.hpp"
+#include "gameworld.inl"
 #include "gamestateanchorlistener.hpp"
 #include <fstream>
+
+#include <iostream> // TODO Debug
 
 GameState::GameState(StateStack& mystack, StateContext context) :
 	State(mystack, context),
@@ -75,11 +78,9 @@ void GameState::addFlower(sf::Vector2f position, Flower::Type type)
 
 void GameState::addBranch(ID<Flower> f1, ID<Flower> f2)
 {
-	if (mGameWorld.getCapacity() - mGameWorld.getUsedCapacity())
-	{
-		mGameWorld.addBranch(f1, f2);
-		mGameWorld.setUsedCapacity(mGameWorld.getUsedCapacity()+1);
-	}
+	// TODO Peut-être que c’est GameWorld qui devrait s’en charger, non ?
+	if (mGameWorld.getLeftCapacity() > 0 && mGameWorld.addBranch(f1, f2))
+			mGameWorld.useCapacity(1);
 }
 
 

@@ -8,6 +8,7 @@ class ID
 {
 	public:
 	explicit inline ID(unsigned int const n) : id(n) {}
+	inline operator bool () const { return bool(id); }
 	inline bool operator == (ID const& other) const { return id == other.id; }
 	inline bool operator != (ID const& other) const { return id != other.id; }
 	inline bool operator < (ID const& other) const { return id < other.id; }

@@ -1,5 +1,5 @@
 #include "insectanchorlistener.hpp"
-#include "insect/insect.hpp"
+#include "insect/insect.inl"
 
 InsectAnchorListener::InsectAnchorListener(Insect& insect) : mInsect(insect) {
 }
@@ -8,9 +8,11 @@ void
 InsectAnchorListener::onMouseButtonPressed(sf::Mouse::Button button, const sf::Vector2f& position) {
 }
 
+/*
 void
 InsectAnchorListener::onMouseDragged(sf::Mouse::Button button, const sf::Vector2f& position) {
 }
+*/
 
 void
 InsectAnchorListener::onMouseButtonReleased(sf::Mouse::Button button, const sf::Vector2f& position) {

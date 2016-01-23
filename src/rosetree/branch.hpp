@@ -2,8 +2,6 @@
 #include "id.hpp"
 #include "math/spline.hpp"
 
-// FIXME There's a problem in the choice branches'orientation
-
 class Flower;
 class RoseTree;
 
@@ -17,7 +15,7 @@ class Branch
 	};
 
 	// Construit une branche de type t entre f1 et f2
-	Branch(RoseTree& rt, ID<Flower> f1, ID<Flower> f2,Type t = RegularBranch);
+	Branch(ID<Flower> f1, ID<Flower> f2, Type t, RoseTree& rt);
 
 	// Renvoie une des deux fleurs de départ de la branche
 	ID<Flower> getFirstFlower() const;
@@ -47,6 +45,20 @@ class Branch
 	void draw(sf::RenderTarget& target) const;
 
 	private:
+
+	// Used to create a branch correctly
+	struct HelpCreator
+	{
+		HelpCreator(ID<Flower> _f1, ID<Flower> _f2, Type _t, RoseTree& _rt);
+		ID<Flower> f1ID;
+		ID<Flower> f2ID;
+		Type type;
+		Flower* f1;
+		Flower* f2;
+	};
+	Branch(HelpCreator hc);
+
+
 	// Crée la SplineShape pour les fleurs f1 et f2
 	static SplineShape createSplineShape(Flower& f1, Flower& f2);
 
@@ -54,6 +66,6 @@ class Branch
 	ID<Flower> mFirstFlower;
 	ID<Flower> mSecondFlower;
 	Type mType;
-	unsigned int mLadybugNumber; // TODO Is this really important ?
 	SplineShape mSplineShape; // TODO Should we really have the shape here ? Maybe just need a Spline…
+	unsigned int mLadybugNumber; // TODO Is this really important ?
 };

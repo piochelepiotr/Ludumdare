@@ -1,7 +1,6 @@
 #pragma once
 #include "behaviour.hpp"
 #include <SFML/Graphics.hpp>
-#include "rosetree/rosetree.hpp" // Juste besoin pour inliner
 
 class Insect {
 	public:
@@ -9,17 +8,16 @@ class Insect {
 	Insect(RoseTree const& rt, ID<Flower> spawnFlower, float speed);
 
 	// Renvoie l’ID de la branche de l’insecte (erreur si le chemin est fini)
-	ID<Branch> getBranch() const
-	{ return mRoseTree.getBranchID(mPath.getTwoFirstNodes()); }
+	inline ID<Branch> getBranch() const;
 	// Renvoie sa position sur cette branche (entre 0 et 1, avec 0 si au début)
 	float getPos() const;
 	// Renvoie la fleur sur laquelle était l’insecte
-	ID<Flower> getPrevFlower() const { return mPath.getFirstNode(); }
+	inline ID<Flower> getPrevFlower() const;
 	// true <=> l’insecte a atteint son objectif
-	bool isObjectiveReached() const { return mPath.isEmpty(); }
+	inline bool isObjectiveReached() const;
 
 	// Renvoie sa position dans l’espace
-	sf::Vector2f getPosition() const { return mRealPosition; }
+	inline sf::Vector2f getPosition() const;
 
 	// Dessin de l’insecte
 	void draw(sf::RenderTarget& target, sf::Sprite sprite);
@@ -29,10 +27,9 @@ class Insect {
 	void move(sf::Time dt);
 
 	// Renvoie la prochaine fleur du chemin (erreur si le chemin est fini)
-	ID<Flower> getNextFlower() const { return mPath.getTwoFirstNodes().second; }
+	inline ID<Flower> getNextFlower() const;
 	// Renvoie la branche où est l’insecte (erreur si le chemin est fini)
-	Branch const& getRealBranch() const
-	{ return mRoseTree.getBranch(mPath.getTwoFirstNodes()); }
+	inline Branch const& getRealBranch() const;
 
 	RoseTree const& mRoseTree; // Arbre sur lequel on est
 	Path<Flower> mPath; // Chemin actuellement suivi
@@ -48,7 +45,7 @@ class Aphid : public Insect {
 	// Nouveau puceron sur l’arbre rt, à la fleur spawnFlower, et de type t
 	Aphid(RoseTree const& rt, ID<Flower> spawnFlower, AphidBehaviour::Type t);
 	// Bouge le puceron de dt
-	void move(sf::Time dt) { Insect::move(dt); }
+	inline void move(sf::Time dt);
 
 	private:
 	AphidBehaviour mBehaviour; // Son comportement, qui dicte son chemin
@@ -61,7 +58,7 @@ class LadyBug : public Insect {
 
 	public:
 	// Nouvelle Coccinelle sur l’arbre rt, fleur spawnFlower, de type t
-	LadyBug(RoseTree const& rt, ID<Flower> spawnFlower, LadyBug::Type t);
+	inline LadyBug(RoseTree const& rt, ID<Flower> spawnFlower, LadyBug::Type t);
 
 	// Le type de coccinelle
 	Type getType();
@@ -73,11 +70,11 @@ class LadyBug : public Insect {
 	//sf::Time getBusyTime() { return busyTime; };
 	
 	// La coccinelle se régale avec aphid (ne détruit pas aphid)
-	void eatAnAphid(Aphid& aphid) { mEatingTime = sf::seconds(0.2f); }
+	inline void eatAnAphid(Aphid& aphid);
 	// true <=> La coccinelle mange, ne la dérangeons pas.
-	bool isEating() { return mEatingTime > sf::seconds(0); }
+	inline bool isEating();
 	// la coccinelle digère pendant le temps dt
-	void decreaseEatingTime(sf::Time dt) { mEatingTime -= dt; }
+	inline void decreaseEatingTime(sf::Time dt);
 
 	private:
 	Path<Flower> mDutyPath; // Chemin de ronde de la coccinelle

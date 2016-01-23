@@ -39,8 +39,7 @@ Widget::focus ()
 void
 Widget::setFocusGroup (FocusGroup* group)
 {
-	//FIXME? Completer
-	if (mFocusGroup == group) return;
+	if (mFocusGroup == group) return; // Nothing to do
 	
 	if (mFocusGroup)
 		mFocusGroup->remove(*this);

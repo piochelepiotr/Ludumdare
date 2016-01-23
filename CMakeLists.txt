@@ -59,6 +59,8 @@ ADD_DEFINITIONS(
     --std=c++11
     -g
     -Wall
+	-Werror
+	-Wpedantic
 )
 
 INCLUDE_DIRECTORIES(

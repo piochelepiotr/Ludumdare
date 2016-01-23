@@ -1,6 +1,4 @@
-#include "insect.hpp"
-#include "rosetree/flower.hpp"
-#include "rosetree/branch.hpp"
+#include "insect/insect.inl"
 
 
 void Insect::draw(sf::RenderTarget& target, sf::Sprite sprite) {
@@ -50,13 +48,6 @@ Aphid::Aphid(RoseTree const& rt, ID<Flower> spawnFlower, AphidBehaviour::Type t)
 	mPath = mBehaviour.getPath();
 }
 
-
-LadyBug::LadyBug(RoseTree const& rt, ID<Flower> spawnFlower, LadyBug::Type t) :
-	Insect(rt, spawnFlower, 50.f*1.5f), mDutyPath(spawnFlower), mType(t)
-{
-	// Juste pour faire la mise au point du path
-	move(sf::seconds(0.f));
-}
 
 void LadyBug::redefinePath(Path<Flower> newPath)
 {

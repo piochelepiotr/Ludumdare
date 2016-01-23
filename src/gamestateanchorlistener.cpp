@@ -23,9 +23,11 @@ void NodeAnchor::onMouseButtonReleased(sf::Mouse::Button button, const sf::Vecto
 	m_gameState.onFlowerReleased(m_flower);
 }
 
+/*
 void NodeAnchor::onMouseDragged(sf::Mouse::Button button, const sf::Vector2f& position)
 {
 }
+*/
 
 void NodeAnchor::onMouseEnter()
 {
@@ -36,7 +38,7 @@ void NodeAnchor::onMouseLeft()
 }
 
 
-// LadybugAnchor
+// LadybugAnchor TODO
 
 
 

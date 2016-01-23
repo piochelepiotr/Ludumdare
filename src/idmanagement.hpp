@@ -26,7 +26,7 @@ class IDstaticmap
 {
 	public:
 	template <typename... Args>
-	typename std::map<ID<T>, T>::iterator addObj(Args&... args)
+	typename std::map<ID<T>, T>::iterator addObj(Args&&... args)
 	{
 		return map.emplace_hint(map.end(), std::piecewise_construct,
 				std::forward_as_tuple(idgen.next()),

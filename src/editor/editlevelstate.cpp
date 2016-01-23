@@ -79,7 +79,9 @@ void EditLevelState::draw()
 void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
 {
 	if (!mAnchors.injectEvent(event, pos))
+	{
 		addFlower(pos, Flower::Type::RegularFlower);
+	}
 	//mFirstFlower = mGraph.flowerAt(pos);
 }
 
@@ -130,10 +132,9 @@ ID<Flower> EditLevelState::addFlower(sf::Vector2f v, Flower::Type type)
 
 void EditLevelState::removeFlower(ID<Flower> flower)
 {
-	//std::cout << "EditLevelState::removeFlower" << std::endl;
 	mRoseTree.removeFlower(flower);
 	auto it = mFlowerToAnchors.find(flower);
-	mAnchors.removeAnchor<NodeAnchorListener>(it->second);
+	mAnchors.removeAnchor(it->second);
 	mFlowerToAnchors.erase(it);
 }
 

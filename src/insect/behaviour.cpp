@@ -1,7 +1,5 @@
 #include "behaviour.hpp"
-#include "rosetree/flower.hpp"
-#include "rosetree/rosetree.hpp"
-#include "rosetree/branch.hpp"
+#include "rosetree/rosetree.inl"
 
 // TODO Il faudrait revoir les comportements qu’on donne
 

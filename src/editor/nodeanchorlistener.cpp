@@ -20,9 +20,11 @@ void NodeAnchorListener::onMouseButtonReleased(sf::Mouse::Button button, const s
 	m_editLevelState.onFlowerReleased(m_flower, button);
 }
 
+/*
 void NodeAnchorListener::onMouseDragged(sf::Mouse::Button button, const sf::Vector2f& position)
 {
 }
+*/
 
 void NodeAnchorListener::onMouseEnter()
 {

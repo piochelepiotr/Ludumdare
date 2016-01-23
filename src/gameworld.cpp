@@ -1,8 +1,9 @@
 #include "gameworld.hpp"
+#include "insect/insect.inl"
 #include "textureholder.hpp" // TODO on devrait pouvoir l’enlever si on gère mieux
 #include "insectanchorlistener.hpp"
 #include "anchor/anchorpool.hpp"
-#include "rosetree/branch.hpp"
+//#include "rosetree/branch.hpp"
 #include "statecontext.hpp"
 
 GameWorld::GameWorld(AnchorPool& anchor, StateContext& context) :
@@ -10,8 +11,8 @@ GameWorld::GameWorld(AnchorPool& anchor, StateContext& context) :
 	mAphids(),
 	mBackGround(/*backGround*/),
     mInsectSprites(),
-    mCapacity(3),
-    mUsedCapacity(0),
+    mTotalCapacity(3),
+    mLeftCapacity(mTotalCapacity),
     mAnchorPool(anchor)
 {
 	// TODO Tout ça, ça ne devrait pas être fait ici…
@@ -107,6 +108,17 @@ void GameWorld::render(sf::RenderTarget& target)
 		// TODO Just horrible…
 		apd->draw(target, mInsectSprites[static_cast<size_t>(LadyBug::BlackLadybug)+1]);
 	}
+
+	// Puis enfin, on dessine l’interface
+	// la barre de capacité
+	sf::RectangleShape ext(sf::Vector2f(24.f, mTotalCapacity*10.f + 4));
+	ext.setPosition(8.f, 8.f);
+	ext.setFillColor(sf::Color::Green);
+	target.draw(ext, sf::RenderStates::Default);
+	sf::RectangleShape used(sf::Vector2f(20.f, (mTotalCapacity - mLeftCapacity)*10.f));
+	used.setPosition(10.f, 10.f + mLeftCapacity*10.f);
+	used.setFillColor(sf::Color::Black);
+	target.draw(used, sf::RenderStates::Default);
 }
 
 Aphid& GameWorld::spawnAphid(ID<Flower> flower)
@@ -136,13 +148,6 @@ LadyBug& GameWorld::spawnLadyBug(ID<Flower> flower, LadyBug::Type type)
 	return ladybug;
 }
 
-ID<Flower> GameWorld::spawnNode(sf::Vector2f position, Flower::Type type)
-{
-	// TODO: Peut-être qu’il n’y a pas que ça à faire
-	return mRoseTree.addFlower(position, type);
-}
-
-
 void GameWorld::update(sf::Time dt)
 {
 	// Commençons par mettre à jour les LadyBugs
@@ -156,20 +161,24 @@ void GameWorld::update(sf::Time dt)
 		{
 			ladybug->move(dt);
 
-			ID<Branch> currentBranch = ladybug->getBranch();
-			float currentPos = ladybug->getPos();
-
-			for (auto it = mAphids.begin() ; it != mAphids.end() ; ++it)
+			// TODO C’est toujours pas la bonne solution
+			if (!ladybug->isObjectiveReached())
 			{
-				Aphid& aphid = **it;
-				// TODO Il faudrait changer ces conditions
-				if (aphid.getBranch() == currentBranch &&
-						std::abs(currentPos - aphid.getPos()) < 0.1f)
+				ID<Branch> currentBranch = ladybug->getBranch();
+				float currentPos = ladybug->getPos();
+
+				for (auto it = mAphids.begin() ; it != mAphids.end() ; ++it)
 				{
-					ladybug->eatAnAphid(aphid);
-					delete &aphid;
-					mAphids.erase(it);
-					break;
+					Aphid& aphid = **it;
+					// TODO Il faudrait changer ces conditions
+					if (aphid.getBranch() == currentBranch &&
+							std::abs(currentPos - aphid.getPos()) < 0.1f)
+					{
+						ladybug->eatAnAphid(aphid);
+						delete &aphid;
+						mAphids.erase(it);
+						break;
+					}
 				}
 			}
 		}

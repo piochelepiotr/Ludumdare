@@ -22,8 +22,6 @@ class Graph
 		// Enlève le nœud n, renvoie l’ID des branches qu’on a dû retirer
 		std::set<ID<Edge> > removeNode(ID<Node> n);
 
-/*		// Ajoute une arête dans entre n1 et n2 déjà existants, renvoie son ID
-		ID<Edge> addEdge(ID<Node> n1, ID<Node> n2); */ // TODO ? Cette fonction est-elle vraiment utile ?…
 		// Ajoute l’arête e entre n1 et n2, et renvoie e
 		// (il ne faut pas que e soit déjà dans le graphe)
 		ID<Edge> addEdge(ID<Node> n1, ID<Node> n2, ID<Edge> e);
@@ -62,8 +60,6 @@ class PonderateGraph : public Graph<Node, Edge>
 
 		// Renvoie la distance du plus court entre les nœuds n1 et n2
 		Dist getDist(ID<Node> n1, ID<Node> n2) const;
-/*		// Renvoie la longueur de l’arête b
-		Dist getLength(ID<Edge> b) const;*/ // TODO We don’t really need it…
 
 		// Complête le chemin existant de manière à ce qu’il arrive à n2
 		// avec le plus court chemin
@@ -96,6 +92,11 @@ class PonderateGraph : public Graph<Node, Edge>
 		void removeEdge(ID<Node> n1, ID<Node> n2);
 		// Enlève l’arête e
 		void removeEdge(ID<Edge> e);
+		// Ajoute les nœuds de [begN, endN) et les arêtes de [begE, endE)
+		// (représentées par ((n1, n2), (e, d)), avec e l’ID de l’arête,
+		// d son poids, n1 et n2 les IDs des nœuds) dans le graphe.
+		template <typename ItNode, typename ItEdge>
+		void addNodesEdges(ItNode begN, ItNode endN, ItEdge begE, ItEdge endE);
 	
 	private:
 		// Renvoie mDistances[n1, n2]
@@ -118,6 +119,7 @@ class PonderateGraph : public Graph<Node, Edge>
 };
 
 
+// TODO Put it in a .inl file, this would be better
 
 
 
@@ -170,18 +172,7 @@ std::set<ID<Edge> > Graph<Node, Edge>::removeNode(ID<Node> n)
 }
 
 
-/*
-template <typename Node, typename Edge>
-ID<Edge> Graph<Node, Edge>::addEdge(ID<Node> n1, ID<Node> n2)
-{
-	// On commence par trouver le dernier ID des arêtes utilisé
-	auto it = mEdgeToNodes.rbegin();
-	ID<Edge> id = (it == mEdgeToNodes.rend() ? ID<Edge>(0) : (++it)->first);
-	id++;
-	// On peut ensuite ajouter le nouvel ID dans le bazar
-	return addEdge(n1, n2, e);
-}
-*/ // TODO Cette fonction est-elle vraiment utile ?…
+ // TODO Cette fonction est-elle vraiment utile ?…
 
 template <typename Node, typename Edge>
 ID<Edge> Graph<Node, Edge>::addEdge(ID<Node> n1, ID<Node> n2, ID<Edge> e)
@@ -246,7 +237,14 @@ std::map<ID<Node>, ID<Edge> >& Graph<Node, Edge>::operator [] (ID<Node> n1)
 
 template <typename Node, typename Edge>
 ID<Edge> Graph<Node, Edge>::getEdge(ID<Node> n1, ID<Node> n2) const
-{ return mNodesToEdge.at(n1).at(n2); }
+{
+	auto &neighboursMap = mNodesToEdge.at(n1);
+	auto it = neighboursMap.find(n2);
+	if (it == neighboursMap.end())
+		return noID;
+	else
+		return it->second;
+}
 
 template <typename Node, typename Edge>
 std::pair<ID<Node>, ID<Node>> Graph<Node, Edge>::getNodes(ID<Edge> e) const
@@ -285,7 +283,8 @@ void PonderateGraph<Node, Edge, Dist>::completePath(Path<Node>& path, ID<Node> n
 		path.addNode(newNode);
 	}
 }
-	
+
+
 template <typename Node, typename Edge, typename Dist>
 void PonderateGraph<Node, Edge, Dist>::getPath(Path<Node>& path, ID<Node> n1, ID<Node> n2) const
 {
@@ -349,30 +348,58 @@ template <typename Node, typename Edge, typename Dist>
 ID<Node> PonderateGraph<Node, Edge, Dist>::addNode(ID<Node> n)
 {
 	auto id = Graph<Node, Edge>::addNode(n);
-	mBasicDistances.insert(mBasicDistances.end(), std::make_pair(n, std::map<ID<Node>, Dist>()));
-	rebuildDistances(); // TODO Pas besoin d’être aussi brutal…
+	mBasicDistances.insert(mBasicDistances.end(), std::make_pair(id, std::map<ID<Node>, Dist>()));
+
+	// On met à jour les distances à id // Cette partie n’a jamais été vérifiée
+	auto& newMap = mDistances.insert(mDistances.end(), std::make_pair(id, std::map<ID<Node>, std::pair<Dist, ID<Node>>>()))->second;
+	for (auto& id_map : mDistances)
+	{
+		auto& map = id_map.second;
+		map.insert(map.end(), std::make_pair(id, std::make_pair(std::numeric_limits<Dist>::infinity(), noID)));
+		newMap.insert(newMap.end(), std::make_pair(id_map.first, std::make_pair(std::numeric_limits<Dist>::infinity(), noID)));
+	}
+	newMap.insert(newMap.end(), std::make_pair(id, std::make_pair(std::numeric_limits<Dist>::infinity(), noID)));
 	return id;
 }
+
+template <typename Node, typename Edge, typename Dist>
+template <typename ItNode, typename ItEdge>
+void PonderateGraph<Node, Edge, Dist>::addNodesEdges(ItNode begN, ItNode endN, ItEdge begE, ItEdge endE)
+{
+	for (auto itNode = begN ; itNode != endN ; ++itNode)
+	{
+		auto id = Graph<Node, Edge>::addNode(*itNode);
+		mBasicDistances.insert(mBasicDistances.end(), std::make_pair(id, std::map<ID<Node>, Dist>()));
+	}
+	for (auto itEdge = begE ; itEdge != endE ; ++itEdge)
+	{
+		auto n1 = itEdge->first.first;
+		auto n2 = itEdge->first.second;
+		auto e = itEdge->second.first;
+		auto d = itEdge->second.second;
+		Graph<Node, Edge>::addEdge(n1, n2, e);
+		mBasicDistances[n1].insert(std::make_pair(n2, d));
+		mBasicDistances[n2].insert(std::make_pair(n1, d));
+	}
+	rebuildDistances();
+}
+
+
 
 template <typename Node, typename Edge, typename Dist>
 std::set<ID<Edge> > PonderateGraph<Node, Edge, Dist>::removeNode(ID<Node> n)
 {
 	// On enlève toutes les distances à n
-	//std::cerr << "I'm in PonderateGraph::removeNode with n = " << n.id << std::endl;
 	auto distancesToN = mBasicDistances.find(n);
 	for (auto n2_d : distancesToN->second)
 	{
-		//std::cerr << "Looooooping, yeah" << std::endl;
 		mBasicDistances.at(n2_d.first).erase(n);
 	}
 	mBasicDistances.erase(distancesToN);
 	// Puis on laisse papa terminer le bouleau
-	//std::cerr << "Now dady will continue!" << std::endl;
 	auto set = Graph<Node, Edge>::removeNode(n);
-	//std::cerr << "Now rebuilding!" << std::endl;
 
 	rebuildDistances(); // TODO Besoin d’être aussi brutal ?
-	//std::cerr << "Now quitting!" << std::endl;
 	return set;
 }
 
@@ -404,6 +431,7 @@ void PonderateGraph<Node, Edge, Dist>::removeEdge(ID<Edge> e)
 }
 
 
+// TODO CETTE FONCTION EST BIEN TROP LENTE
 template <typename Node, typename Edge, typename Dist>
 void PonderateGraph<Node, Edge, Dist>::rebuildDistances()
 {

@@ -27,6 +27,12 @@ FocusGroup::remove (Widget& widget)
 	auto it = std::find(mWidgets.begin(), mWidgets.end(), &widget);
 	if (it != mWidgets.end())
 	{
+		if (&widget == mCurrent)
+			mCurrent = nullptr;
+
+		mWidgets.erase(it);
+
+		/* Too much for few…
 		if (mWidgets.size() <= 1) {	
 			mWidgets.clear();
 			mCurrent = nullptr;
@@ -38,6 +44,7 @@ FocusGroup::remove (Widget& widget)
 		}
 		
 		else mWidgets.erase(it);
+		*/
 	}
 }
 
