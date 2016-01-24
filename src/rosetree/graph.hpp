@@ -4,6 +4,7 @@
 #include <limits>
 #include <map>
 
+// TODO Il faudrait refaire tout ça en mieux
 
 template <typename Node, typename Edge>
 class Graph
@@ -61,7 +62,7 @@ class PonderateGraph : public Graph<Node, Edge>
 		// Renvoie la distance du plus court entre les nœuds n1 et n2
 		Dist getDist(ID<Node> n1, ID<Node> n2) const;
 
-		// Complête le chemin existant de manière à ce qu’il arrive à n2
+		// Complète le chemin existant de manière à ce qu’il arrive à n2
 		// avec le plus court chemin
 		void completePath(Path<Node>& path, ID<Node> n2) const;
 		// Met le plus court chemin entre n1 et n2 dans path
@@ -114,7 +115,6 @@ class PonderateGraph : public Graph<Node, Edge>
 		// La table associative qui ne contient que les distances
 		// entre les nœuds qui sont reliés par une arête
 		// Il y a des redondances car les parcours se font dans les deux sens
-		// TODO En a-t-on vraiment besoin ?
 		std::map<ID<Node>, std::map<ID<Node>, Dist> > mBasicDistances;
 };
 
@@ -171,8 +171,6 @@ std::set<ID<Edge> > Graph<Node, Edge>::removeNode(ID<Node> n)
 
 }
 
-
- // TODO Cette fonction est-elle vraiment utile ?…
 
 template <typename Node, typename Edge>
 ID<Edge> Graph<Node, Edge>::addEdge(ID<Node> n1, ID<Node> n2, ID<Edge> e)

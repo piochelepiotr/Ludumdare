@@ -1,12 +1,13 @@
 #include "editor/editlevelstate.hpp"
 #include <fstream>
 #include "rosetree/branch.hpp"
-#include "editor/nodeanchorlistener.hpp"
+#include "gameworld.inl"
 
 
-EditLevelState::EditLevelState(StateStack& mystack, StateContext context)
-	: State(mystack, context)
-	  , mFirstFlower(noID)
+EditLevelState::EditLevelState(StateStack& mystack, StateContext context) :
+	State(mystack, context),
+	mGameWorld(context, GameWorld::EditMode),
+	mFAManager(mGameWorld, true)
 {
 	load("niveau1.txt");
 	auto it = mFlowerSprites.insert(std::make_pair(Flower::RegularFlower,
@@ -44,10 +45,8 @@ bool EditLevelState::handleEvent(const sf::Event& event)
 			break;
 
 		case sf::Event::MouseButtonPressed:
-			mousePressed(event, mouse);
-			break;
 		case sf::Event::MouseButtonReleased:
-			mouseReleased(event, mouse);
+			mFAManager.injectEvent(event, mouse);
 			break;
 
 		default:
@@ -63,120 +62,29 @@ void EditLevelState::handlePlayerInput(sf::Keyboard::Key, bool)
 
 bool EditLevelState::update(sf::Time dt)
 {
-	return mAnchors.injectMouse(mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window)));
+	bool b = mFAManager.injectMouse(getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
+	mGameWorld.update(dt);
+	return b;
 }
 
 void EditLevelState::draw()
 {
 	getContext().window->clear();
-	for (auto& id_branch : mRoseTree.getBranchs())
-		id_branch.second.draw(*getContext().window);
-	for (auto& id_flower : mRoseTree.getFlowers())
-		drawFlower(*getContext().window, id_flower.second);
-	// mRoseTree.draw(*getContext().window,sf::RenderStates::Default);
+	mGameWorld.render(*getContext().window);
 }
 
-void EditLevelState::mousePressed(sf::Event event, sf::Vector2f pos)
-{
-	if (!mAnchors.injectEvent(event, pos))
-	{
-		addFlower(pos, Flower::Type::RegularFlower);
-	}
-	//mFirstFlower = mGraph.flowerAt(pos);
-}
-
-void EditLevelState::mouseReleased(sf::Event event, sf::Vector2f pos)
-{
-	mAnchors.injectEvent(event, pos);
-	m_isFlowerDragged = false;
-}
-
-void EditLevelState::onFlowerPressed(ID<Flower> flower, sf::Mouse::Button button)
-{
-	mFirstFlower = flower;
-	m_isFlowerDragged = true;
-}
-
-
-void EditLevelState::onFlowerReleased(ID<Flower> flower, sf::Mouse::Button button)
-{
-	if(m_isFlowerDragged)
-	{
-		if(mFirstFlower != flower)
-			mRoseTree.addBranch(mFirstFlower,flower);
-		else
-		{
-			switch (button)
-			{
-				case sf::Mouse::Right:
-					removeFlower(flower);
-					break;
-				case sf::Mouse::Left:
-					mRoseTree[flower].nextType();
-					break;
-				default:
-					break;
-			}
-		}
-	}
-}
-
-ID<Flower> EditLevelState::addFlower(sf::Vector2f v, Flower::Type type)
-{
-	ID<Flower> id = mRoseTree.addFlower(v, type);
-	auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, id, v);
-	mFlowerToAnchors[id] = ptr;
-	//m_isFlowerDragged = false;
-	return id;
-}
-
-void EditLevelState::removeFlower(ID<Flower> flower)
-{
-	mRoseTree.removeFlower(flower);
-	auto it = mFlowerToAnchors.find(flower);
-	mAnchors.removeAnchor(it->second);
-	mFlowerToAnchors.erase(it);
-}
-
-void EditLevelState::addEdge(ID<Flower> n1, ID<Flower>)
-{
-
-}
 
 void EditLevelState::load(std::string name)
 {
 	std::ifstream file(name);
-	mRoseTree.load(file);
+	mGameWorld.load(file);
 	file.close();
-	updateAnchors();
+	mFAManager.rebuildAnchors();
 }
 
-//void EditLevelState::save(std::__cxx11::string name)
 void EditLevelState::save(std::string name)
 {
 	std::ofstream file(name);
-	mRoseTree.save(file);
+	mGameWorld.save(file);
 	file.close();
-}
-
-void EditLevelState::updateAnchors()
-{
-	//mAnchors.clear();
-	auto flowers = mRoseTree.getFlowers();
-	for(auto& id_flower : flowers)
-	{
-		auto ptr = mAnchors.addAnchor<NodeAnchorListener>(AnchorItem(10.f), *this, id_flower.first, id_flower.second.getPosition());
-		mFlowerToAnchors[id_flower.first] = ptr;
-	}
-	m_isFlowerDragged = false;
-}
-
-
-void EditLevelState::drawFlower(sf::RenderTarget& target, Flower const& flower) const
-{
-	if (flower.getType() == Flower::Node)
-		return;
-	sf::Transform transform;
-	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);
-	target.draw(mFlowerSprites.find(flower.getType())->second, transform);
 }

@@ -18,7 +18,7 @@ class State
 	State(StateStack& mystack, StateContext context);
 	virtual ~State();
 	virtual void draw() = 0;
-	virtual bool update(sf::Time dt) = 0;
+	virtual bool update(sf::Time dt) = 0; // TODO Expliquer à quoi servent ces bool…
 	virtual bool handleEvent(const sf::Event& event) = 0;
 
 	protected:

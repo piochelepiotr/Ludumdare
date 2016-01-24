@@ -36,10 +36,11 @@ SET(
 
 	src/gameworld.cpp
 	src/gamestate.cpp
-	src/gamestateanchorlistener.cpp
+	#src/gamestateanchorlistener.cpp
+	src/floweranchor.cpp
 	src/insectanchorlistener.cpp
 
-	src/editor/nodeanchorlistener.cpp
+	#src/editor/nodeanchorlistener.cpp
 	src/editor/editlevelstate.cpp
 
 	src/titlestate.cpp

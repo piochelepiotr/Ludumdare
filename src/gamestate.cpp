@@ -1,19 +1,16 @@
 #include "gamestate.hpp"
 #include "gameworld.inl"
-#include "gamestateanchorlistener.hpp"
 #include <fstream>
-
-#include <iostream> // TODO Debug
 
 GameState::GameState(StateStack& mystack, StateContext context) :
 	State(mystack, context),
-	mGameWorld(mAnchors, context),
-	mDraggedFlower(noID)
+	mGameWorld(context, GameWorld::GameMode),
+	mFAManager(mGameWorld, false)
 {
 	std::ifstream file("niveau1.txt");
 	mGameWorld.load(file);
+	mFAManager.rebuildAnchors();
 	file.close();
-	updateAnchors();
 }
 
 GameState::~GameState()
@@ -35,12 +32,8 @@ bool GameState::handleEvent(const sf::Event& event)
 			break;
 
 		case sf::Event::MouseButtonPressed:
-			mAnchors.injectEvent(event, getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
-			break;
-
 		case sf::Event::MouseButtonReleased:
-			mAnchors.injectEvent(event, getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
-			mIsDragged = false;
+			mFAManager.injectEvent(event, getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
 			break;
 
         default:
@@ -56,8 +49,7 @@ void GameState::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 bool GameState::update(sf::Time dt)
 {
-	bool b = mAnchors.injectMouse(getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
-	getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window));
+	bool b = mFAManager.injectMouse(getContext().window->mapPixelToCoords(sf::Mouse::getPosition(*getContext().window)));
 	mGameWorld.update(dt);
 	return b;
 }
@@ -65,44 +57,4 @@ bool GameState::update(sf::Time dt)
 void GameState::draw()
 {
     mGameWorld.render(*mContext.window);
-}
-
-
-
-
-void GameState::addFlower(sf::Vector2f position, Flower::Type type)
-{
-	ID<Flower> id = mGameWorld.addFlower(position, type);
-	mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this, id, position);
-}
-
-void GameState::addBranch(ID<Flower> f1, ID<Flower> f2)
-{
-	// TODO Peut-être que c’est GameWorld qui devrait s’en charger, non ?
-	if (mGameWorld.getLeftCapacity() > 0 && mGameWorld.addBranch(f1, f2))
-			mGameWorld.useCapacity(1);
-}
-
-
-
-void GameState::onFlowerPressed(ID<Flower> flower)
-{
-	mDraggedFlower = flower;
-	mIsDragged = true;
-}
-
-void GameState::onFlowerReleased(ID<Flower> flower)
-{
-	if (mIsDragged && mDraggedFlower != flower)
-		addBranch(mDraggedFlower, flower);
-}
-
-void GameState::updateAnchors()
-{
-    auto flowers = mGameWorld.getFlowers();
-    for(auto& id_flower : flowers)
-    {
-		mAnchors.addAnchor<NodeAnchor>(AnchorItem(10.f), *this,
-				id_flower.first, id_flower.second.getPosition());
-    }
 }

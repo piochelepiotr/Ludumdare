@@ -1,19 +1,18 @@
-#include "gameworld.hpp"
+#include "gameworld.inl"
 #include "insect/insect.inl"
 #include "textureholder.hpp" // TODO on devrait pouvoir l’enlever si on gère mieux
 #include "insectanchorlistener.hpp"
 #include "anchor/anchorpool.hpp"
-//#include "rosetree/branch.hpp"
 #include "statecontext.hpp"
 
-GameWorld::GameWorld(AnchorPool& anchor, StateContext& context) :
+GameWorld::GameWorld(StateContext& context, Mode mode) :
 	mLadyBugs(),
 	mAphids(),
-	mBackGround(/*backGround*/),
+	mBackGround(),
     mInsectSprites(),
     mTotalCapacity(3),
     mLeftCapacity(mTotalCapacity),
-    mAnchorPool(anchor)
+	mMode(mode)
 {
 	// TODO Tout ça, ça ne devrait pas être fait ici…
 	sf::Sprite redLdb;
@@ -55,31 +54,10 @@ GameWorld::GameWorld(AnchorPool& anchor, StateContext& context) :
 				sf::Sprite(context.textures->get(Texture::ID::LadybugFlower))));
 	it.first->second.setOrigin(100.f, 100.f);
 	it.first->second.setColor(sf::Color::Red);
-	/*
-	for (auto flower : mRoseTree.getFlowers())
-	{
-		//ID<Flower> flower = stuff.first;
-		switch (mRoseTree[flower].getType())
-		{
-			case Flower::Type::RegularFlower:
-				mFlowers.push_back(new Flower(flower, 5, sf::seconds(60), Flower::Type::RegularFlower));
-				break;
-			case Flower::Type::AphidFlower:
-				mFlowers.push_back(new Flower(flower, 5, sf::seconds(0), Flower::Type::AphidFlower));
-				break;
-			case Flower::Type::LadyBugFlower:
-				mFlowers.push_back(new Flower(flower, 5, sf::seconds(3), Flower::Type::LadyBugFlower));
-				break;
-			default:
-				break;
-		}
-	}
-	*/
 }
 
 GameWorld::~GameWorld()
 {
-	// TODO Est-ce suffisant ?
 	for (auto ladybug : mLadyBugs)
 		delete ladybug;
 
@@ -90,8 +68,9 @@ GameWorld::~GameWorld()
 
 void GameWorld::render(sf::RenderTarget& target)
 {
-	// On commence par le fond d’écran
-	target.draw(mBackGround);
+	// On commence par le fond d’écran si on est en jeu
+	if (mMode == GameMode)
+		target.draw(mBackGround);
 
 	// Puis on dessine le rosier
 	for (auto& id_branch : mRoseTree.getBranchs())
@@ -111,14 +90,17 @@ void GameWorld::render(sf::RenderTarget& target)
 
 	// Puis enfin, on dessine l’interface
 	// la barre de capacité
-	sf::RectangleShape ext(sf::Vector2f(24.f, mTotalCapacity*10.f + 4));
-	ext.setPosition(8.f, 8.f);
-	ext.setFillColor(sf::Color::Green);
-	target.draw(ext, sf::RenderStates::Default);
-	sf::RectangleShape used(sf::Vector2f(20.f, (mTotalCapacity - mLeftCapacity)*10.f));
-	used.setPosition(10.f, 10.f + mLeftCapacity*10.f);
-	used.setFillColor(sf::Color::Black);
-	target.draw(used, sf::RenderStates::Default);
+	if (mMode == GameMode)
+	{
+		sf::RectangleShape ext(sf::Vector2f(24.f, mTotalCapacity*10.f + 4));
+		ext.setPosition(8.f, 8.f);
+		ext.setFillColor(sf::Color::Green);
+		target.draw(ext, sf::RenderStates::Default);
+		sf::RectangleShape used(sf::Vector2f(20.f, (mTotalCapacity - mLeftCapacity)*10.f));
+		used.setPosition(10.f, 10.f + mLeftCapacity*10.f);
+		used.setFillColor(sf::Color::Black);
+		target.draw(used, sf::RenderStates::Default);
+	}
 }
 
 Aphid& GameWorld::spawnAphid(ID<Flower> flower)
@@ -144,12 +126,15 @@ LadyBug& GameWorld::spawnLadyBug(ID<Flower> flower, LadyBug::Type type)
 		p.addNode(*neighbours.begin());
 		ladybug.redefinePath(p);
 	}
-	mAnchorPool.addAnchor<InsectAnchorListener>(AnchorItem(20.f), ladybug);
 	return ladybug;
 }
 
 void GameWorld::update(sf::Time dt)
 {
+	// Si on est en train d’éditer tout ça, pas besoin de tout ça
+	if (mMode == EditMode)
+		return;
+
 	// Commençons par mettre à jour les LadyBugs
 	for (auto ladybug : mLadyBugs)
 	{
@@ -232,6 +217,19 @@ void GameWorld::update(sf::Time dt)
 	}
 }
 
+
+ID<Branch> GameWorld::addBranch(ID<Flower> f1, ID<Flower> f2)
+{
+	if (getLeftCapacity() > 0 || mMode == EditMode)
+	{
+		ID<Branch> id = mRoseTree.addBranch(f1, f2);
+		if (id)
+			useCapacity(1);
+		return id;
+	}
+	else
+		return noID;
+}
 
 void GameWorld::drawFlower(sf::RenderTarget& target, Flower const& flower) const
 {

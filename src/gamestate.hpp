@@ -1,7 +1,7 @@
 #pragma once
 #include "state.hpp"
 #include "gameworld.hpp"
-#include "anchor/anchorpool.hpp"
+#include "floweranchor.hpp"
 
 
 class GameState : public State
@@ -14,18 +14,7 @@ class GameState : public State
 	virtual bool handleEvent(const sf::Event& event);
 	void handlePlayerInput(sf::Keyboard::Key , bool);
 
-	void addFlower(sf::Vector2f position, Flower::Type type);
-	void addBranch(ID<Flower> f1, ID<Flower> f2);
-
-	void onFlowerPressed(ID<Flower> flower);
-	void onFlowerReleased(ID<Flower> flower);
-
-	void updateAnchors();
-
 	private:
 	GameWorld mGameWorld;
-	AnchorPool mAnchors;
-	ID<Flower> mDraggedFlower;
-	bool mIsDragged;
-
+	FlowerAnchorManager mFAManager;
 };
