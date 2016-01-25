@@ -39,7 +39,7 @@ FlowerAnchorManager::FlowerAnchorManager(GameWorld& gameworld, bool canChangeFlo
 	mCanChangeFlowers(canChangeFlowers)
 {}
 
-void FlowerAnchorManager::injectEvent(sf::Event event, sf::Vector2f mouse)
+bool FlowerAnchorManager::injectEvent(sf::Event event, sf::Vector2f mouse)
 {
 	bool toucheQqch = mPool.injectEvent(event, mouse);
 	if (event.type == sf::Event::MouseButtonReleased)
@@ -51,6 +51,7 @@ void FlowerAnchorManager::injectEvent(sf::Event event, sf::Vector2f mouse)
 		ID<Flower> id = mGameWorld.addFlower(mouse, Flower::Type::RegularFlower);
 		mPool.addAnchor<FlowerAnchor>(AnchorItem(10.f), *this, id, mouse);
 	}
+	return true;
 }
 
 void FlowerAnchorManager::onFlowerPressed(FlowerAnchor* flower, sf::Mouse::Button button)

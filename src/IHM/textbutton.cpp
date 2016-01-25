@@ -40,14 +40,16 @@ TextButton::render (sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(mText, states);
 }
 
-void
+bool
 TextButton::event (sf::Event e) {
 	if (e.type == sf::Event::KeyPressed) {
 		if (e.key.code == sf::Keyboard::Return)
 		{
 			mCallback();
+			return true;
 		}
 	}
+	return false;
 }
 
 bool 

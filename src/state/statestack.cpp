@@ -19,12 +19,13 @@ State::Ptr StateStack::createState(States::ID stateID)
 
 void StateStack::handleEvent(const sf::Event& event)
 {
-    for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
-    {
-        if (!(*itr)->handleEvent(event))
-            return;
-    }
-    applyPendingChanges();
+	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
+	{
+		if (!(*itr)->handleEvent(event))
+			break;
+	}
+	applyPendingChanges();
+	return;
 }
 
 void StateStack::update(sf::Time dt)

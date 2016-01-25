@@ -4,6 +4,7 @@
 
 class Widget;
 
+// TODO What is a Layout ?
 class Layout 
 {
 

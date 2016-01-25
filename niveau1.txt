@@ -8,7 +8,6 @@ flowers
 	573 164.927 AphidFlower
 	272 136.324 AphidFlower
 	556 -49.5978 RegularFlower
-	365 41.933 RegularFlower
 	221 71.9665 AphidFlower
 branchs
 	3 1
@@ -21,4 +20,4 @@ branchs
 	7 2
 	8 5
 	2 0
-	10 7
+	9 7

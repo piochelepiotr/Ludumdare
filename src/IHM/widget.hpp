@@ -11,14 +11,15 @@ class Widget : public sf::Drawable, public Observable<Updatable>
 {
 	public:
 		/// @brief updates the button state
-		virtual void 
+		virtual void
 		update (sf::Time t)=0;
 
-		virtual 
+		virtual
 		~Widget();
 
 		/// @brief reacts to mouse/keyboard event
-		virtual void 
+		/// @return true if e has been used, false in other cases
+		virtual bool
 		event (sf::Event e)=0;
 
 		virtual bool

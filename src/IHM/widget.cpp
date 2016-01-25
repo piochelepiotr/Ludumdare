@@ -30,7 +30,7 @@ Widget::draw (sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 void
-Widget::focus () 
+Widget::focus ()
 {
 	if (mFocusGroup)
 		mFocusGroup->setFocus(*this);
@@ -44,7 +44,7 @@ Widget::setFocusGroup (FocusGroup* group)
 	if (mFocusGroup)
 		mFocusGroup->remove(*this);
 	
-	mFocusGroup = group; 
+	mFocusGroup = group;
 	
 	if (mFocusGroup)
 		mFocusGroup->append(*this);

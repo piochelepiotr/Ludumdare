@@ -2,7 +2,7 @@
 #include "titlestate.hpp"
 #include "gamestate.hpp"
 #include "menustate.hpp"
-#include "editor/editlevelstate.hpp"
+#include "editlevelstate.hpp"
 
 Application::Application(StateContext context)
 : mStateStack(context)

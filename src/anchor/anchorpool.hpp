@@ -28,9 +28,11 @@ class AnchorPool
 	void
 	removeAnchor (AnchorActionListener* ptr);
 
+	/// @return true il y a eu interaction avec une ancre
 	bool
 	injectEvent (sf::Event event, sf::Vector2f mouse);
 
+	/// @return true si on est sur une ancre, false sinon
 	bool
 	injectMouse (sf::Vector2f mouse);
 

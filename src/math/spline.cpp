@@ -1,5 +1,5 @@
 #include "spline.hpp"
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
 CubicCurve::CubicCurve(float cc0, float cc1, float cc2, float cc3) : c0 (cc0)
 								   , c1 (cc1)

@@ -15,27 +15,25 @@ void SelectorWidget::addEntry ( int id, const sf::String& name )
 	recompute();
 }
 
-void SelectorWidget::event ( sf::Event e )
+bool SelectorWidget::event ( sf::Event e )
 {
 	if (e.type == sf::Event::KeyPressed)
 	{
 		switch (e.key.code)
 		{
-			case sf::Keyboard::Left:{
+			case sf::Keyboard::Left:
 				previous();
-				break;
-			}
+				return true;
 			
-			case sf::Keyboard::Right:{
+			case sf::Keyboard::Right:
 				next();
-				break;
-			}
+				return true;
 			
 			default:
 				break;
 		}
-		
 	}
+	return false;
 }
 
 sf::FloatRect SelectorWidget::getArea() const

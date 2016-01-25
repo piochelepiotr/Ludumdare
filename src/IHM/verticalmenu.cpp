@@ -15,7 +15,7 @@ VerticalMenu::VerticalMenu (sf::Vector2f position, float width) :
 
 
 void
-VerticalMenu::setHorizontalAlignment (HorizontalAlignment align) 
+VerticalMenu::setHorizontalAlignment (HorizontalAlignment align)
 {
 	mAlignPolicy = align;
 	recompute();
@@ -51,7 +51,7 @@ VerticalMenu::recompute() {
 		for (auto w : mWidgets)
 		{
 			sf::Vector2f position = {
-				x_center + mWidth/2 - w->getArea().width/2, 
+				x_center + mWidth/2 - w->getArea().width/2,
 				y_pos
 			};
 			setWidgetPosition(*w, position);
@@ -64,7 +64,7 @@ VerticalMenu::recompute() {
 		for (auto w : mWidgets)
 		{
 			sf::Vector2f position = {
-				x_center, 
+				x_center,
 				y_pos
 			};
 			setWidgetPosition(*w, position);
@@ -77,7 +77,7 @@ VerticalMenu::recompute() {
 		for (auto w : mWidgets)
 		{
 			sf::Vector2f position = {
-				x_center + mWidth - w->getArea().width, 
+				x_center + mWidth - w->getArea().width,
 				y_pos
 			};
 			setWidgetPosition(*w, position);

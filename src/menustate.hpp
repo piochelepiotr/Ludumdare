@@ -1,5 +1,5 @@
 #pragma once
-#include "state.hpp"
+#include "state/state.hpp"
 
 #include <IHM/textbutton.hpp>
 #include <IHM/verticalmenu.hpp>

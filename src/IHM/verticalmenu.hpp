@@ -30,14 +30,14 @@ class VerticalMenu : public Layout, public Observer<Updatable> {
 		setHorizontalAlignment (HorizontalAlignment align);
 
 		/// @brief append a widget to the bottom of the layout
-		void 
+		void
 		append (Widget& widget);
 
 		/// @brief remove a widget from the layout
 		void
 		remove (Widget& widget);
 
-		virtual void 
+		virtual void
 		onUpdate(Observable< Updatable >& source);
 		
 		

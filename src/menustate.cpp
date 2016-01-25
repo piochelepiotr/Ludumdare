@@ -54,44 +54,42 @@ MenuState::MenuState(StateStack& mystack, StateContext context)
 
 bool MenuState::handleEvent(const sf::Event& event)
 {
-	
-    if (event.type == sf::Event::KeyPressed)
-    {
-		switch (event.key.code)
-		{
-			case sf::Keyboard::Down:
-				mFocusGroup.next(); break;
-			case sf::Keyboard::Up:
-				mFocusGroup.previous(); break;
-			
-			case sf::Keyboard::Escape:
-				resume();
-				
-			default:
-				break;
-		}
+	switch (event.type)
+	{
+		case sf::Event::KeyPressed:
+			switch (event.key.code)
+			{
+				case sf::Keyboard::Down:
+					mFocusGroup.next();
+					return true;
+				case sf::Keyboard::Up:
+					mFocusGroup.previous();
+					return true;
+				case sf::Keyboard::Escape:
+					resume();
+					return true;
+				default:
+					if (mFocusGroup.current())
+						return mFocusGroup.current()->event(event);
+					break;
+			}
+			break;
 
-		if (mFocusGroup.current())
-			mFocusGroup.current()->event(event);
-    }
-    else if (
-		event.type == sf::Event::MouseButtonPressed
-		|| event.type == sf::Event::MouseButtonReleased
-		|| event.type == sf::Event::MouseMoved
-	){
-		auto w = getContext().window;
-		mFocusGroup.mouseEvent(
-			event 
-			, w->mapPixelToCoords(sf::Mouse::getPosition(*w))
-		);
+		case sf::Event::MouseButtonPressed:
+		case sf::Event::MouseButtonReleased:
+		case sf::Event::MouseMoved:
+			mFocusGroup.mouseEvent(event, getMousePos());
+			return true;
+
+		default:
+			break;
 	}
-	
-    return false;
+	return false;
 }
 
 bool MenuState::update(sf::Time dt)
 {
-    return false;
+	return false;
 }
 
 void MenuState::draw()
@@ -100,7 +98,7 @@ void MenuState::draw()
 	sf::RectangleShape background (size);
 	background.setFillColor(sf::Color(0,0,0,175));
 	mContext.window->draw(background);
-        //mContext.window->draw(mText);
+	//mContext.window->draw(mText);
 	mContext.window->draw(mResumeButton);
 	mContext.window->draw(mMainScreenButton);
 	mContext.window->draw(mSoundButton);

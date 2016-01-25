@@ -3,7 +3,7 @@
 #include "textureholder.hpp" // TODO on devrait pouvoir l’enlever si on gère mieux
 #include "insectanchorlistener.hpp"
 #include "anchor/anchorpool.hpp"
-#include "statecontext.hpp"
+#include "state/statecontext.hpp"
 
 GameWorld::GameWorld(StateContext& context, Mode mode) :
 	mLadyBugs(),

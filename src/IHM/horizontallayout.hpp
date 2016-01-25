@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
 
-// TODO
-
 class HorizontalLayout
 {
 	public:
@@ -29,14 +27,14 @@ class HorizontalLayout
 		setVerticalAlignment (VerticalAlignment align);
 		
 		/// @brief append a widget to the bottom of the layout
-		void 
+		void
 		append (Widget& widget);
 		
 		/// @brief remove a widget from the layout
 		void
 		remove (Widget& widget);
 		
-		virtual void 
+		virtual void
 		onUpdate(Observable< Updatable >& source);
 		
 	protected:
@@ -49,5 +47,4 @@ class HorizontalLayout
 		sf::Vector2f         mPosition;
 		sf::Vector2f         mSize;
 		VerticalAlignment    mAlignPolicy = FIT;
-	
 };

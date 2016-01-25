@@ -1,7 +1,7 @@
 #pragma once
 #include "anchor/anchoractionlistener.hpp"
 #include "anchor/anchorpool.hpp"
-#include "id.hpp"
+#include "utils/id.hpp"
 
 class Flower;
 class GameWorld;
@@ -31,7 +31,8 @@ class FlowerAnchorManager
 	public:
 	FlowerAnchorManager(GameWorld& gameworld, bool canChangeFlowers);
 
-	void injectEvent(sf::Event event, sf::Vector2f mouse);
+	/// @return true si l’événement a été traité, false sinon
+	bool injectEvent(sf::Event event, sf::Vector2f mouse);
 	inline bool injectMouse(sf::Vector2f mouse)
 	{ return mPool.injectMouse(mouse); }
 

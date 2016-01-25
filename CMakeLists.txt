@@ -22,8 +22,8 @@ SET(
 	src/anchor/anchoritem.cpp
 	src/anchor/anchorpool.cpp
 
-	src/state.cpp
-	src/statestack.cpp
+	src/state/state.cpp
+	src/state/statestack.cpp
 
 	src/math/spline.cpp
 
@@ -35,14 +35,11 @@ SET(
 	src/insect/behaviour.cpp
 
 	src/gameworld.cpp
-	src/gamestate.cpp
-	#src/gamestateanchorlistener.cpp
 	src/floweranchor.cpp
 	src/insectanchorlistener.cpp
 
-	#src/editor/nodeanchorlistener.cpp
-	src/editor/editlevelstate.cpp
-
+	src/gamestate.cpp
+	src/editlevelstate.cpp
 	src/titlestate.cpp
 	src/menustate.cpp
 

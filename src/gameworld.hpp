@@ -7,6 +7,9 @@
 template <typename T> class IDstaticmap;
 class StateContext;// TODO À enlever au plus vite: on n’a besoin de ça que pour StateContext, qui ne sert que pour les Sprites
 
+// TODO: Dans l’éditeur, les fleurs None devrait être affichée
+
+/// \brief Gère l’univers du jeu (insectes, arbre…).
 class GameWorld
 {
 	public:
@@ -38,13 +41,14 @@ class GameWorld
 	inline Flower::Type nextType(ID<Flower> f);
 
 
+	private:
+
 	// Capacity
 	inline void useCapacity(int usedCapacity);
 	inline int getLeftCapacity();
 	inline int getTotalCapacity();
 	inline void increaseTotalCapacity();
 
-	private:
 	void drawFlower(sf::RenderTarget& target, Flower const& flower) const; // TODO Should not be here
 
 	RoseTree mRoseTree;

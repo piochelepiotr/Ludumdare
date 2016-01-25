@@ -56,7 +56,7 @@ class TextButton : public Widget {
 		update (sf::Time t) override;
 
 		/// @brief reacts to mouse/keyboard event
-		void 
+		bool 
 		event (sf::Event e) override;
 
 		bool 

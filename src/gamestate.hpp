@@ -1,5 +1,5 @@
 #pragma once
-#include "state.hpp"
+#include "state/state.hpp"
 #include "gameworld.hpp"
 #include "floweranchor.hpp"
 
@@ -12,9 +12,13 @@ class GameState : public State
 	virtual void draw();
 	virtual bool update(sf::Time dt);
 	virtual bool handleEvent(const sf::Event& event);
-	void handlePlayerInput(sf::Keyboard::Key , bool);
+	bool handlePlayerInput(sf::Keyboard::Key , bool);
 
-	private:
+	void load(std::string name);
+
+	protected:
+	GameState(StateStack& mystack, StateContext context, GameWorld::Mode mode);
+
 	GameWorld mGameWorld;
 	FlowerAnchorManager mFAManager;
 };

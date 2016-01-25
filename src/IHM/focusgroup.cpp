@@ -110,7 +110,6 @@ FocusGroup::unfocus()
 {
 	if (mCurrent)
 		mCurrent->disableFocus();
-	//mCurrent = false;
 	mCurrentFocusGroup = nullptr;
 }
 

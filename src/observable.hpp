@@ -16,7 +16,7 @@ class Observable {
 		removeListener(Observer<T>& observer);
 
 	protected:
-		void 
+		void
 		notify();
 
 	private:

@@ -10,7 +10,7 @@ class SelectorWidget : public Widget
 
 		SelectorWidget(sf::Font& font, TriggerFun callback=[](int){});
 		
-		void 
+		bool 
 		event ( sf::Event e ) override;
 
 		sf::FloatRect 

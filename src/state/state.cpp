@@ -32,3 +32,8 @@ StateContext State::getContext() const
 {
     return mContext;
 }
+
+sf::Vector2f State::getMousePos()
+{
+	return mContext.window->mapPixelToCoords(sf::Mouse::getPosition(*mContext.window));
+}

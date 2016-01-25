@@ -1,7 +1,7 @@
 #include <anchor/anchorpool.hpp>
 #include <anchor/anchoractionlistener.hpp>
 #include <SFML/Window/Event.hpp>
-#include "utils.hpp"
+#include "utils/utils.hpp"
 #include <limits>
 
 AnchorPool::~AnchorPool()
@@ -26,20 +26,26 @@ AnchorPool::removeAnchor(AnchorActionListener* ptr)
 
 bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
 {
-	if(!mCurrentAnchor) return false;
 	switch(event.type)
 	{
 		case sf::Event::MouseButtonPressed:
-			mCurrentAnchor->onMouseButtonPressed(event.mouseButton.button, mouse);
-			return true;
-
 		case sf::Event::MouseButtonReleased:
-			mCurrentAnchor->onMouseButtonReleased(event.mouseButton.button, mouse);
-			return true;
+			// On fait cela au cas où le clic à lieu avant qu’on ai eu le temps
+			// d’update le mouvement (cas d’un écran tactile)
+			if (injectMouse(mouse))
+			{
+				if (event.type == sf::Event::MouseButtonPressed)
+					mCurrentAnchor->onMouseButtonPressed(event.mouseButton.button, mouse);
+				else
+					mCurrentAnchor->onMouseButtonReleased(event.mouseButton.button, mouse);
+				return true;
+			}
+			break;
 
 		default:
-			return false;
+			break;
 	}
+	return false;
 }
 
 

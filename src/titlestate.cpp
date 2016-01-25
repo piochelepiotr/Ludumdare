@@ -4,9 +4,9 @@
 TitleState::TitleState(StateStack& mystack, StateContext context)
 : State(mystack, context)
 , mBackgroundSprite()
-, mText()
-, mShowText(true)
-, mTextEffectTime()
+//, mText()
+//, mShowText(true)
+//, mTextEffectTime()
 , mVerticalMenu()
 , mFocusGroup()
 , mPlayButton("Play", context.fonts->get(Font::Text), std::bind(&TitleState::play, this))
@@ -14,7 +14,7 @@ TitleState::TitleState(StateStack& mystack, StateContext context)
 , mQuitButton("Quit", context.fonts->get(Font::Text), std::bind(&TitleState::quit, this))
 ,mLevelEditorButton("Level editor", context.fonts->get(Font::Text), std::bind(&TitleState::editor, this))
 
-{ 
+{
 	TextButtonStyle normal;
 	normal.color = sf::Color::White;
 	normal.font = &context.fonts->get(Font::Text);
@@ -53,35 +53,39 @@ TitleState::TitleState(StateStack& mystack, StateContext context)
 
 bool TitleState::handleEvent(const sf::Event& event)
 {
-	
-    if (event.type == sf::Event::KeyPressed)
-    {
-		if (event.key.code == sf::Keyboard::Down) {
-			mFocusGroup.next();
-		}
-		else if (event.key.code == sf::Keyboard::Up) {
-			mFocusGroup.previous();
-		}
+	switch (event.type)
+	{
+		case sf::Event::KeyPressed:
+			switch (event.key.code)
+			{
+				case sf::Keyboard::Down:
+					mFocusGroup.next();
+					return true;
+				case sf::Keyboard::Up:
+					mFocusGroup.previous();
+					return true;
+				default:
+					if (mFocusGroup.current())
+						return mFocusGroup.current()->event(event);
+					break;
+			}
+			break;
 
-		if (mFocusGroup.current())
-			mFocusGroup.current()->event(event);
-    }
-    else if (
-		event.type == sf::Event::MouseButtonPressed
-		|| event.type == sf::Event::MouseButtonReleased
-		|| event.type == sf::Event::MouseMoved
-	){
-		auto w = getContext().window;
-		return mFocusGroup.mouseEvent(event, 
-			w->mapPixelToCoords(sf::Mouse::getPosition(*w))
-		);
+		case sf::Event::MouseButtonPressed:
+		case sf::Event::MouseButtonReleased:
+		case sf::Event::MouseMoved:
+			mFocusGroup.mouseEvent(event, getMousePos());
+			return true;
+
+		default:
+			break;
 	}
-	
-    return true;
+	return false;
 }
 
 bool TitleState::update(sf::Time dt)
 {
+	/*
     mTextEffectTime += dt;
 
 	// blinking text effect
@@ -90,6 +94,7 @@ bool TitleState::update(sf::Time dt)
         mShowText = !mShowText;
         mTextEffectTime = sf::Time::Zero;
     }
+	*/
     return true;
 }
 
@@ -120,5 +125,3 @@ void TitleState::editor()
     requestStackClear();
     requestStackPush(States::Editor);
 }
-
-
