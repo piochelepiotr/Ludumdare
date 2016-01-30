@@ -1,7 +1,8 @@
 #pragma once
 #include "rosetree/rosetree.hpp"
-#include "rosetree/branch.hpp"
 #include "rosetree/flower.hpp"
+#include "rosetree/branch.inl"
+#include <utility>
 
 // Inline functions for rosetree/rostree.hpp
 
@@ -9,10 +10,10 @@
 
 template <typename... Args>
 ID<Flower> RoseTree::addFlower(Args&&... args)
-{ return mGraph.addNode(softAddFlower(args...)); }
+{ return mGraph.addNode(softAddFlower(std::forward<Args>(args)...)); }
 template <typename...Args>
 ID<Flower> RoseTree::softAddFlower(Args&&... args)
-{ return mFlowers.addObj(args...)->first; }
+{ return mFlowers.addObj(std::forward<Args>(args)...)->first; }
 
 Flower const& RoseTree::getFlower(ID<Flower> f) const
 { return mFlowers[f]; }

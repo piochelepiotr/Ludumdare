@@ -15,34 +15,34 @@ class Branch
 	};
 
 	// Construit une branche de type t entre f1 et f2
-	Branch(ID<Flower> f1, ID<Flower> f2, Type t, RoseTree& rt);
+	inline Branch(ID<Flower> f1, ID<Flower> f2, Type t, RoseTree& rt);
 
 	// Renvoie une des deux fleurs de départ de la branche
-	ID<Flower> getFirstFlower() const;
-	ID<Flower> getSecondFlower() const;
+	inline ID<Flower> getFirstFlower() const;
+	inline ID<Flower> getSecondFlower() const;
 	// Renvoie la longueur physique de la branche
-	float getLength() const;
+	inline float getLength() const;
 	// Renvoie le nombre de coccinelles présentes sur cette branche
-	unsigned int getLadybugNumber() const;
+	inline unsigned int getLadybugNumber() const;
 	// Renvoie le type de la branche
-	Type getType() const;
+	inline Type getType() const;
 
 	// Changer le nombre de coccinelles présentes sur cette branche
-	void setLadybugNumber(unsigned int nb);
+	inline void setLadybugNumber(unsigned int nb);
 	// Changer le type de la branche
-	void setType(Type t = RegularBranch);
+	inline void setType(Type t = RegularBranch);
 
 
 	// Renvoie l’avancée réelle si l’avancée est pos relativement à la fleur f0
-	float getPos(float pos, ID<Flower> f0) const;
+	inline float getPos(float pos, ID<Flower> f0) const;
 	// Renvoie la position du point à l’avancée pos (entre 0 et 1),
 	// en considérant firstFlower comme le point de départ
-	sf::Vector2f eval(float pos, ID<Flower> firstFlower) const;
+	inline sf::Vector2f eval(float pos, ID<Flower> firstFlower) const;
 	// Renvoie la dérivée du point à l’avancée pos (entre 0 et 1),
 	// en considérant firstFlower comme le point de départ
 	sf::Vector2f evalDerivative(float pos, ID<Flower> firstFlower) const;
 
-	void draw(sf::RenderTarget& target) const;
+	inline void draw(sf::RenderTarget& target) const;
 
 	private:
 

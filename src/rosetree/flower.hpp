@@ -11,7 +11,7 @@ class Flower
 		AphidFlower,
 		LadybugFlower,
 		Node,
-		TypeEnumSize // Permet de connaître la taille de cette enum
+		TypeNumber // Permet de connaître le nombre de types
 	};
 
 	Flower(sf::Vector2f position, Type type);

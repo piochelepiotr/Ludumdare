@@ -4,18 +4,17 @@
 
 namespace Texture
 {
-    enum class ID {
+    enum ID {
 	Branch
-	, LeafBranch
-	, AphidBranch
-	, OffensiveLadyBug
-	, DefensiveLadyBug
-	, NormalLadyBug
+	, OffensiveLadybug
+	, DefensiveLadybug
+	, NormalLadybug
 	, Aphid
-	, BackGround
+	, Background
 	, RegularFlower
 	, AphidFlower
 	, LadybugFlower
+	, NodeFlower
 	, None
     };
 }

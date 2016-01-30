@@ -5,9 +5,6 @@
 #include "rosetree/rosetree.hpp"
 
 template <typename T> class IDstaticmap;
-class StateContext;// TODO À enlever au plus vite: on n’a besoin de ça que pour StateContext, qui ne sert que pour les Sprites
-
-// TODO: Dans l’éditeur, les fleurs None devrait être affichée
 
 /// \brief Gère l’univers du jeu (insectes, arbre…).
 class GameWorld
@@ -18,47 +15,55 @@ class GameWorld
 		GameMode
 	};
 
-	GameWorld(StateContext& context, Mode mode); // TODO À modifier au plus vite…
-	GameWorld& operator= (GameWorld& world);
+	public:
+	GameWorld(Mode mode);
+	GameWorld& operator= (GameWorld& world) = delete;
+	GameWorld(GameWorld& world) = delete;
 	~GameWorld();
-
-	void render (sf::RenderTarget& target);
-
 	void update (sf::Time dt);
 
-	inline void load(std::istream& is);
-	inline void save(std::ostream& os) const;
+	// Flowers
+	public:
 	inline ID<Flower> addFlower(sf::Vector2f position, Flower::Type type);
 	inline void removeFlower(ID<Flower>);
-	ID<Branch> addBranch(ID<Flower> f1, ID<Flower> f2);
-	inline IDstaticmap<Flower>& getFlowers();
-
-
-	Aphid& spawnAphid (ID<Flower> flower);
-	LadyBug& spawnLadyBug (ID<Flower> flower, LadyBug::Type type);
-
 	inline ID<Flower> spawnFlower (sf::Vector2f position, Flower::Type type);
 	inline Flower::Type nextType(ID<Flower> f);
 
+	// Branchs
+	public:
+	ID<Branch> addBranch(ID<Flower> f1, ID<Flower> f2);
 
-	private:
+	// Insects
+	public:
+	Aphid& spawnAphid (ID<Flower> flower);
+	Ladybug& spawnLadybug (ID<Flower> flower, Ladybug::Type type);
+
+	// Get everything
+	public:
+	inline IDstaticmap<Flower> const& getFlowers() const;
+	inline IDstaticmap<Branch> const& getBranchs() const;
+	inline std::vector<Ladybug*> const& getLadybugs() const;
+	inline std::vector<Aphid*> const& getAphids() const;
+
+	// Input-Output
+	public:
+	inline void load(std::istream& is);
+	inline void save(std::ostream& os) const;
 
 	// Capacity
+	public:
+	inline int getRemainingCapacity() const;
+	inline int getTotalCapacity() const;
+	private:
 	inline void useCapacity(int usedCapacity);
-	inline int getLeftCapacity();
-	inline int getTotalCapacity();
 	inline void increaseTotalCapacity();
 
-	void drawFlower(sf::RenderTarget& target, Flower const& flower) const; // TODO Should not be here
-
+	// Attirbutes
+	private:
 	RoseTree mRoseTree;
-	std::vector<LadyBug*> mLadyBugs;
+	std::vector<Ladybug*> mLadybugs;
 	std::vector<Aphid*> mAphids;
-	sf::Sprite mBackGround; // TODO Ces trois lignes ne devraient pas être là
-	sf::Sprite mInsectSprites[4];
-	std::map<Flower::Type, sf::Sprite> mFlowerSprites;
 	int mTotalCapacity;
-	int mLeftCapacity;
-
+	int mRemainingCapacity;
 	Mode mMode;
 };

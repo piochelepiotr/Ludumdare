@@ -51,33 +51,26 @@ bool AnchorPool::injectEvent ( sf::Event event, sf::Vector2f mouse )
 
 bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 {
-	// TODO améliorer en prenant en compte le rayon
-
-	// On recherche l’ancre la plus proche
-	// TODO On pourrait utiliser la STL pour ça, non ?
+	// On recherche l’ancre la plus proche qu’on touche
 	float min_distance = std::numeric_limits<float>::infinity();
 	auto min_it = mAnchors.end();
-	for (auto it = mAnchors.begin() ; it != mAnchors.end() ; it++)
+	for (auto it = mAnchors.begin() ; it != mAnchors.end() ; ++it)
 	{
-		float distance = squareNorm(mouse - it->first->getPosition());
-		if (distance < min_distance)
+		AnchorActionListener& anchor = *it->first;
+		AnchorItem& item = it->second;
+		float distance = squareNorm(mouse - anchor.getPosition());
+		float radius = item.getRadius();
+		if (distance < radius*radius && distance < min_distance)
 		{
 			min_distance = distance;
 			min_it = it;
 		}
 	}
 
-	// Si on n’en a pas trouvé, on s’en va
-	// (cela ne devrait arriver que si il n’y a pas encore d’ancres)
-	if (min_it == mAnchors.end())
-		return false;
-
-	// On verifie qu’on est bien sur l’ancre
-	//
-	bool isOnAnchor = min_distance < min_it->second.getSquareRadius();
+	bool isOnAnchor = min_it != mAnchors.end();
 
 	// Si on a quitté l’ancre précédente, on ne manque pas de le faire savoir
-	if (mCurrentAnchor && (min_it->first != mCurrentAnchor || !isOnAnchor))
+	if (mCurrentAnchor && (!isOnAnchor || min_it->first != mCurrentAnchor))
 	{
 		mCurrentAnchor->onMouseLeft();
 		mCurrentAnchor = nullptr;
@@ -86,7 +79,6 @@ bool AnchorPool::injectMouse ( sf::Vector2f mouse )
 	// Enfin, on fait ce qu’on a à faire avec cette ancre
 	if (isOnAnchor)
 	{
-
 		mCurrentAnchor = min_it->first;
 		mCurrentAnchor->onMouseEnter();
 		return true;

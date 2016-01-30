@@ -5,7 +5,6 @@
 
 void RoseTree::removeFlower(ID<Flower> f)
 {
-	//std::cout << "RoseTree::removeFlower" << std::endl;
 	mFlowers.removeObj(f);
 	auto branchsToRemove = mGraph.removeNode(f);
 	for (ID<Branch> b : branchsToRemove)

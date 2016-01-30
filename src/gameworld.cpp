@@ -1,64 +1,20 @@
 #include "gameworld.inl"
 #include "insect/insect.inl"
-#include "textureholder.hpp" // TODO on devrait pouvoir l’enlever si on gère mieux
 #include "insectanchorlistener.hpp"
 #include "anchor/anchorpool.hpp"
-#include "state/statecontext.hpp"
 
-GameWorld::GameWorld(StateContext& context, Mode mode) :
-	mLadyBugs(),
+GameWorld::GameWorld(Mode mode) :
+	mLadybugs(),
 	mAphids(),
-	mBackGround(),
-    mInsectSprites(),
     mTotalCapacity(3),
-    mLeftCapacity(mTotalCapacity),
+    mRemainingCapacity(mTotalCapacity),
 	mMode(mode)
 {
-	// TODO Tout ça, ça ne devrait pas être fait ici…
-	sf::Sprite redLdb;
-	redLdb.setTexture(context.textures->get(Texture::ID::NormalLadyBug));
-	redLdb.setOrigin(50.0f, 70.0f);
-	redLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(LadyBug::RedLadybug)] = redLdb;
-
-	sf::Sprite redBlackLdb;
-	redBlackLdb.setTexture(context.textures->get(Texture::ID::DefensiveLadyBug));
-	redBlackLdb.setOrigin(50.0f, 70.0f);
-	redBlackLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(LadyBug::RedBlackLadybug)] = redBlackLdb;
-
-	sf::Sprite blackLdb;
-	blackLdb.setTexture(context.textures->get(Texture::ID::OffensiveLadyBug));
-	blackLdb.setOrigin(50.0f, 70.0f);
-	blackLdb.setScale(.9f, .9f);
-	mInsectSprites[static_cast<int>(LadyBug::BlackLadybug)] = blackLdb;
-
-	sf::Sprite aphid;
-	aphid.setTexture(context.textures->get(Texture::ID::Aphid));
-	aphid.setOrigin(50.0f, 75.0f);
-	aphid.setScale(0.6f, 0.6f);
-	// TODO This is just horrible
-	mInsectSprites[static_cast<int>(LadyBug::BlackLadybug)+1] = aphid;
-
-	mBackGround.setTexture(context.textures->get(Texture::ID::BackGround));
-
-	// TODO Mauvaise idée, si on modifie les Flowers…
-	auto it = mFlowerSprites.insert(std::make_pair(Flower::RegularFlower,
-				sf::Sprite(context.textures->get(Texture::ID::RegularFlower))));
-	it.first->second.setOrigin(100.f, 100.f);
-	it = mFlowerSprites.insert(std::make_pair(Flower::AphidFlower,
-				sf::Sprite(context.textures->get(Texture::ID::AphidFlower))));
-	it.first->second.setOrigin(100.f, 100.f);
-	it.first->second.setColor(sf::Color::Green);
-	it = mFlowerSprites.insert(std::make_pair(Flower::LadybugFlower,
-				sf::Sprite(context.textures->get(Texture::ID::LadybugFlower))));
-	it.first->second.setOrigin(100.f, 100.f);
-	it.first->second.setColor(sf::Color::Red);
 }
 
 GameWorld::~GameWorld()
 {
-	for (auto ladybug : mLadyBugs)
+	for (auto ladybug : mLadybugs)
 		delete ladybug;
 
 	for (auto aphid : mAphids)
@@ -66,56 +22,19 @@ GameWorld::~GameWorld()
 }
 
 
-void GameWorld::render(sf::RenderTarget& target)
-{
-	// On commence par le fond d’écran si on est en jeu
-	if (mMode == GameMode)
-		target.draw(mBackGround);
-
-	// Puis on dessine le rosier
-	for (auto& id_branch : mRoseTree.getBranchs())
-		id_branch.second.draw(target);
-	for (auto& id_flower : mRoseTree.getFlowers())
-		drawFlower(target, id_flower.second);
-		
-
-	// Ensuite viennent les insectes
-	for (auto ldb : mLadyBugs) {
-		ldb->draw(target, mInsectSprites[static_cast<size_t>(ldb->getType())]);
-	}
-	for (auto &apd : mAphids) {
-		// TODO Just horrible…
-		apd->draw(target, mInsectSprites[static_cast<size_t>(LadyBug::BlackLadybug)+1]);
-	}
-
-	// Puis enfin, on dessine l’interface
-	// la barre de capacité
-	if (mMode == GameMode)
-	{
-		sf::RectangleShape ext(sf::Vector2f(24.f, mTotalCapacity*10.f + 4));
-		ext.setPosition(8.f, 8.f);
-		ext.setFillColor(sf::Color::Green);
-		target.draw(ext, sf::RenderStates::Default);
-		sf::RectangleShape used(sf::Vector2f(20.f, (mTotalCapacity - mLeftCapacity)*10.f));
-		used.setPosition(10.f, 10.f + mLeftCapacity*10.f);
-		used.setFillColor(sf::Color::Black);
-		target.draw(used, sf::RenderStates::Default);
-	}
-}
-
 Aphid& GameWorld::spawnAphid(ID<Flower> flower)
 {
 	mAphids.push_back(new Aphid(mRoseTree, flower, AphidBehaviour::Offensive));
 	return *mAphids.back();
 }
 
-LadyBug& GameWorld::spawnLadyBug(ID<Flower> flower, LadyBug::Type type)
+Ladybug& GameWorld::spawnLadybug(ID<Flower> flower, Ladybug::Type type)
 {
-	LadyBug& ladybug = *(new LadyBug(mRoseTree, flower, type));
-	mLadyBugs.push_back(&ladybug);
-	// TODO Doit-on donner un chemin par défaut aux LadyBug ?
-	// TODO Cela dépend du type de LadyBug, non ?
-	// TODO Peut-être attendre un clic ici pour que LadyBug apparaîsse…
+	Ladybug& ladybug = *(new Ladybug(mRoseTree, flower, type));
+	mLadybugs.push_back(&ladybug);
+	// TODO Doit-on donner un chemin par défaut aux Ladybug ?
+	// TODO Cela dépend du type de Ladybug, non ?
+	// TODO Peut-être attendre un clic ici pour que Ladybug apparaîsse…
 	// Pour l’instant, on va lui donner un chemin par défaut :
 	//		Elle va jusqu’à un nœud voisin de la fleur et elle revient;
 	//		Si il n’y a pas de voisin, elle reste là…
@@ -135,8 +54,8 @@ void GameWorld::update(sf::Time dt)
 	if (mMode == EditMode)
 		return;
 
-	// Commençons par mettre à jour les LadyBugs
-	for (auto ladybug : mLadyBugs)
+	// Commençons par mettre à jour les Ladybugs
+	for (auto ladybug : mLadybugs)
 	{
 		// Si ladybug n’est pas déjà en train de manger,
 		// elle mange un Aphid assez proche sur sa branche
@@ -207,7 +126,7 @@ void GameWorld::update(sf::Time dt)
 					flower.setTimeLeft(sf::seconds(0.9f)); // TODO Ne pas le fixer à 2
 					break;
 				case Flower::LadybugFlower:
-					spawnLadyBug(ID_n_flower.first, LadyBug::BlackLadybug);
+					spawnLadybug(ID_n_flower.first, Ladybug::BlackLadybug);
 					flower.becomeNode(); // Doit-on faire ça ?
 					break;
 				default:
@@ -220,7 +139,7 @@ void GameWorld::update(sf::Time dt)
 
 ID<Branch> GameWorld::addBranch(ID<Flower> f1, ID<Flower> f2)
 {
-	if (getLeftCapacity() > 0 || mMode == EditMode)
+	if (getRemainingCapacity() > 0 || mMode == EditMode)
 	{
 		ID<Branch> id = mRoseTree.addBranch(f1, f2);
 		if (id)
@@ -229,13 +148,4 @@ ID<Branch> GameWorld::addBranch(ID<Flower> f1, ID<Flower> f2)
 	}
 	else
 		return noID;
-}
-
-void GameWorld::drawFlower(sf::RenderTarget& target, Flower const& flower) const
-{
-	if (flower.getType() == Flower::Node)
-		return;
-	sf::Transform transform;
-	transform.translate(flower.getPosition()).scale(0.3f, 0.3f);
-	target.draw(mFlowerSprites.find(flower.getType())->second, transform);
 }

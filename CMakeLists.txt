@@ -37,6 +37,7 @@ SET(
 	src/gameworld.cpp
 	src/floweranchor.cpp
 	src/insectanchorlistener.cpp
+	src/gamedrawer.cpp
 
 	src/gamestate.cpp
 	src/editlevelstate.cpp

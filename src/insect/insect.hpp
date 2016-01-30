@@ -18,9 +18,8 @@ class Insect {
 
 	// Renvoie sa position dans l’espace
 	inline sf::Vector2f getPosition() const;
-
-	// Dessin de l’insecte
-	void draw(sf::RenderTarget& target, sf::Sprite sprite);
+	// Renvoie son angle
+	inline float getAngle() const;
 
 	protected:
 	// L’insecte se déplace de dt
@@ -37,7 +36,7 @@ class Insect {
 
 	float mPos; // Position sur la branche actuelle (entre 0 et 1)
 	sf::Vector2f mRealPosition; // Position réelle dans l’espace
-	float mAngle; // Angle de l’insecte
+	float mAngle; // Angle de l’insecte en radians
 };
 
 class Aphid : public Insect {
@@ -51,14 +50,21 @@ class Aphid : public Insect {
 	AphidBehaviour mBehaviour; // Son comportement, qui dicte son chemin
 };
 
-class LadyBug : public Insect {
+class Ladybug : public Insect {
 	public:
 	// Différents types pour différents comportements
-	enum Type {RedLadybug, RedBlackLadybug, BlackLadybug};
+	// TODO Renomer ces type pour que ça explicite leur comportement
+	//		(Les couleurs peuvent être explicité dans Texture::ID)
+	enum Type {
+		RedLadybug,
+		RedBlackLadybug,
+		BlackLadybug,
+		TypeNumber // Nombre de types différents
+	};
 
 	public:
 	// Nouvelle Coccinelle sur l’arbre rt, fleur spawnFlower, de type t
-	inline LadyBug(RoseTree const& rt, ID<Flower> spawnFlower, LadyBug::Type t);
+	inline Ladybug(RoseTree const& rt, ID<Flower> spawnFlower, Ladybug::Type t);
 
 	// Le type de coccinelle
 	Type getType();

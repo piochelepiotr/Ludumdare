@@ -1,12 +1,6 @@
 #include "insect/insect.inl"
 
 
-void Insect::draw(sf::RenderTarget& target, sf::Sprite sprite) {
-	sprite.setRotation(mAngle * 180.0f / 3.14159265f + 90.0f);
-	sprite.setPosition(mRealPosition);
-	target.draw(sprite);
-}
-
 void Insect::move(sf::Time dt) {
 	if (isObjectiveReached())
 		return;
@@ -49,7 +43,7 @@ Aphid::Aphid(RoseTree const& rt, ID<Flower> spawnFlower, AphidBehaviour::Type t)
 }
 
 
-void LadyBug::redefinePath(Path<Flower> newPath)
+void Ladybug::redefinePath(Path<Flower> newPath)
 {
 	mDutyPath = newPath;
 	if (!mDutyPath.isCyclic())
@@ -70,7 +64,7 @@ void LadyBug::redefinePath(Path<Flower> newPath)
 }
 
 
-void LadyBug::move(sf::Time dt)
+void Ladybug::move(sf::Time dt)
 {
 	Insect::move(dt);
 
@@ -83,7 +77,7 @@ void LadyBug::move(sf::Time dt)
 	}
 }
 
-LadyBug::Type LadyBug::getType() {
+Ladybug::Type Ladybug::getType() {
 	return mType;
 }
 

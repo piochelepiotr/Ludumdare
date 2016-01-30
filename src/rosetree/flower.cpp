@@ -56,7 +56,7 @@ void Flower::setType(Type t)
 Flower::Type Flower::nextType()
 {
 	int newType = static_cast<int>(mType) + 1;
-	if (newType >= static_cast<int>(TypeEnumSize))
+	if (newType >= static_cast<int>(TypeNumber))
 		newType = 0;
 	return mType = Type(newType);
 }
@@ -91,7 +91,7 @@ std::ostream& operator<<(std::ostream& os, Flower::Type const& type)
 		case Flower::Node:
 			s = "Node";
 			break;
-		case Flower::TypeEnumSize:
+		case Flower::TypeNumber:
 			assert(false); // This case should never happen
 			break;
 	}

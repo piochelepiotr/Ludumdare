@@ -1,6 +1,7 @@
 #pragma once
 #include "insect/insect.hpp"
 #include "rosetree/rosetree.inl"
+#include "rosetree/rosetree.hpp"
 
 // Insect
 
@@ -13,6 +14,8 @@ bool Insect::isObjectiveReached() const
 
 sf::Vector2f Insect::getPosition() const
 { return mRealPosition; }
+float Insect::getAngle() const
+{ return mAngle; }
 
 ID<Flower> Insect::getNextFlower() const
 { return mPath.getTwoFirstNodes().second; }
@@ -27,15 +30,15 @@ void Aphid::move(sf::Time dt)
 { Insect::move(dt); }
 
 
-// LadyBug
+// Ladybug
 
-LadyBug::LadyBug(RoseTree const& rt, ID<Flower> spawnFlower, LadyBug::Type t) :
+Ladybug::Ladybug(RoseTree const& rt, ID<Flower> spawnFlower, Ladybug::Type t) :
 	Insect(rt, spawnFlower, 50.f*1.5f), mDutyPath(spawnFlower), mType(t)
 { move(sf::seconds(0.f)); } // Juste pour faire la mise au point du path
 
-void LadyBug::eatAnAphid(Aphid& aphid)
+void Ladybug::eatAnAphid(Aphid& aphid)
 { mEatingTime = sf::seconds(0.2f); }
-bool LadyBug::isEating()
+bool Ladybug::isEating()
 { return mEatingTime > sf::seconds(0); }
-void LadyBug::decreaseEatingTime(sf::Time dt)
+void Ladybug::decreaseEatingTime(sf::Time dt)
 { mEatingTime -= dt; }

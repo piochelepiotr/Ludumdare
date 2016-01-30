@@ -3,67 +3,50 @@
 #include "player.hpp"
 #include "application.hpp"
 
-//#include "rosetree/graph.hpp"
-//#include "rosetree/flower.hpp"
-//#include "path.hpp"
+#include <iostream>
 
 
-int main()
+int main() noexcept
 {
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « RoseBud », mais on n'est pas sur");
+	std::cerr << sizeof(sf::Sprite) << std::endl;
+	std::cerr << sizeof(sf::Transformable) << std::endl;
+	std::cerr << sizeof(sf::Drawable) << std::endl;
+	std::cerr << sizeof(sf::Transform) << std::endl;
 
-	//Graph g;
+	sf::RenderWindow window(sf::VideoMode(1280, 1024), "Jeu qu'on va peut-etre appeler « RoseBud », mais on n'est pas sur");
+	TextureHolder textures;
+	FontHolder fonts;
+	Player player;
+	struct StateContext context(window, textures, fonts, player);
 
-	/*g.addNode(Node::ID(250, 200));
-	g.addNode(Node::ID(350, 210));
-	g.addNode(Node::ID(450,150));
-	g.forceNewEdge(sf::Vector2f(250, 200),sf::Vector2f(300, 170));
-	g.forceNewEdge(sf::Vector2f(350, 210),sf::Vector2f(300, 300));
-	g.forceNewEdge(sf::Vector2f(450, 150), sf::Vector2f(350, 210));
-	g.save("niveau1");
-	g.charge("niveau1");
-	std::cout << g.isCulDeSac(b2) << std::endl;
-	window.clear();
+	// Set the window params
+	window.setFramerateLimit(90);
+	// TODO This is useless here…
+	auto view = window.getDefaultView();
+	view.setSize(1280,1024);
+	window.setView(view);
 
-	g.draw(window, sf::RenderStates::Default);
-	g.save("niveau1");
-	window.display();
-	sf::sleep(sf::milliseconds(2000));
+	// Load textures
+	context.textures->load(Texture::OffensiveLadybug, "graphics/ldb3.png");
+	context.textures->load(Texture::NormalLadybug, "graphics/ldb.png");
+	context.textures->load(Texture::DefensiveLadybug, "graphics/ldb2.png");
+	context.textures->load(Texture::Aphid, "graphics/puceron.png");
+	context.textures->load(Texture::Background, "graphics/bg.png");
+	context.textures->load(Texture::RegularFlower, "graphics/bigflower.png");
+	// TODO Ces images ne sont pas utilitées comme prévues
+	context.textures->load(Texture::AphidFlower, "graphics/flower1.png");
+	context.textures->load(Texture::LadybugFlower, "graphics/flower3.png");
+	context.textures->load(Texture::NodeFlower, "../ld33/graphics/items/pan2.png");
 
-	Path p = g.getPath(Node::ID(300, 300), Node::ID(450, 150));
-	std::cout << p.length(g) << std::endl;
-	std::cout << p.getSize() << std::endl;
-	for (int i = 0 ; i < p.getSize() ; i++)
-	{
-		std::cout << g[p[i].first].getPosition().x << " " << g[p[i].first].getPosition().y << std::endl;
-	}
-
-*/
-    auto view = window.getDefaultView();
-    view.setSize(1280,1024);
-    window.setView(view);
-
-    window.setFramerateLimit(90);
-    TextureHolder textures;
-    FontHolder fonts;
-
+	// Load fonts
 	fonts.load(Font::Text, "fonts/text.ttf");
 	fonts.load(Font::Standard, "fonts/standard.ttf");
 
-    Player player;
-    struct StateContext context(window, textures, fonts, player);
-    context.textures->load(Texture::ID::OffensiveLadyBug, "graphics/ldb3.png");
-    context.textures->load(Texture::ID::NormalLadyBug, "graphics/ldb.png");
-    context.textures->load(Texture::ID::DefensiveLadyBug, "graphics/ldb2.png");
-    context.textures->load(Texture::ID::Aphid, "graphics/puceron.png");
-    context.textures->load(Texture::ID::BackGround, "graphics/bg.png");
-	context.textures->load(Texture::ID::RegularFlower, "graphics/bigflower.png");
-	context.textures->load(Texture::ID::AphidFlower, "graphics/bigflower.png");
-	context.textures->load(Texture::ID::LadybugFlower, "graphics/bigflower.png");
-    Application app(context);
-    int truc = app.run();
+	// Set the player params
 
+	// And Now, start the application
+	Application app(context);
+	int truc = app.run();
 
-    return truc;
+	return truc;
 }

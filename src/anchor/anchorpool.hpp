@@ -45,7 +45,7 @@ class AnchorPool
 template<typename T, typename... Args> T*
 AnchorPool::addAnchor ( AnchorItem anchor, Args&&... args )
 {
-	auto ptr = new T(args...);
+	auto ptr = new T(std::forward<Args>(args)...);
     mAnchors.insert(std::pair<AnchorActionListener*, AnchorItem>(ptr, anchor));
     return ptr;
 }

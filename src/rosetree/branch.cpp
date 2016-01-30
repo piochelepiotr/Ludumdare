@@ -1,10 +1,7 @@
 #include "rosetree/branch.hpp"
 #include "rosetree/rosetree.hpp"
 #include "rosetree/flower.hpp"
-
-Branch::Branch(ID<Flower> f1, ID<Flower> f2, Type t, RoseTree& rt) :
-	Branch(HelpCreator(f1, f2, t, rt))
-{}
+#include "rosetree/branch.inl"
 
 Branch::HelpCreator::HelpCreator(ID<Flower> _f1, ID<Flower> _f2, Type _t, RoseTree& rt) :
 	f1ID(_f1), f2ID(_f2), type(_t), f1(&rt[f1ID]), f2(&rt[f2ID])
@@ -36,47 +33,13 @@ Branch::Branch(HelpCreator hc) :
 { }
 
 
-// TODO These seven functions: inline them!
-ID<Flower> Branch::getFirstFlower() const
-{ return mFirstFlower; }
-ID<Flower> Branch::getSecondFlower() const
-{ return mSecondFlower; }
-
-float Branch::getLength() const
-{ return mSplineShape.getLength(); }
-
-unsigned int Branch::getLadybugNumber() const
-{ return mLadybugNumber; }
-
-Branch::Type Branch::getType() const
-{ return mType; }
-
-void Branch::setLadybugNumber(unsigned int nb)
-{ mLadybugNumber = nb; }
-
-void Branch::setType(Type t)
-{ mType = t; }
-
-
-float Branch::getPos(float pos, ID<Flower> f0) const
-{
-	return f0 == mFirstFlower ? pos : 1.f - pos;
-}
-sf::Vector2f Branch::eval(float pos, ID<Flower> firstFlower) const
-{
-	float f = firstFlower == mFirstFlower ? pos : 1.f - pos;
-	return mSplineShape.getSpline().evaluatePos(f);
-}
-
 sf::Vector2f Branch::evalDerivative(float pos, ID<Flower> firstFlower) const
 {
+	auto spline = mSplineShape.getSpline();
+	float realPos = getPos(pos, firstFlower);
+	sf::Vector2f derivative = spline.evaluateSpeed(realPos);
 	if (firstFlower == mFirstFlower)
-		return mSplineShape.getSpline().evaluateSpeed(pos);
+		return derivative;
 	else
-		return - mSplineShape.getSpline().evaluateSpeed(1.f - pos);
-}
-
-void Branch::draw(sf::RenderTarget& target) const
-{
-	target.draw(mSplineShape);
+		return - derivative;
 }

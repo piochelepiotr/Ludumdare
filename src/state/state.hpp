@@ -18,7 +18,8 @@ class State
 	State(StateStack& mystack, StateContext context);
 	virtual ~State();
 	virtual void draw() = 0;
-	virtual bool update(sf::Time dt) = 0; // TODO Expliquer à quoi servent ces bool…
+	/// @return le booléen retourné ne sert à rien pour l’instant
+	virtual bool update(sf::Time dt) = 0;
 	/// @return true si l’événement a été géré, false sinon
 	virtual bool handleEvent(const sf::Event& event) = 0;
 
