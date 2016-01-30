@@ -38,11 +38,8 @@ void GameDrawer::draw(sf::RenderTarget& target)
 
 	// Puis on dessine le rosier
 
-	// Les branches // TODO à faire mieux, ce n’est pas aux branches de se dessiner elles-mêmes
-	for (auto& id_branch : mGameWorld.getBranchs())
-	{
-		id_branch.second.draw(target);
-	}
+	// Les branches
+	mBranchRenderer.draw(target);
 
 	// Les fleurs
 	for (auto& id_flower : mGameWorld.getFlowers())
@@ -81,3 +78,4 @@ void GameDrawer::draw(sf::RenderTarget& target)
 		used.setFillColor(sf::Color::Black);
 		target.draw(used, sf::RenderStates::Default);
 }
+

@@ -82,7 +82,6 @@ bool GameState::update(sf::Time dt)
 
 void GameState::draw()
 {
-    //mGameWorld.render(*mContext.window);
 	mGameDrawer.draw(*mContext.window);
 }
 

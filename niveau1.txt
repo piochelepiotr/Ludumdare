@@ -5,7 +5,6 @@ flowers
 	494 286.492 LadybugFlower
 	452 129.173 LadybugFlower
 	485 26.2011 LadybugFlower
-	573 164.927 AphidFlower
 	272 136.324 AphidFlower
 	556 -49.5978 RegularFlower
 	221 71.9665 AphidFlower
@@ -16,8 +15,7 @@ branchs
 	4 2
 	4 3
 	5 4
-	6 3
-	7 2
-	8 5
+	6 2
+	7 5
 	2 0
-	9 7
+	8 6

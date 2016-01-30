@@ -38,6 +38,7 @@ SET(
 	src/floweranchor.cpp
 	src/insectanchorlistener.cpp
 	src/gamedrawer.cpp
+	src/splinerenderer.cpp
 
 	src/gamestate.cpp
 	src/editlevelstate.cpp

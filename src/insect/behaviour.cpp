@@ -1,5 +1,6 @@
 #include "behaviour.hpp"
 #include "rosetree/rosetree.inl"
+#include <algorithm>
 
 // TODO Il faudrait revoir les comportements qu’on donne
 
@@ -92,10 +93,10 @@ AphidBehaviour::AphidBehaviour(AphidBehaviour::Type type, ID<Flower> spawningFlo
 				switch (type)
 				{
 					case AphidBehaviour::Dumb:
-						spawningFlower = *min_element(neighbours.begin(), neighbours.end(), DumbCompare(rt, spawningFlower, previousFlower));
+						spawningFlower = *std::min_element(neighbours.begin(), neighbours.end(), DumbCompare(rt, spawningFlower, previousFlower));
 						break;
 					case AphidBehaviour::Coward:
-						spawningFlower = *min_element(neighbours.begin(), neighbours.end(), CowardCompare(rt, spawningFlower, previousFlower));
+						spawningFlower = *std::min_element(neighbours.begin(), neighbours.end(), CowardCompare(rt, spawningFlower, previousFlower));
 						break;
 					default:
 						break;

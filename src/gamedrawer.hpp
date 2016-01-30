@@ -2,6 +2,7 @@
 
 #include "insect/insect.hpp"
 #include "rosetree/flower.hpp"
+#include "splinerenderer.hpp"
 
 class GameWorld;
 
@@ -15,7 +16,8 @@ class GameDrawer
 	using Rect = sf::IntRect;
 
 	public:
-	inline GameDrawer(GameWorld& gameWorld) : mGameWorld(gameWorld) {};
+	inline GameDrawer(GameWorld& gameWorld) :
+		mGameWorld(gameWorld), mBranchRenderer(gameWorld) {};
 	void draw(sf::RenderTarget& target);
 
 	// Si textureRect n’est pas précisé, alors celui-ci s’adapte à la taille
@@ -49,6 +51,7 @@ class GameDrawer
 	sf::Sprite mFlowers[Flower::TypeNumber];
 	sf::Sprite mLadybugs[Ladybug::TypeNumber];
 	sf::Sprite mAphids;
+	SplineRenderer mBranchRenderer;
 };
 
 

@@ -20,12 +20,14 @@ class Branch
 	// Renvoie une des deux fleurs de départ de la branche
 	inline ID<Flower> getFirstFlower() const;
 	inline ID<Flower> getSecondFlower() const;
+	// Renvoie le type de la branche
+	inline Type getType() const;
 	// Renvoie la longueur physique de la branche
 	inline float getLength() const;
 	// Renvoie le nombre de coccinelles présentes sur cette branche
 	inline unsigned int getLadybugNumber() const;
-	// Renvoie le type de la branche
-	inline Type getType() const;
+	// Renvoie la Spline de la branche
+	inline Spline const& getSpline() const;
 
 	// Changer le nombre de coccinelles présentes sur cette branche
 	inline void setLadybugNumber(unsigned int nb);
@@ -42,8 +44,6 @@ class Branch
 	// en considérant firstFlower comme le point de départ
 	sf::Vector2f evalDerivative(float pos, ID<Flower> firstFlower) const;
 
-	inline void draw(sf::RenderTarget& target) const;
-
 	private:
 
 	// Used to create a branch correctly
@@ -56,16 +56,16 @@ class Branch
 		Flower* f1;
 		Flower* f2;
 	};
-	Branch(HelpCreator hc);
+	inline Branch(HelpCreator hc);
 
 
 	// Crée la SplineShape pour les fleurs f1 et f2
-	static SplineShape createSplineShape(Flower& f1, Flower& f2);
+	static Spline createSpline(Flower& f1, Flower& f2);
 
 
 	ID<Flower> mFirstFlower;
 	ID<Flower> mSecondFlower;
 	Type mType;
-	SplineShape mSplineShape; // TODO Should we really have the shape here ? Maybe just need a Spline…
+	Spline mSpline;
 	unsigned int mLadybugNumber; // TODO Is this really important ?
 };

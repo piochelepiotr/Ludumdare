@@ -55,9 +55,6 @@ class RoseTree
 	void load(std::istream& is);
 	void save(std::ostream& os) const;
 
-	// Drawing
-	//		void draw (sf::RenderTarget& ,sf::RenderStates) const;
-
 	private:
 	// Les fonctions en 'soft' font la même chose, mais sans interagir
 	// avec le graphe (on suppose que l’ajout où la suppression dans le

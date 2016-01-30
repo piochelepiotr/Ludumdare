@@ -66,13 +66,6 @@ std::pair<ID<Node>, ID<Node> > Path<Node>::getTwoFirstNodes() const
 template <typename Node>
 std::deque<ID<Node> > const& Path<Node>::getNodes() const
 { return mPath; }
-/*
-	std::set<ID<Node> > nodesSet;
-	for (auto it : mPath)
-		nodesSet.insert_hint(nodesSet.end(), *it);
-	return nodesSet;
-}
-*/
 
 
 template <typename Node>

@@ -37,7 +37,9 @@ std::set<ID<Flower> > const RoseTree::getNeighbours(ID<Flower> f) const
 void RoseTree::removeBranch(ID<Flower> f1, ID<Flower> f2)
 { removeBranch(mGraph.getEdge(f1, f2)); }
 void RoseTree::softRemoveBranch(ID<Branch> b)
-{ mBranchs.removeObj(b); }
+{
+	mBranchs.removeObj(b);
+}
 
 Branch const& RoseTree::getBranch(ID<Branch> b) const
 { return mBranchs[b]; }

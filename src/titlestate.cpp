@@ -4,9 +4,6 @@
 TitleState::TitleState(StateStack& mystack, StateContext context)
 : State(mystack, context)
 , mBackgroundSprite()
-//, mText()
-//, mShowText(true)
-//, mTextEffectTime()
 , mVerticalMenu()
 , mFocusGroup()
 , mPlayButton("Play", context.fonts->get(Font::Text), std::bind(&TitleState::play, this))
@@ -85,24 +82,12 @@ bool TitleState::handleEvent(const sf::Event& event)
 
 bool TitleState::update(sf::Time dt)
 {
-	/*
-    mTextEffectTime += dt;
-
-	// blinking text effect
-    if (mTextEffectTime >= sf::seconds(0.7f))
-    {
-        mShowText = !mShowText;
-        mTextEffectTime = sf::Time::Zero;
-    }
-	*/
     return true;
 }
 
 void TitleState::draw()
 {
     mContext.window->draw(mBackgroundSprite);
-    //if (mShowText)
-        //mContext.window->draw(mText);
 	mContext.window->draw(mPlayButton);
 	mContext.window->draw(mSettingsButton);
 	mContext.window->draw(mQuitButton);

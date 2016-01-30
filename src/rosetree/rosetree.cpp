@@ -1,4 +1,5 @@
 #include "rosetree/rosetree.inl"
+#include <vector>
 #include <istream>
 
 // Flowers

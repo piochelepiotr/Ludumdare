@@ -1,23 +1,35 @@
 #pragma once
 
-#include <math/spline.hpp>
-#include <memory>
+#include "utils/id.hpp"
+#include <SFML/Graphics.hpp>
 
-// TODO What is this file ?
+class Branch;
+class Spline;
+class GameWorld;
 
-struct SplineGraphics
-{
-	std::unique_ptr<SplineShape> spline;
+class SplineShape {
+	public:
+	SplineShape(Spline const& spline, float thickness, int dots = 30);
+
+	void draw(sf::RenderTarget& target) const;
+	void partialDraw(sf::RenderTarget& target, float start, float end) const;
+
+	private:
+	Spline const& mSpline;
+	float mThickness;
+	sf::VertexArray mShape;
+	int mDots;
 };
+
+
 
 class SplineRenderer
 {
 	public:
-		~SplineRenderer()=default;
-		
-		void addSpline(const Spline& curve);
-	
-		void render(sf::RenderTarget& target) const;
+	SplineRenderer(GameWorld const& gw) : mGameWorld(gw) {};
+	void draw(sf::RenderTarget& target);
+
 	private:
-		std::vector<SplineGraphics> mSplines;
+	GameWorld const& mGameWorld;
+	std::map<ID<Branch>, SplineShape> mSavedSplines;
 };

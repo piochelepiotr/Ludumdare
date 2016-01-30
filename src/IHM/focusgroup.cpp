@@ -31,20 +31,6 @@ FocusGroup::remove (Widget& widget)
 			mCurrent = nullptr;
 
 		mWidgets.erase(it);
-
-		/* Too much for few…
-		if (mWidgets.size() <= 1) {	
-			mWidgets.clear();
-			mCurrent = nullptr;
-		}
-
-		else if (&widget == mCurrent) {
-			mWidgets.erase(it);
-			mCurrent = nullptr;
-		}
-		
-		else mWidgets.erase(it);
-		*/
 	}
 }
 

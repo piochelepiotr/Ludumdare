@@ -19,10 +19,6 @@ class TitleState : public State
 		void editor();
 		
         sf::Sprite mBackgroundSprite;
-        //sf::Text mText;
-        //bool mShowText;
-        //sf::Time mTextEffectTime;
-
 		VerticalMenu mVerticalMenu;
 		FocusGroup   mFocusGroup;
 		TextButton   mPlayButton;
